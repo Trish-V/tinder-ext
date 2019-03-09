@@ -16,6 +16,11 @@ export class AppComponent implements OnInit {
 
     getChrome().tabs.getSelected(null, function (tab) {
       var tablink = tab.url;
+      if (tablink.includes('tinder.com')){
+        alert('welcome')
+      }else{
+        alert('It\'s not tinder');
+      }
       // alert(tablink);
     });
 
@@ -26,8 +31,8 @@ export class AppComponent implements OnInit {
         this.profileDataSet = request.source;
         // message.innerText = request.source;
       }
-      if(request.action == "getLocalStorage"){
-        alert(JSON.stringify(   request.source));// callback for local storage
+      if (request.action == "getLocalStorage") {
+        alert(JSON.stringify(request.source));// callback for local storage
       }
     });
 
@@ -48,7 +53,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  likeAll() { 
+  likeAll() {
     getChrome().tabs.executeScript(null, { // injecting retriving dom
       file: "assets/chromejs/getDom.js"
     }, function () {
@@ -66,13 +71,13 @@ export class AppComponent implements OnInit {
   feelingLucky() {
 
   }
-  testLocalStorage(){// injecting localstorage script
+  testLocalStorage() {// injecting localstorage script
     alert('local');
-    
+
     getChrome().tabs.executeScript(null, {
       file: "assets/chromejs/localstorage.js"
     }, function () {
-      if (getChrome().runtime.lastError) { 
+      if (getChrome().runtime.lastError) {
       }
     });
   }
