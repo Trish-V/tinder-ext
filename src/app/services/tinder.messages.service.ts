@@ -43,7 +43,7 @@ export class MessageRetrivalService {
         if (pagination_token == "start") {
             params["page_token"] = pagination_token
         }
-        return this.httpClient.get<any>(this.url_matches, { headers: new HttpHeaders(JSON.stringify(this.headers)) })
+        return this.httpClient.get<any>(this.url_matches, { headers: new HttpHeaders(JSON.stringify(this.headers)) , params : params } )
 
     }
 
@@ -62,7 +62,7 @@ export class MessageRetrivalService {
             params["page_token"] = pagination_token
         }
         this.matchId = match_id;
-        return this.httpClient.get<any>(this.url_messages, { headers: new HttpHeaders(JSON.stringify(this.headers)) })
+        return this.httpClient.get<any>(this.url_messages, { headers: new HttpHeaders(JSON.stringify(this.headers)) , params : params })
 
     }
 
