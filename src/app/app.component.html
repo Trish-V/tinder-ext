@@ -1,0 +1,73 @@
+<div class="header container-fluid">
+    <div class="row">
+        <div class="col-5">
+
+            <img class="avatar" />
+
+        </div>
+        <div class="col-4">
+
+            <h2>Tinder Bud!</h2>
+        </div>
+        <div class="col-1">
+            <button title="Go to Tinder.com" type="button" class="btn btn-link"> <i   class="fas fa-fire-alt"></i>
+            </button>
+        </div>
+
+        <div class="col-1">
+            <button title="Options" type="button" class="btn btn-link"><i  
+                    class="fas fa-cog "></i></button>
+        </div>
+        <div class="col-1">
+            <button (click)="popUp()" title="Pop-up window" type="button" class="btn btn-link"> <i  
+                    class="fas fa-sort-up"></i>
+            </button>
+        </div>
+     
+    </div>
+</div>
+<div class="container-fluid content">
+    <div class="row  justify-content-center">
+        <div class="col-6">
+
+            <app-time-line></app-time-line>
+
+
+
+
+        </div>
+
+        <div class="col-6 ">
+            <app-profile-card   ></app-profile-card>
+        </div>
+
+    </div>
+
+
+</div>
+<div style="margin-top:10px; margin-bottom:10px;" class="container bottom-bar">
+
+    <div class="btn-group w3-card-4" role="group">
+        <button  (click)="likeAll()"  type="button" class="btn btn1 btn-light btn-outline-danger">Like All</button>
+        <button  (click)="likeWithInterval()"  type="button" class="btn btn2 btn-light btn-outline-danger">Like With 5s interval</button>
+        <button  (click)="feelingLucky()"  type="button" class="btn btn3 btn-light btn-outline-danger">Feeling Lucky!</button>
+    </div>
+    <div style="text-align:center; color: white; margin-left: -3%; margin-top: 1%">
+
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+            <label class="form-check-label" for="inlineRadio1">2s</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" checked type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+            <label class="form-check-label" for="inlineRadio2">5s</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+            <label class="form-check-label" for="inlineRadio3">10s</label>
+        </div>
+
+    </div>
+
+    <button id="testLocalStorage" (click)="testLocalStorage()">Test LocalStorage</button>
+</div>
