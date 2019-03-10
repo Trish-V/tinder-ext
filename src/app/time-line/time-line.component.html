@@ -4,7 +4,7 @@
   <div title="History">
     <p *ngFor="let profile of listOfProfiles" class="  ">
       <b>{{profile.name}} </b>{{profile.age}}<br >
-      {{profile.studies}}<br *ngIf="profile.studies===''">
+      {{profile.studies}}<br *ngIf="profile.studies!==''">
       {{profile.distance}}
     </p>
 
