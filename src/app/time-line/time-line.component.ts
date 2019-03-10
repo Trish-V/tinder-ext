@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { SibilingsCommunicationService } from '../services/sibilings.communication.service';
 import PerfectScrollbar from 'perfect-scrollbar';
+import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: 'app-time-line',
@@ -10,19 +11,14 @@ import PerfectScrollbar from 'perfect-scrollbar';
 export class TimeLineComponent implements OnInit {
   
   @Input() listOfProfiles: any;
+
+  @ViewChild(PerfectScrollbarComponent) componentRef?: PerfectScrollbarComponent;
   
   constructor(sibilingsCommService: SibilingsCommunicationService) {
 
-    sibilingsCommService.messageAnnounced$.subscribe(msg => {
-    
-      let scrollView = document.getElementById('list');
-    
-      const ps = new PerfectScrollbar(scrollView);
-    
-      scrollView.scrollTop = scrollView.scrollHeight;
-    
-      ps.update();
+    sibilingsCommService.messageAnnounced$.subscribe(msg => { 
 
+      this.componentRef.directiveRef.scrollToBottom();
     
     });
   
