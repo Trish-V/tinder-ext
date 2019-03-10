@@ -1,7 +1,7 @@
-<perfect-scrollbar style="max-width: 600px; max-height: 238px">
+<perfect-scrollbar  id="list" style="max-width: 600px; max-height: 238px">
 
 
-  <div title="History" >
+  <div title="History">
     <p *ngFor="let profile of listOfProfiles" class="  ">
       <b>{{profile.name}} </b>{{profile.age}}<br >
       {{profile.studies}}<br *ngIf="profile.studies===''">

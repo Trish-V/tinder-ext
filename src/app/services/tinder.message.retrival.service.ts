@@ -5,11 +5,17 @@ import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class TinderMessageRetrivalService {
+    
     headers: Headers;
+    
     url_matches;
+    
     url_messages;
+    
     match_list;
+    
     matchId;
+
     constructor(private httpClient: HttpClient) {
         this.headers = new Headers();
     }
@@ -33,16 +39,23 @@ export class TinderMessageRetrivalService {
     get_match_list(pagination_token = "start") {
         let params = {
             "count": "60",
+
             "locale": "en",
+            
             "message": "1"
         }
 
         if (pagination_token) {
+
             return this.match_list;
+        
         }
         if (pagination_token == "start") {
+        
             params["page_token"] = pagination_token
+        
         }
+        
         return this.httpClient.get<any>(this.url_matches, { headers: new HttpHeaders(JSON.stringify(this.headers)) , params : params } )
 
     }
@@ -50,18 +63,29 @@ export class TinderMessageRetrivalService {
 
     get_match_message(match_id, pagination_token = "start") {
         let params = {
+
             "count": "60",
+            
             "locale": "en",
+            
             "message": "1"
+        
         }
 
         if (pagination_token) {
+        
             return this.match_list;
+        
         }
+        
         if (pagination_token == "start") {
+        
             params["page_token"] = pagination_token
+        
         }
+        
         this.matchId = match_id;
+        
         return this.httpClient.get<any>(this.url_messages, { headers: new HttpHeaders(JSON.stringify(this.headers)) , params : params })
 
     }
