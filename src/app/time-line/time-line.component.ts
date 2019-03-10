@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-time-line',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./time-line.component.scss']
 })
 export class TimeLineComponent implements OnInit {
-
+  @Input() listOfProfiles: any;
   constructor() { }
 
   ngOnInit() {

@@ -1,81 +1,11 @@
 <perfect-scrollbar style="max-width: 600px; max-height: 238px">
 
 
-  <div title="History">
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
-    </p>
-    <p>
-      <b>Missa </b>25<br>
-      University of Tampere<br>
-      12km
+  <div title="History" >
+    <p *ngFor="let profile of listOfProfiles" class="  ">
+      <b>{{profile.name}} </b>{{profile.age}}<br >
+      {{profile.studies}}<br *ngIf="profile.studies===''">
+      {{profile.distance}}
     </p>
 
   </div>

@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
-export class MessageRetrivalService {
+export class TinderMessageRetrivalService {
     headers: Headers;
     url_matches;
     url_messages;

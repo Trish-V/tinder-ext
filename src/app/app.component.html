@@ -30,7 +30,7 @@
     <div class="row  justify-content-center">
         <div class="col-6">
 
-            <app-time-line></app-time-line>
+            <app-time-line [listOfProfiles]="listOfProfiles"></app-time-line>
 
 
 
@@ -38,7 +38,7 @@
         </div>
 
         <div class="col-6 ">
-            <app-profile-card   ></app-profile-card>
+            <app-profile-card [profileDataSet]="profileDataSet"  ></app-profile-card>
         </div>
 
     </div>

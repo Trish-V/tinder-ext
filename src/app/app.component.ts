@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { environment } from '../environments/environment';
+import { SibilingsCommunicationService } from './services/sibilings.communication.service';
 declare var getChrome: any;
 declare var getDOM: any;
 
@@ -9,16 +10,28 @@ declare var getDOM: any;
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  profileDataSet: any;
+  @Input()
+  profileDataSet = {
+    name: '',
+    age: '',
+    distance: '',
+    imgUrl: '',
+    studies: ''
+  };
 
-  ngOnInit(): void {
-    // window.resizeTo(680,400);
+  listOfProfiles = [];
+
+  constructor(sibilingsCommService: SibilingsCommunicationService) {
+    const context = this;
+    sibilingsCommService.messageAnnounced$.subscribe(msg => {
+      alert(msg);
+    });
 
     getChrome().tabs.getSelected(null, function (tab) {
       var tablink = tab.url;
-      if (tablink.includes('tinder.com')){
+      if (tablink.includes('tinder.com')) {
         alert('welcome')
-      }else{
+      } else {
         alert('It\'s not tinder');
       }
       // alert(tablink);
@@ -26,16 +39,18 @@ export class AppComponent implements OnInit {
 
 
     getChrome().runtime.onMessage.addListener(function (request, sender) {
-      if (request.action == "getSource") { // callback for liked recomendations
-        alert(request.source);
-        this.profileDataSet = request.source;
-        // message.innerText = request.source;
+      if (request.action == "getSource") { // callback for liked recomendations 
+        context.profileDataSet = JSON.parse(request.source);
+        context.listOfProfiles.push(context.profileDataSet);
       }
       if (request.action == "getLocalStorage") {
-        alert(JSON.stringify(request.source));// callback for local storage
+        alert(request.source);// callback for local storage
       }
     });
 
+  }
+  ngOnInit(): void {
+    // window.resizeTo(680,400);
 
   }
   title = 'TinderBudExt';
@@ -65,7 +80,7 @@ export class AppComponent implements OnInit {
   }
 
   likeWithInterval() {
-
+    alert(JSON.stringify(this.profileDataSet));
   }
 
   feelingLucky() {
