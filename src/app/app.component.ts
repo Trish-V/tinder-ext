@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { environment } from '../environments/environment';
-import { SibilingsCommunicationService } from './services/sibilings.communication.service';
+import { SibilingsCommunicationService } from './services/sibilings.communication.service'; 
+import { TinderAPI } from './services/tinder.message.retrival.service';
 
 declare var getChrome: any; 
 
@@ -28,9 +29,11 @@ export class AppComponent implements OnInit {
 
   listOfProfiles = []; 
   
-  constructor(public sibilingsCommService: SibilingsCommunicationService) {
+  constructor(public sibilingsCommService: SibilingsCommunicationService, tinderAPI: TinderAPI) {
   
     const context = this;
+
+ 
  
     getChrome().tabs.getSelected(null, function (tab) {
  
@@ -38,11 +41,11 @@ export class AppComponent implements OnInit {
  
       if (tablink.includes('tinder.com')) {
  
-        alert('welcome')
+        // alert('welcome')
  
       } else {
  
-        alert('It\'s not tinder');
+        // alert('It\'s not tinder');
  
       }
  
@@ -54,10 +57,12 @@ export class AppComponent implements OnInit {
       if (request.action == "getSource") { // callback for liked recomendations 
  
         context.profileDataSet = JSON.parse(request.source);
+
+        alert('context.profileDataSet');
  
         context.listOfProfiles.push(context.profileDataSet);
  
-        context.sibilingsCommService.pushMessage('scrollTop'); 
+        // context.sibilingsCommService.pushMessage('scrollTop'); 
  
       }
  

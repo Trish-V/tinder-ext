@@ -9,7 +9,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { HttpClientModule } from '@angular/common/http';
-import { TinderMessageRetrivalService } from './services/tinder.message.retrival.service';
+import { TinderAPI } from './services/tinder.message.retrival.service';
 import { SibilingsCommunicationService } from './services/sibilings.communication.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -34,7 +34,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     provide: PERFECT_SCROLLBAR_CONFIG,
     useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
   },
-    TinderMessageRetrivalService,
+    TinderAPI,
     SibilingsCommunicationService
   ],
   bootstrap: [AppComponent]

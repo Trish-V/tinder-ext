@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-profile-card',
@@ -7,11 +8,16 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ProfileCardComponent implements OnInit {
   @Input() profileDataSet:any;
+  img1: any;
   
-  constructor() { }
+  constructor(private sanitizer: DomSanitizer,) { }
 
   ngOnInit() {
     // alert(JSON.parse(this.profileDataSet));
+
+
+    this.img1 = this.sanitizer.bypassSecurityTrustStyle('url( '+ this.profileDataSet.imgUrl + ' )');
+
   }
 
 }
