@@ -1,14 +1,15 @@
-<perfect-scrollbar id="list" style="max-width: 600px; max-height: 238px; padding-right: 15px;">
+<perfect-scrollbar id="list" style="max-width: 600px; max-height: 300px; padding-right: 15px;">
 
 
   <div title="Recomendations">
-    <div *ngFor="let profile of listOfProfiles" class="listStyle target">
+    <div *ngFor="let profile of listOfProfiles" draggable="true" (dragstart)="drag($event,profile)" class="listStyle target">
 
       <div class="row">
         <div class="col-8">
           <b>{{profile.name}} </b>{{profile.age}}<br>
-          {{profile.studies}}<br *ngIf="profile.studies===''">
-          {{profile.distance}}
+          {{profile.distance_mi}} miles away
+          <small  *ngIf="profile.schools[0].id!=='000'"> {{profile.schools[0].name}} </small>
+
 
         </div>
         <div class="col-3">

@@ -271,6 +271,10 @@ export class AppComponent implements OnInit {
       var age = nowDate.getTime() - bdate.getTime();
 
       result.age = ((age / (1000 * 60 * 60 * 24)) / 366).toFixed(0);
+      result.schools.push({
+        id: "000",
+        name: "000"
+      })
 
       this.listOfProfiles.push(result)
 

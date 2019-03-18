@@ -11,6 +11,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { HttpClientModule } from '@angular/common/http';
 import { TinderAPI } from './services/tinder.message.retrival.service';
 import { SibilingsCommunicationService } from './services/sibilings.communication.service';
+import { NguCarouselModule } from '@ngu/carousel';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -28,7 +29,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BrowserModule,
     AppRoutingModule,
     PerfectScrollbarModule,
-    HttpClientModule
+    HttpClientModule,
+    NguCarouselModule
   ],
   providers: [{
     provide: PERFECT_SCROLLBAR_CONFIG,

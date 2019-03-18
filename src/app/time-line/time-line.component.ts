@@ -9,22 +9,32 @@ import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
   styleUrls: ['./time-line.component.scss']
 })
 export class TimeLineComponent implements OnInit {
-  
+
   @Input() listOfProfiles: any;
-  profileDisplayPicture ='../../assets/icon/avatar.png'
+  profileDisplayPicture = '../../assets/icon/avatar.png'
   @ViewChild(PerfectScrollbarComponent) componentRef?: PerfectScrollbarComponent;
-  
+
   constructor(sibilingsCommService: SibilingsCommunicationService) {
 
-    sibilingsCommService.messageAnnounced$.subscribe(msg => { 
+    sibilingsCommService.messageAnnounced$.subscribe(msg => {
 
       this.componentRef.directiveRef.scrollToBottom();
-    
+
     });
-  
+
   }
 
   ngOnInit() {
   }
+
+  allowDrop(ev) {
+    ev.preventDefault();
+  }
+
+  drag(ev, profile) {
+    ev.dataTransfer.setData("text", JSON.stringify(profile));
+  }
+
+
 
 }

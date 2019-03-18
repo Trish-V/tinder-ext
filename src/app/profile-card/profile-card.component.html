@@ -1,16 +1,47 @@
-<div class="row">
-    <div class="col-6">
+<div class="row justify-content-md-center dragArea" [style.border]="dropState ? '3px dotted white ':''  "  (dragenter)="dragenter($event)" (dragleave)="dragleave($event)" (dragover)="allowDrop($event)"  (drop)="drop($event)" >
+    <!-- <div class="col-6">
         <div class="content">
             <h4>{{profileDataSet.name}} {{profileDataSet.age}}</h4>
             <p>{{profileDataSet.distance}} <br>{{profileDataSet.studies}}</p> 
             <p></p>
         </div>
-    </div>
-    <div class="col-6">
-        <div [style.background-image]="'img1'" class="card w3-card-4   w3-hover-grayscale">
+    </div> -->
+    <div class="col-2"></div>
+    <div class="col-8">
+        <div class="row">
+            <!-- <div [style.background-image]="'img1'" class="card w3-card-4   w3-hover-grayscale">
+            </div> -->
+            <ngu-carousel style="width:100%; height: 250px;" #myCarousel [inputs]="carouselTileConfig" [dataSource]="carouselTileItems$ ">
+                <ngu-tile *nguCarouselDef="let item; let i = index; let ani = animate"> <!-- [@slider]="ani" PLease this animation to this tile to see animation. stackblitz have error with animations -->
+                  <div class="tile" [style.background]="'url('+item+')'">
+                    <!-- <h1>{{i + 1}}</h1> -->
+                  </div>
+                </ngu-tile>
+              
+                <button NguCarouselPrev class="leftRs" [style.opacity]="myCarousel.isFirst ? 0.5:1">&lt;</button>
+                <button NguCarouselNext class="rightRs" [style.opacity]="myCarousel.isLast ? 0.5:1">&gt;</button>
+              
+                <ul class="myPoint" NguCarouselPoint>
+                  <li *ngFor="let i of myCarousel.pointNumbers; let i = index" [class.active]="i==myCarousel.activePoint" (click)="myCarousel.moveTo(i)"></li>
+                </ul>
+              </ngu-carousel>
+
+
         </div>
+        <div class="row">
+            <div style="margin-top:25px; margin-bottom:10px;" class="   bottom-bar">
+
+                <div class="btn-group w3-card-4"  role="group">
+                    <button (click)="like()" type="button" class="btn btn1 btn-light btn-outline-warning">Pass</button>
+                    <button (click)="pass()" type="button" class="btn btn3 btn-light btn-outline-danger">Like</button>
+                </div>
+
+
+            </div>
+        </div>
+
     </div>
 
-
+    <div class="col-2"></div>
 
 </div>
