@@ -87,25 +87,19 @@ export class AppComponent implements OnInit {
       if (request.action == "savedLocalStorage") {
         // callback for local storage 
         thisContext.saveLocalStorage('tinder_local_storage', request.source);
-        // alert(request.source)
-
-
-
 
       }
       if (request.action == "getLocalStorage") {
 
         localStorage.setItem('tinder_local_storage', request.source);
 
-        // AppComponent.context.setUserProfile();
-        // AppComponent.context.getRecs();
       }
 
     });
     try {
       this.setUserProfile();
-      this.getRecs();
 
+      this.getRecs(3050);
 
     } catch (error) {
 
@@ -116,22 +110,31 @@ export class AppComponent implements OnInit {
 
   setUserProfile() {
     var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'));
-    // alert(JSON.stringify(localStorageData))
 
     this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
+
     this.tinderAPI.services.get_profile_of_the_logged_in_user().subscribe(res => {
+
       this.profileDisplayPicture = res.photos[0].url;
+
       this.username = res.name;
+
       const Toast = Swal.mixin({
         toast: true,
+
         position: 'top-end',
+
         showConfirmButton: false,
+
         timer: 3000
+
       });
 
       Toast.fire({
         type: 'success',
+
         title: 'Signed in successfully'
+
       })
 
       console.log(res.photos[0].url)
@@ -146,46 +149,47 @@ export class AppComponent implements OnInit {
   }
 
 
-  getRecs() {
+  getRecs(sleep) {
 
     var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'));
+
     this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
+
     this.tinderAPI.services.get_all_recomendations().subscribe(res => {
-      // this.listOfProfiles = res.results;
 
       try {
         if (res.message) {
           setTimeout(() => {
-            // 
-
 
             const Toast = Swal.mixin({
+
               toast: true,
+
               position: 'top-end',
+
               showConfirmButton: false,
+
               timer: 3000
+
             });
 
             Toast.fire({
               type: 'warning',
+
               title: 'No recomendations for now'
+
             })
 
-          }, 3100)
-
-          // setInterval(() => {
-
-          // }), 3000;
-
-
+          }, sleep)
 
           return;
         }
       } catch (error) {
 
       }
+
       this.poll(res.results)
-      // alert(JSON.stringify(res))
+
     }, err => {
 
     })
@@ -261,10 +265,15 @@ export class AppComponent implements OnInit {
     for (let result of results) {
       // code to poll server and update models and view ...
       var bdate = new Date(result.birth_date);
+
       var nowDate = new Date();
+
       var age = nowDate.getTime() - bdate.getTime();
+
       result.age = ((age / (1000 * 60 * 60 * 24)) / 366).toFixed(0);
+
       this.listOfProfiles.push(result)
+
       this.sibilingsCommService.pushMessage('scrollTop');
 
       await this.sleep(this.updateEveryMS);
@@ -272,19 +281,30 @@ export class AppComponent implements OnInit {
   }
 
   sleep(ms) {
+
     return new Promise(resolve => setTimeout(resolve, ms));
+
   }
 
   openAlertToReLogUser() {
     Swal.fire({
+
       title: 'You are not logged in?',
+
       text: 'Please log in to tinder.com ',
+
       type: 'warning',
+
       showCancelButton: true,
+
       confirmButtonText: 'Take me there!',
+
       cancelButtonText: 'Cancel'
+
     }).then(result => {
+
       if (result.value) {
+
         getChrome().runtime.sendMessage({
 
           action: "open_tinder",
@@ -300,6 +320,10 @@ export class AppComponent implements OnInit {
 
   saveLocalStorage(key, value) {
     localStorage.setItem(key, value);
+  }
+
+  refresh() {
+    this.getRecs(0);
   }
 
 }
