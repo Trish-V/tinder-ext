@@ -1,45 +1,68 @@
- 
-div {
-  width:100%; 
-  padding-right: 3px;
+* {
+  transition: all 1s ease;
 }
 
-p {
-
+.listStyle {
   border-top: 4px double;
   border-color: rgb(255, 255, 255) !important;
-  margin:0; padding: 10px;
-  color:white;
-}
-*{
-  transition: all 1s ease-in-out;
+  margin: 0;
+  padding: 10px;
+  color: white;
 }
 
+.avatar {
+  width: 50px;
+  height: 50px;
+  // background-color: white;
+  border-radius: 50%;
+  // src: url('../../assets/icon/avatar.png ');
+  background-size: cover;
+  border: solid white 3px;
+  float: right;
+}
 
-p:nth-child(even) {
+.listStyle:nth-child(even) {
   border-left: 4px double;
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
-  margin-right: 30px; 
+
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+
+
+
+  margin-right: 30px;
   padding-right: 0;
 }
 
-p:nth-child(odd) {
+.listStyle:nth-child(odd) {
   border-right: 4px double;
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
-  margin-left: 30px; 
-  padding-left: 0;
+
+
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+
+  margin-left: 30px;
+  padding-left: 15px;
 }
 
-p:first-child {
+.listStyle:first-child {
   border-top: 0;
-  border-top-right-radius:0;
-  border-top-left-radius:0;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
 }
 
-p:last-child {
-  border-bottom-right-radius:0;
-  border-bottom-left-radius:0;
+.listStyle:last-child {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
+.listStyle:hover {
+  background-color: rgba(0, 0, 0, 0.274);
+  .avatar{
+    width: 70px;
+    height: 70px;
+  }
+}

@@ -11,7 +11,7 @@ import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 export class TimeLineComponent implements OnInit {
   
   @Input() listOfProfiles: any;
-
+  profileDisplayPicture ='../../assets/icon/avatar.png'
   @ViewChild(PerfectScrollbarComponent) componentRef?: PerfectScrollbarComponent;
   
   constructor(sibilingsCommService: SibilingsCommunicationService) {

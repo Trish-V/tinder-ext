@@ -7,7 +7,20 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./profile-card.component.scss']
 })
 export class ProfileCardComponent implements OnInit {
-  @Input() profileDataSet:any;
+  @Input()   profileDataSet = {
+
+    name: '',
+
+    age: '',
+
+    distance: '',
+
+    imgUrl: '',
+
+    studies: ''
+
+  };
+  
   img1: any;
   
   constructor(private sanitizer: DomSanitizer,) { }

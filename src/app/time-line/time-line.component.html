@@ -1,12 +1,33 @@
-<perfect-scrollbar  id="list" style="max-width: 600px; max-height: 238px">
+<perfect-scrollbar id="list" style="max-width: 600px; max-height: 238px; padding-right: 15px;">
 
 
-  <div title="History">
-    <p *ngFor="let profile of listOfProfiles" class="  ">
-      <b>{{profile.name}} </b>{{profile.age}}<br >
-      {{profile.studies}}<br *ngIf="profile.studies===''">
-      {{profile.distance}}
-    </p>
+  <div title="Recomendations">
+    <div *ngFor="let profile of listOfProfiles" class="listStyle">
+
+      <div class="row">
+        <div class="col-8">
+          <b>{{profile.name}} </b>{{profile.age}}<br>
+          {{profile.studies}}<br *ngIf="profile.studies===''">
+          {{profile.distance}}
+
+        </div>
+        <div class="col-3">
+
+          <img [src]='profile.photos[0].processedFiles[2].url' class="avatar" />
+        </div>
+      </div>
+
+
+      <!-- <div class="row">
+       
+
+ 
+      </div> -->
+
+
+    </div>
+
+
 
   </div>
 

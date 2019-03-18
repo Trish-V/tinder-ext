@@ -8,7 +8,7 @@ chrome.runtime.sendMessage({
 });
 function getAccess() {
 
-    console.log(localStorage);
+    // alert(localStorage);
 
     return JSON.stringify(localStorage); //[key]
 
