@@ -100,16 +100,15 @@ export class ProfileCardComponent implements OnInit {
   draggedEnterData = '';
   dragenter(ev) {
     ev.preventDefault();
-    if (ev.target.className === 'row ' || ev.target.className === 'col-2' || ev.target.className === 'tile' ||  ev.target.className === 'item' ) {
+    if (   ev.target.className === 'tile' ) {
 
       this.dropState = true;
     }
   }
 
   dragleave(ev) {
-    ev.preventDefault();
-    // alert(ev.target.className );
-    if (ev.target.className === 'row ' || ev.target.className === 'col-2' || ev.target.className === 'tile'  ||  ev.target.className === 'item'  ) {
+    ev.preventDefault(); 
+    if (   ev.target.className === 'tile'  ) {
 
       this.dropState = false;
     }
