@@ -136,9 +136,9 @@ export class AppComponent implements OnInit {
 
       console.log(res.photos[0].url)
     }, err => {
-      if(err.status){
+      if (err.status) {
 
-      this.openAlertToReLogUser();
+        this.openAlertToReLogUser();
 
       }
 
@@ -155,8 +155,10 @@ export class AppComponent implements OnInit {
 
       try {
         if (res.message) {
+          setTimeout(() => {
+            // 
 
-          setInterval(() => {
+
             const Toast = Swal.mixin({
               toast: true,
               position: 'top-end',
@@ -168,7 +170,12 @@ export class AppComponent implements OnInit {
               type: 'warning',
               title: 'No recomendations for now'
             })
-          }), 3000;
+
+          }, 3100)
+
+          // setInterval(() => {
+
+          // }), 3000;
 
 
 
