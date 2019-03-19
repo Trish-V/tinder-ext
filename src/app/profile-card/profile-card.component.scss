@@ -1,5 +1,5 @@
 * {
-  transition: all 1s ease-in-out;
+  transition: all .5s ease;
 }
 
 .card {
@@ -94,12 +94,23 @@
   min-height: 240px;
   background-color: #ccc;
   background-size: cover !important;
+  width: 100%;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+  h1 {
+  
+  }
 }
-
+.drop{
+  z-index: 9999;
+    position: absolute;
+    color: white;
+    text-align: center;
+    width: 100%;
+    top: 110px; 
+}
 // .tile h1 {
 //   text-align: center;
 //   line-height: 200px;
@@ -260,4 +271,3 @@ nav h1 {
     }
   }
 }
- 
