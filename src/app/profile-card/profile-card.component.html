@@ -1,11 +1,5 @@
-<div class="row justify-content-md-center dragArea" >
-    <!-- <div class="col-6">
-        <div class="content">
-            <h4>{{profileDataSet.name}} {{profileDataSet.age}}</h4>
-            <p>{{profileDataSet.distance}} <br>{{profileDataSet.studies}}</p> 
-            <p></p>
-        </div>
-    </div> -->
+<div class="row justify-content-md-center dragArea" draggable="false" >
+ 
     <div class="col-2"></div>
     <div class="col-8">
         <div class="row" style="border-radius:20px;" [style.border]="dropState ? '3px dotted white ':''  ">
@@ -18,17 +12,18 @@
 
 
 
-                    <ngu-tile *nguCarouselDef="let item; let i = index; let ani = animate">
-                        <!-- [@slider]="ani" PLease this animation to this tile to see animation. stackblitz have error with animations -->
-                        <div class="tile" [style.background]="'url('+item+')'"  (dragenter)="dragenter($event)" (dragleave)="dragleave($event)"
-                        (dragover)="allowDrop($event)" (drop)="drop($event)" >
+                    <ngu-tile *nguCarouselDef="let item; let i = index; let ani = animate"   (dragenter)="dragenter($event)" (dragleave)="dragleave($event)"
+                        (dragover)="allowDrop($event)" (drop)="drop($event)"    >
+ 
+                        <div class="tile" [style.background]="'url('+item+')'" >
                             <!-- <h1  >Drop Here</h1> -->
 
                         </div>
                     </ngu-tile>
 
-                    <button NguCarouselPrev class="leftRs" [style.opacity]="myCarousel.isFirst ? 0.5:1">&lt;</button>
-                    <button NguCarouselNext class="rightRs" [style.opacity]="myCarousel.isLast ? 0.5:1">&gt;</button>
+                    <button NguCarouselNext style="z-index:99999" [style.opacity]="myCarousel.isLast ? 0.5:1" (click)="alert('hello clicked')" class="rightRs">></button>
+                    <button NguCarouselPrev style="z-index:99999"  [style.opacity]="myCarousel.isFirst ? 0.5:1" class="leftRs"><</button>
+ 
 
                     <ul class="myPoint" NguCarouselPoint>
                         <li *ngFor="let i of myCarousel.pointNumbers; let i = index"
