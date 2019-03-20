@@ -17,3 +17,11 @@ width: 650px;
  .gradient{
      padding: 5px;
  }
+
+ .swalZ{
+     z-index: 120000;
+ }
+
+ .swal-overlay {
+    background-color: rgba(43, 165, 137, 0.45);
+  }

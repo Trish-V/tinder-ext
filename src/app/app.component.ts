@@ -96,6 +96,8 @@ export class AppComponent implements OnInit {
       }
 
     });
+
+
     try {
       this.setUserProfile();
 
@@ -137,10 +139,10 @@ export class AppComponent implements OnInit {
 
       })
 
-      console.log(res.photos[0].url)
+      // console.log(res.photos[0].url)
     }, err => {
       if (err.status) {
-
+        console.log('No Access ' + err.status)
         this.openAlertToReLogUser();
 
       }
@@ -303,7 +305,12 @@ export class AppComponent implements OnInit {
 
       confirmButtonText: 'Take me there!',
 
-      cancelButtonText: 'Cancel'
+      cancelButtonText: 'Cancel',
+
+      customClass: {
+        popup: 'animated tada'
+      }
+
 
     }).then(result => {
 

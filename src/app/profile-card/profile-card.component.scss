@@ -104,12 +104,14 @@
   }
 }
 .drop{
-  z-index: 9999;
+  z-index: -500;
     position: absolute;
     color: white;
     text-align: center;
-    width: 100%;
+    width: 80%;
     top: 110px; 
+    margin-left: 10%;
+    margin-right: 10%; 
 }
 // .tile h1 {
 //   text-align: center;
