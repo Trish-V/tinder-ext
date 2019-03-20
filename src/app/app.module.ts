@@ -12,6 +12,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { TinderAPI } from './services/tinder.message.retrival.service';
 import { SibilingsCommunicationService } from './services/sibilings.communication.service';
 import { NguCarouselModule } from '@ngu/carousel';
+import { HomeComponent } from './home/home.component';
+import { SettingsComponent } from './settings/settings.component'; 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -23,7 +25,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   declarations: [
     AppComponent,
     ProfileCardComponent,
-    TimeLineComponent
+    TimeLineComponent,
+    HomeComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,

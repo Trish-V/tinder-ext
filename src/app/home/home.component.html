@@ -1,0 +1,63 @@
+<div class="header container-fluid">
+  <div class="row">
+      <div class="col-5">
+          <div class="row">
+              <div class="col-3">
+
+                  <img [src]='profileDisplayPicture' class="avatar" />
+              </div>
+              <div class="col-9">
+
+                  <h6 style="margin-top:15px">{{username}}</h6>
+              </div>
+          </div>
+      </div>
+      <div class="col-4">
+
+          <h2>Tinder Bud!</h2>
+      </div>
+      <div class="col-1">
+          <button title="Go to Tinder.com" href="www.tinder.com" type="button" class="btn btn-link"> <i
+                  class="fas fa-fire-alt"></i>
+          </button>
+      </div>
+
+      <div class="col-1">
+          <button title="Refresh recomendations" (click)="refresh()" type="button" class="btn btn-link"><i class="fas fa-sync "></i></button>
+      </div>
+      <div class="col-1">
+          <button (click)="popUp()" title="Pop-up window" type="button" class="btn btn-link"> <i
+                  class="fas fa-sort-up"></i>
+          </button>
+      </div>
+
+  </div>
+</div>
+<div class="container-fluid content">
+  <div class="row  justify-content-center">
+      <div class="col-6">
+
+          <app-time-line [listOfProfiles]="listOfProfiles"></app-time-line>
+
+
+
+
+      </div>
+
+      <div class="col-6 ">
+          <app-profile-card [profileDataSet]="profileDataSet"></app-profile-card>
+      </div>
+
+  </div>
+
+
+</div>
+<div style="margin-top:10px; margin-bottom:10px;" class="container bottom-bar">
+
+  <div class="btn-group w3-card-4" role="group">
+      <button (click)="likeAll()" type="button" class="btn btn1 btn-light btn-outline-danger">Like  Humanly</button>
+      <button (click)="likeWithInterval()" type="button" class="btn btn3 btn-light btn-outline-danger">Like With 5s
+          interval</button>
+  </div>
+ 
+</div>
