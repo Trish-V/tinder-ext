@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ProfileCardComponent } from './profile-card/profile-card.component';
-import { TimeLineComponent } from './time-line/time-line.component';
+import { ProfileCardComponent } from './home/profile-card/profile-card.component';
+import { TimeLineComponent } from './home/time-line/time-line.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';

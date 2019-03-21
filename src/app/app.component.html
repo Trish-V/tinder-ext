@@ -1,1 +1,37 @@
- <app-home></app-home>
+<div class="header container-fluid">
+    <div class="row">
+        <div class="col-5">
+            <div class="row">
+                <div class="col-3">
+
+                    <img [src]='profileDisplayPicture' class="avatar" />
+                </div>
+                <div class="col-9">
+
+                    <h6 style="margin-top:15px">{{username}}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+
+            <h2   routerLink="" routerLinkActive="active"  >Tinder Bud!</h2>
+        </div>
+        <div class="col-1">
+            <button title="Go to Tinder.com"  (click)="goToTinder()" type="button" class="btn btn-link"> <i
+                    class="fas fa-fire-alt"></i>
+            </button>
+        </div>
+ 
+        <div class="col-1">
+            <button title="Settings"  routerLink="/settings" routerLinkActive="active" type="button" class="btn btn-link"><i
+                    class="fas fa-cog "></i></button>
+        </div>
+        <div class="col-1">
+            <button (click)="popUp()" title="Pop-up window" type="button" class="btn btn-link"> <i
+                    class="fas fa-sort-up"></i>
+            </button>
+        </div>
+
+    </div>
+</div>
+<router-outlet></router-outlet>

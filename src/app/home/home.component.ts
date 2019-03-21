@@ -1,27 +1,27 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { SibilingsCommunicationService } from '../services/sibilings.communication.service';
-import { TinderAPI } from '../services/tinder.message.retrival.service';
-import { Router } from '@angular/router';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { async } from '@angular/core/testing';
+import { Component, OnInit, Input, ViewChild } from '@angular/core'
+import { environment } from '../../environments/environment'
+import { SibilingsCommunicationService } from '../services/sibilings.communication.service'
+import { TinderAPI } from '../services/tinder.message.retrival.service'
+import { Router } from '@angular/router'
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser'
+import { async } from '@angular/core/testing'
+import { TimeLineComponent } from './time-line/time-line.component'
 
-declare var getChrome: any;
+declare var getChrome: any
 
-declare var openTinder: any;
+declare var openTinder: any
 
-declare var Swal: any;
+declare var Swal: any
 
-declare var Toast: any;
+declare var Toast: any
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+ 
 
-  profileDisplayPicture = '../../assets/icon/avatar.png';
-  username = 'loading...';
 
   @Input()
   profileDataSet = {
@@ -36,10 +36,10 @@ export class HomeComponent implements OnInit {
 
     studies: ''
 
-  };
+  }
 
-  listOfProfiles = [];
-  static context;
+  listOfProfiles = []
+  static context
 
 
 
@@ -56,11 +56,11 @@ export class HomeComponent implements OnInit {
   ) {
     console.log('started')
 
-    HomeComponent.context = this;
+    HomeComponent.context = this
 
     getChrome().tabs.getSelected(null, function (tab) {
 
-      var tablink = tab.url;
+      var tablink = tab.url
 
       if (tablink.includes('tinder.com')) {
 
@@ -74,85 +74,47 @@ export class HomeComponent implements OnInit {
             // alert('error')
           }
 
-        });
+        })
 
-
-      }
-
-    });
-
-    let thisContext = this;
-    getChrome().runtime.onMessage.addListener(function (request, sender) {
-      if (request.action == "savedLocalStorage") {
-        // callback for local storage 
-        thisContext.saveLocalStorage('tinder_local_storage', request.source);
-
-      }
-      if (request.action == "getLocalStorage") {
-
-        localStorage.setItem('tinder_local_storage', request.source);
-
-      }
-
-    });
-
-
-    try {
-      this.setUserProfile();
-
-      this.getRecs(3050);
-
-    } catch (error) {
-
-      this.openAlertToReLogUser();
-    }
-
-  }
-
-  setUserProfile() {
-    var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'));
-
-    this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
-
-    this.tinderAPI.services.get_profile_of_the_logged_in_user().subscribe(res => {
-
-      this.profileDisplayPicture = res.photos[0].url;
-
-      this.username = res.name;
-
-      const Toast = Swal.mixin({
-        toast: true,
-
-        position: 'top-end',
-
-        showConfirmButton: false,
-
-        timer: 3000
-
-      });
-
-      Toast.fire({
-        type: 'success',
-
-        title: 'Signed in successfully'
-
-      })
-
-      // console.log(res.photos[0].url)
-    }, err => {
-      if (err.status) {
-        console.log('No Access ' + err.status)
-        this.openAlertToReLogUser();
 
       }
 
     })
+
+    let thisContext = this
+    getChrome().runtime.onMessage.addListener(function (request, sender) {
+      if (request.action == "savedLocalStorage") {
+        
+        // callback for local storage 
+        thisContext.saveLocalStorage('tinder_local_storage', request.source)
+
+      }
+      if (request.action == "getLocalStorage") {
+
+        localStorage.setItem('tinder_local_storage', request.source)
+
+      }
+
+    })
+
+
+    try { 
+
+      this.getRecs(3050)
+
+    } catch (error) {
+ 
+    }
+
   }
+
+  
+
 
 
   getRecs(sleep) {
 
-    var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'));
+    var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'))
 
     this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
 
@@ -172,7 +134,7 @@ export class HomeComponent implements OnInit {
 
               timer: 3000
 
-            });
+            })
 
             Toast.fire({
               type: 'warning',
@@ -183,7 +145,7 @@ export class HomeComponent implements OnInit {
 
           }, sleep)
 
-          return;
+          return
         }
       } catch (error) {
 
@@ -209,16 +171,13 @@ export class HomeComponent implements OnInit {
 
   likeWithInterval() {
 
-    alert(JSON.stringify(this.profileDataSet));
+    alert(JSON.stringify(this.profileDataSet))
 
   }
-
-  feelingLucky() {
-
-  }
+ 
   testLocalStorage() {// injecting localstorage script
 
-    alert('local');
+    alert('local')
 
     getChrome().tabs.executeScript(null, {
 
@@ -230,7 +189,7 @@ export class HomeComponent implements OnInit {
 
       }
 
-    });
+    })
 
   }
 
@@ -253,25 +212,27 @@ export class HomeComponent implements OnInit {
 
         focused: true
 
-      });
+      })
 
-    });
+    })
 
   }
 
 
-  updateEveryMS = 1000;
+  updateEveryMS = 1000
 
   async poll(results: any) {
+
     for (let result of results) {
       // code to poll server and update models and view ...
-      var bdate = new Date(result.birth_date);
+      var bdate = new Date(result.birth_date)
 
-      var nowDate = new Date();
+      var nowDate = new Date()
 
-      var age = nowDate.getTime() - bdate.getTime();
+      var age = nowDate.getTime() - bdate.getTime()
 
-      result.age = ((age / (1000 * 60 * 60 * 24)) / 366).toFixed(0);
+      result.age =Number(((age / (1000 * 60 * 60 * 24)) / 366).toFixed(0) ) - 1
+
       result.schools.push({
         id: "000",
         name: "000"
@@ -279,15 +240,15 @@ export class HomeComponent implements OnInit {
 
       this.listOfProfiles.push(result)
 
-      this.sibilingsCommService.pushMessage('scrollTop');
+      this.sibilingsCommService.pushMessage('scrollTop')
 
-      await this.sleep(this.updateEveryMS);
+      await this.sleep(this.updateEveryMS)
     }
   }
 
   sleep(ms) {
 
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms))
 
   }
 
@@ -321,19 +282,25 @@ export class HomeComponent implements OnInit {
 
           source: 'open_tinder'
 
-        });
+        })
       }
 
-    });
+    })
   }
 
 
   saveLocalStorage(key, value) {
-    localStorage.setItem(key, value);
+
+    localStorage.setItem(key, value)
+
   }
 
   refresh() {
-    this.getRecs(0);
+
+    this.listOfProfiles=[]
+
+    this.getRecs(0)
+
   }
 
 
