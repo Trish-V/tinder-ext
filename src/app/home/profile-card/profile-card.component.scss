@@ -1,5 +1,8 @@
+@import '../../../assets/css/animate.css';
+
 * {
-  transition: all .5s ease;
+  transition: all 0.5s ease;
+  position: relative;
 }
 
 .card {
@@ -13,32 +16,6 @@
   background-position: center;
   // margin-bottom: 150%;
   background-repeat: no-repeat;
-}
-.user {
-  background-size: cover;
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  position: relative;
-}
-
-.content {
-  width: 100%;
-  // border-radius: 10px;
-  // padding: 3px;
-  color: white;
-  // float: right;
-  text-align: right;
-  margin-top: 15px;
-  h4 {
-    width: 100%;
-    text-align: right;
-    font-size: 120%;
-  }
-  // background-color: rgba(44, 44, 44, 0.616);
-  // background-image:
-  // position: absolute;
-  // bottom: 0;
 }
 
 .bottom-bar {
@@ -68,30 +45,8 @@
   width: 100%;
 }
 
-.bannerStyle div {
-  background-color: #ccc;
-  background-size: cover !important;
-  height: 100%;
-}
-
-.bannerStyle img {
-  width: 100%;
-  height: 100%;
-}
-
-.bannerStyle h1 {
-  text-align: center;
-  background: rgba(0, 0, 0, 0.32);
-  color: white;
-  margin: 0;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .tile {
-  min-height: 240px;
+  min-height: 270px;
   background-color: #ccc;
   background-size: cover !important;
   width: 100%;
@@ -99,39 +54,22 @@
   border-bottom-left-radius: 10px;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+  position: relative;
   h1 {
-  
   }
 }
-.drop{
+.drop {
   z-index: -500;
-    position: absolute;
-    color: white;
-    text-align: center;
-    width: 80%;
-    top: 110px; 
-    margin-left: 10%;
-    margin-right: 10%; 
-}
-// .tile h1 {
-//   text-align: center;
-//   line-height: 200px;
-//   background: rgba(0, 0, 0, 0.32);
-//   color: white;
-//   margin: 0;
-// }
-
-h4 {
-  margin: 0;
-  padding: 10px 15px;
+  position: absolute;
+  color: white;
   text-align: center;
+  width: 80%;
+  top: 110px;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
-p {
-  margin: 0;
-  padding: 0 15px 10px;
-  text-align: center;
-}
+
 
 .wBg {
   background: white;
@@ -140,21 +78,6 @@ p {
 .container {
   max-width: 75%;
   margin: 0 auto;
-}
-
-nav {
-  border-bottom: 1px solid #ccc;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  background: white;
-  z-index: 12;
-}
-
-nav h1 {
-  margin: 0;
-  padding: 10px;
-  text-align: center;
 }
 
 .carBtn {
@@ -272,4 +195,34 @@ nav h1 {
       transition: 0.3s ease all;
     }
   }
+}
+
+ 
+.rec-info {
+  color: white;
+  line-height: 15px;
+  bottom: 0;
+  font-size: 16px; 
+  width: inherit;
+  position: absolute;
+  padding: 2px;
+  background: -webkit-linear-gradient(to bottom, rgba(0, 0, 0, 0.116), rgba(0, 0, 0, 0.575)); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.116), rgba(0, 0, 0, 0.575)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-radius: 10px; 
+}
+
+ngu-tile { 
+
+  
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+
+.hearts {
+  animation-duration: 1.5s; 
 }

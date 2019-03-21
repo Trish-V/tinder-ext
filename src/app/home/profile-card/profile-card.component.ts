@@ -1,9 +1,11 @@
-import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core'
+import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild } from '@angular/core'
 import { DomSanitizer } from '@angular/platform-browser'
 
-import { NguCarouselConfig } from '@ngu/carousel'
+import { NguCarouselConfig, NguCarousel } from '@ngu/carousel'
 import { slider } from './animation'
 
+
+declare var Swal: any
 
 @Component({
   selector: 'app-profile-card',
@@ -13,6 +15,12 @@ import { slider } from './animation'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileCardComponent implements OnInit {
+
+  @ViewChild('myCarousel') myCarousel:any
+
+  stateLike = false
+
+  stateDislike = false
 
   @Input() profileDataSet = {
 
@@ -38,7 +46,7 @@ export class ProfileCardComponent implements OnInit {
   @Input() name: string
 
   public carouselTileItems$: Array<any> = this.imgags
-  
+
   public carouselTileConfig: NguCarouselConfig = {
     grid: { xs: 1, sm: 1, md: 1, lg: 1, all: 0 },
     speed: 250,
@@ -50,6 +58,7 @@ export class ProfileCardComponent implements OnInit {
     interval: { timing: 3000 },
     animation: 'lazy'
   }
+
   tempData: any[]
 
 
@@ -74,42 +83,91 @@ export class ProfileCardComponent implements OnInit {
   }
 
   drop(ev) {
-    ev.preventDefault()
+
+    this.dropState = false
 
     var data = ev.dataTransfer.getData("text")
 
     this.carouselTileItems$ = []
 
-    for (var photos of JSON.parse(data).photos)
+this.myCarousel.moveTo(0,false)
+    for (var photos of JSON.parse(data).photos) {
 
       this.carouselTileItems$.push(photos.processedFiles[0].url)
+    }
+
+    ev.preventDefault()
 
 
-
-    this.dropState = false
   }
 
   dragenter(ev) {
+    if (String(ev.target.className).trim() === 'tile') {
+      this.dropState = true;
+      console.log('changing state drag enter')
+    }
+    ev.preventDefault();
+    // alert(ev.target.className )
+    // this.dropState = (ev.target.className === 'tile') ? true : this.dropState
 
-    ev.preventDefault()
-
-    this.dropState = (ev.target.className === 'tile') ? true : this.dropState
-
+    console.log('dragenter ' + ev.target.className + ' ' + this.dropState)
   }
 
   dragleave(ev) {
+    if (String(ev.target.className).trim() === 'tile') {
+      this.dropState = false;
+      console.log('changing state drag leave')
+    }
+    ev.preventDefault();
 
-    ev.preventDefault()
+    // this.dropState = (ev.target.className === 'tile') ? false : this.dropState
 
-    this.dropState = (ev.target.className === 'tile') ? false : this.dropState
 
+
+    console.log('dragleave ' + ev.target.className + ' ' + this.dropState)
   }
 
   like() {
+    this.stateLike = true
+    const Toast = Swal.mixin({
+      toast: true,
+
+      position: 'top-end',
+
+      showConfirmButton: false,
+
+      timer: 3000
+
+    })
+
+    Toast.fire({
+      type: 'success',
+
+      title: 'Liked'
+
+    })
 
   }
   pass() {
+    this.stateDislike = true
 
+    const Toast = Swal.mixin({
+      toast: true,
+
+      position: 'top-end',
+
+      showConfirmButton: false,
+
+      timer: 3000
+
+    })
+
+    Toast.fire({
+      type: 'error',
+
+      title: 'Disliked'
+
+    })
   }
 
 }

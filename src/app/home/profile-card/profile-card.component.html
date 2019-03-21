@@ -1,43 +1,55 @@
 <div class="row justify-content-md-center dragArea" draggable="false" style="z-index:1000">
- 
+
     <div class="col-2"></div>
-    <div class="col-8"  style="z-index:1000">
-        <div class="row"  style="border-radius:20px; z-index:1000" [style.border]="dropState ? '3px dotted white ':''  ">
+    <div class="col-8" style="z-index:1000">
+        <div class="row" style="border-radius:20px; z-index:1000" [style.border]="dropState ? '3px dotted white ':''  ">
 
             <!-- <div [style.background-image]="'img1'" class="card w3-card-4   w3-hover-grayscale">
             </div> -->
-            <h3 class="drop"     [style.opacity]="dropState ? '1':'0'  " >Drop Here</h3>
-                <ngu-carousel  style="width:100%; height: 250px;  z-index:999" [style.opacity]="dropState ? '0.2':'1'  " #myCarousel [inputs]="carouselTileConfig"
-                    [dataSource]="carouselTileItems$ ">
+            <h3 class="drop" [style.opacity]="dropState ? '1':'0'  ">Drop Here</h3>
+            <ngu-carousel style="width:100%; height: 280px;  z-index:999" [style.opacity]="dropState ? '0.2':'1'  "
+                #myCarousel [inputs]="carouselTileConfig" [dataSource]="carouselTileItems$ ">
 
 
 
-                    <ngu-tile  style="z-index:1000" *nguCarouselDef="let item; let i = index; let ani = animate"   (dragenter)="dragenter($event)" (dragleave)="dragleave($event)"
-                        (dragover)="allowDrop($event)" (drop)="drop($event)"    >
- 
-                        <div  style="z-index:1000" class="tile" [style.background]="'url('+item+')'" >
-                            <!-- <h1  >Drop Here</h1> -->
+                <ngu-tile  style="z-index:1000" *nguCarouselDef="let item; let i = index; let ani = animate"  
+                  >
 
-                        </div>
-                    </ngu-tile>
+                    <div style="z-index:1000" class="tile " [style.background]="'url('+item+')'"    (dragenter)="dragenter($event)" (dragleave)="dragleave($event)" (dragover)="allowDrop($event)"
+                    (drop)="drop($event)" >
+                        <!-- <h1  >Drop Here</h1> -->
+                        <div class="rec-info">
+                                <small><b>Amanda 20</b><br></small>
+                                <small>26 miles away <br></small>
+                                <small>University of Bristol<br></small>
+                                <small> Assistant HR manager<br> </small>
+    
+    
+                            </div>
+                    </div>
+                </ngu-tile>
 
-                    <button NguCarouselNext style="z-index:5000" [style.opacity]="myCarousel.isLast ? 0.5:1"   class="rightRs">></button>
-                    <button NguCarouselPrev style="z-index:5000"  [style.opacity]="myCarousel.isFirst ? 0.5:1" class="leftRs"><</button>
- 
-
-                    <ul class="myPoint" NguCarouselPoint>
+                <button NguCarouselNext style="z-index:5000" [style.opacity]="myCarousel.isLast ? 0.5:1"
+                    class="rightRs">></button>
+               
+                <button NguCarouselPrev style="z-index:5000" [style.opacity]="myCarousel.isFirst ? 0.5:1"
+                    class="leftRs">
+                    <</button> <ul class="myPoint" NguCarouselPoint>
                         <li *ngFor="let i of myCarousel.pointNumbers; let i = index"
                             [class.active]="i==myCarousel.activePoint" (click)="myCarousel.moveTo(i)"></li>
-                    </ul>
-                </ngu-carousel>
-            
+                        </ul>
+                 
+
+
+            </ngu-carousel>
+        
         </div>
-        <div class="row">
-            <div style="margin-top:25px; margin-bottom:10px;" class="   bottom-bar">
+        <div class="row"   >
+            <div style="margin-top:30px; margin-bottom:10px;" class="   bottom-bar">
 
                 <div class="btn-group w3-card-4" role="group">
-                    <button (click)="like()" type="button" class="btn btn1 btn-light btn-outline-warning">Pass</button>
-                    <button (click)="pass()" type="button" class="btn btn3 btn-light btn-outline-danger">Like</button>
+                    <button [disabled]=" stateDislike || stateLike" (click)="pass()" type="button" [ngClass]="{'btn-outline-warning' : !stateDislike,'btn-light': !stateDislike ,'btn-warning':  stateDislike}" class="btn btn1 "><i class="fas fa-heart-broken  animated infinite jello  hearts"></i></button>
+                    <button [disabled]=" stateDislike || stateLike" (click)="like()" type="button"  [ngClass]="{'btn-outline-danger' : !stateLike,'btn-light': !stateLike ,'btn-danger':  stateLike}" class="btn btn3  "><i class="fas fa-heart animated infinite heartBeat hearts "></i></button>
                 </div>
 
 
@@ -46,6 +58,9 @@
 
     </div>
 
-    <div class="col-2"></div>
+    <div class="col-2">
+
+
+    </div>
 
 </div>
