@@ -16,27 +16,36 @@ declare var Swal: any
 })
 export class ProfileCardComponent implements OnInit {
 
-  @ViewChild('myCarousel') myCarousel:any
+  @ViewChild('myCarousel') myCarousel: any
 
   stateLike = false
 
   stateDislike = false
 
-  @Input() profileDataSet = {
+  @Input() profileDataSet =
+    {
+      name: '',
+      age: '',
+      schools: [
+        {
+          // id: '',
+          name: ''
+        }
+      ],
+      distance_mi: 0,
+      jobs: [
+        {
+          title: {
+            name: ''
+          }
+        }
 
-    name: '',
-
-    age: '',
-
-    distance: '',
-
-    imgUrl: '',
-
-    studies: ''
-
-  }
+      ]
+    }
 
   img1: any
+  school = this.profileDataSet.schools[0].name
+  job = this.profileDataSet.jobs[0].title.name
 
 
   imgags = [
@@ -68,7 +77,7 @@ export class ProfileCardComponent implements OnInit {
   constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    this.img1 = this.sanitizer.bypassSecurityTrustStyle('url( ' + this.profileDataSet.imgUrl + ' )')
+    // this.img1 = this.sanitizer.bypassSecurityTrustStyle('url( ' + this.profileDataSet.imgUrl + ' )')
   }
 
   allowDrop(ev) {
@@ -90,7 +99,17 @@ export class ProfileCardComponent implements OnInit {
 
     this.carouselTileItems$ = []
 
-this.myCarousel.moveTo(0,false)
+    this.myCarousel.moveTo(0, false)
+
+    this.profileDataSet = JSON.parse(data)
+
+    console.log(JSON.stringify(this.profileDataSet))
+    this.school = this.profileDataSet.schools[0].name
+    this.job = this.profileDataSet.jobs[0].title.name
+  
+    // this.profileDataSet.name = JSON.parse(data).name
+    // this.profileDataSet.age = JSON.parse(data).age
+
     for (var photos of JSON.parse(data).photos) {
 
       this.carouselTileItems$.push(photos.processedFiles[0].url)
@@ -102,29 +121,18 @@ this.myCarousel.moveTo(0,false)
   }
 
   dragenter(ev) {
-    if (String(ev.target.className).trim() === 'tile') {
-      this.dropState = true;
-      console.log('changing state drag enter')
-    }
-    ev.preventDefault();
-    // alert(ev.target.className )
-    // this.dropState = (ev.target.className === 'tile') ? true : this.dropState
 
-    console.log('dragenter ' + ev.target.className + ' ' + this.dropState)
+    this.dropState = (String(ev.target.className).trim() === 'tile') ? true : this.dropState;
+
+    ev.preventDefault();
+
   }
 
   dragleave(ev) {
-    if (String(ev.target.className).trim() === 'tile') {
-      this.dropState = false;
-      console.log('changing state drag leave')
-    }
+    this.dropState = (String(ev.target.className).trim() === 'tile') ? false : this.dropState;
+
     ev.preventDefault();
 
-    // this.dropState = (ev.target.className === 'tile') ? false : this.dropState
-
-
-
-    console.log('dragleave ' + ev.target.className + ' ' + this.dropState)
   }
 
   like() {

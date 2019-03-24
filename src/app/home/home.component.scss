@@ -4,72 +4,80 @@
 // font-family: 'Niconne', cursive;
 
 .header {
-    width: 100%;
-    height: 15%;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 5px;
-  
-    color: white;
-  
-    h2 {
-      float: right;
-      // margin-right:5px;
-      margin-top: 5px;
-      font-family: "Kaushan Script", cursive;
-    }
+  width: 100%;
+  height: 15%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+
+  color: white;
+
+  h2 {
+    float: right;
+    // margin-right:5px;
+    margin-top: 5px;
+    font-family: "Kaushan Script", cursive;
   }
-  .avatar {
-    width: 50px;
-    height: 50px;
-    // background-color: white;
-    border-radius: 50%;
-    src: url(../../assets/icon/avatar.png);
-    background-size: cover;
-    border: solid white 3px;
-  }
-  .btn1 {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-  }
-  
-  .btn3 {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-  }
-  
-  .btn-group {
-    width: 100%;
-  }
-  .content {
-    height: 65%;
-  }
-  
-  .bottom-bar {
-    height: 20%;
-    // position: static;
-    // bottom: 0;
-    top: 80%;
-  }
-  .info {
-    text-align: right;
-  }
-  
-  .timeline {
-    height: 30%;
-    // overflow-y: auto;
-    // height: 19%;
-  }
-  
-   
-  //*************************************************************
-  i{
-      color: white;
-  }
-  i:hover {
-    color: yellow;
-  }
-  
-  .w3-card-4{
-      border-radius: 10px;
-  }
+}
+.avatar {
+  width: 50px;
+  height: 50px;
+  // background-color: white;
+  border-radius: 50%;
+  src: url(../../assets/icon/avatar.png);
+  background-size: cover;
+  border: solid white 3px;
+}
+.btn1 {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.btn3 {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.btn-group {
+  width: 100%;
+}
+.content {
+  height: 65%;
+}
+
+.bottom-bar {
+  height: 20%;
+  // position: static;
+  // bottom: 0;
+  top: 80%;
+}
+.info {
+  text-align: right;
+}
+
+.timeline {
+  height: 30%;
+  // overflow-y: auto;
+  // height: 19%;
+}
+
+//*************************************************************
+i {
+  color: white;
+}
+i:hover {
+  color: yellow;
+}
+
+.w3-card-4 {
+  border-radius: 10px;
+}
+
+.overlay-drag-n-drop {
+  position: absolute;
+
+  width: 100%;
+  height: 465px;
+  background-color: rgba(0, 0, 0, 0.459);
+  z-index: 1500000;
+}

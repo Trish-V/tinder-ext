@@ -20,7 +20,7 @@ declare var Toast: any
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
- 
+
 
 
   @Input()
@@ -84,7 +84,7 @@ export class HomeComponent implements OnInit {
     let thisContext = this
     getChrome().runtime.onMessage.addListener(function (request, sender) {
       if (request.action == "savedLocalStorage") {
-        
+
         // callback for local storage 
         thisContext.saveLocalStorage('tinder_local_storage', request.source)
 
@@ -98,17 +98,17 @@ export class HomeComponent implements OnInit {
     })
 
 
-    try { 
+    try {
 
       this.getRecs(3050)
 
     } catch (error) {
- 
+
     }
 
   }
 
-  
+
 
 
 
@@ -174,7 +174,7 @@ export class HomeComponent implements OnInit {
     alert(JSON.stringify(this.profileDataSet))
 
   }
- 
+
   testLocalStorage() {// injecting localstorage script
 
     alert('local')
@@ -231,11 +231,17 @@ export class HomeComponent implements OnInit {
 
       var age = nowDate.getTime() - bdate.getTime()
 
-      result.age =Number(((age / (1000 * 60 * 60 * 24)) / 366).toFixed(0) ) - 1
+      result.age = Number(((age / (1000 * 60 * 60 * 24)) / 366).toFixed(0)) - 1
 
       result.schools.push({
         id: "000",
         name: "000"
+      })
+
+      result.jobs.push({
+        "title": {
+          "name": "000"
+        }
       })
 
       this.listOfProfiles.push(result)
@@ -297,7 +303,7 @@ export class HomeComponent implements OnInit {
 
   refresh() {
 
-    this.listOfProfiles=[]
+    this.listOfProfiles = []
 
     this.getRecs(0)
 

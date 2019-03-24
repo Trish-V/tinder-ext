@@ -19,10 +19,10 @@
                     (drop)="drop($event)" >
                         <!-- <h1  >Drop Here</h1> -->
                         <div class="rec-info">
-                                <small><b>Amanda 20</b><br></small>
-                                <small>26 miles away <br></small>
-                                <small>University of Bristol<br></small>
-                                <small> Assistant HR manager<br> </small>
+                                <small><b>{{profileDataSet.name}} {{profileDataSet.age}}</b><br></small>
+                                <small *ngIf="profileDataSet.distance_mi==0">{{profileDataSet.distance_mi}} miles away <br></small>
+                                <small *ngIf="school!='000'">{{school}}   <br></small>
+                                <small *ngIf="job!='000'">{{job}} <br> </small>
     
     
                             </div>
