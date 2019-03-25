@@ -122,14 +122,14 @@ export class ProfileCardComponent implements OnInit {
 
   dragenter(ev) {
 
-    this.dropState = (String(ev.target.className).trim() === 'tile') ? true : this.dropState;
+    this.dropState = (String(ev.target.className).trim().includes('tile') ) ? true : this.dropState;
 
     ev.preventDefault();
 
   }
 
   dragleave(ev) {
-    this.dropState = (String(ev.target.className).trim() === 'tile') ? false : this.dropState;
+    this.dropState = (String(ev.target.className).trim().includes('tile') ) ? false : this.dropState;
 
     ev.preventDefault();
 

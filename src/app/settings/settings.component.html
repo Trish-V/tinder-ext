@@ -1,3 +1,316 @@
-<p>
-  settings works!
-</p>
+<div class="container-fluid content">
+  <mat-card class="result">
+    <mat-card-content>
+      <mat-card-header>
+        <mat-card-title>Settings</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+
+
+        <!-- 738 + 16 -->
+
+
+
+        <mat-accordion style="max-width: 100%; max-height: 738px;  ">
+
+          <!-- Height -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Height
+              </mat-panel-title>
+              <mat-panel-description class="description">
+                Set your height. Currently height is set to {{value}}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-slider id="height" class="example-margin" [invert]="invert" [max]="max"
+              [min]="min" [step]="step" [displayWith]="formatLabel" [thumbLabel]="thumbLabel"
+              [tickInterval]="tickInterval" [(ngModel)]="value" [vertical]="vertical">
+            </mat-slider>
+
+          </mat-expansion-panel>
+
+          <!-- ethnicity -->
+          <mat-expansion-panel  >
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Ethnicity
+              </mat-panel-title>
+              <mat-panel-description class="description">
+                Current :
+                <p *ngIf="ethnicity.asian">&nbsp;Asian&nbsp; </p>
+                <p *ngIf="ethnicity.black"> &nbsp;Black&nbsp; </p>
+                <p *ngIf="ethnicity.indian"> &nbsp;Indian&nbsp;</p>
+                <p *ngIf="ethnicity.hispanic">&nbsp;Hispanic&nbsp;</p>
+                <p *ngIf="ethnicity.arabic">&nbsp;Arabic&nbsp;</p>
+                <p *ngIf="ethnicity.white">&nbsp;White&nbsp;</p>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.asian" 
+              >
+              Asian
+            </mat-checkbox>
+            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.black" 
+              >
+              Black
+            </mat-checkbox>
+            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.indian" 
+              >
+              Indian
+            </mat-checkbox>
+            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.hispanic" 
+              >
+              Hispanic
+            </mat-checkbox>
+            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.arabic" 
+              >
+              Arabic
+            </mat-checkbox>
+            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.white" 
+              >
+              White
+            </mat-checkbox>
+          </mat-expansion-panel>
+
+          <!-- Expectation type -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Expectation type
+              </mat-panel-title>
+              <mat-panel-description class="description">
+                Current :
+                <p *ngIf="expType==1">&nbsp;Hookup&nbsp; </p>
+                <p *ngIf="expType==2">&nbsp;Short term&nbsp; </p>
+                <p *ngIf="expType==3">&nbsp;Long term&nbsp; </p>
+                <p *ngIf="expType==4">&nbsp;Friends&nbsp; </p>
+
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="expType">
+              <mat-radio-button value="1">Hookup</mat-radio-button>
+              <mat-radio-button value="2">Short term</mat-radio-button>
+              <mat-radio-button value="3">Long term</mat-radio-button>
+              <mat-radio-button value="4">Friends</mat-radio-button>
+            </mat-radio-group>
+
+          </mat-expansion-panel>
+
+          <!-- Body type -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Body type
+              </mat-panel-title>
+              <mat-panel-description class="description">
+                Current :
+                <p *ngIf="bdyType==1">&nbsp;Thin&nbsp; </p>
+                <p *ngIf="bdyType==2">&nbsp;Average&nbsp; </p>
+                <p *ngIf="bdyType==3">&nbsp;Fit&nbsp; </p>
+                <p *ngIf="bdyType==4">&nbsp;Muscular&nbsp; </p>
+                <p *ngIf="bdyType==5">&nbsp;Curvy&nbsp; </p>
+                <p *ngIf="bdyType==6">&nbsp;Full figured&nbsp; </p>
+
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="bdyType">
+              <mat-radio-button value="1">Thin</mat-radio-button>
+              <mat-radio-button value="2">Average</mat-radio-button>
+              <mat-radio-button value="3">Fit</mat-radio-button>
+              <mat-radio-button value="4">Muscular</mat-radio-button>
+              <mat-radio-button value="5">Curvy</mat-radio-button>
+              <mat-radio-button value="6">Full figured</mat-radio-button>
+            </mat-radio-group>
+
+          </mat-expansion-panel>
+
+          <!-- Pets -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Pets
+              </mat-panel-title>
+              <mat-panel-description class="description">
+                Current :
+                <p *ngIf="pets==1">&nbsp;Cat&nbsp; </p>
+                <p *ngIf="pets==2">&nbsp;Dog&nbsp; </p>
+                <p *ngIf="pets==3">&nbsp;Any pet&nbsp; </p>
+                <p *ngIf="pets==4">&nbsp;No pet&nbsp; </p>
+
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="pets">
+              <mat-radio-button value="1">Cat</mat-radio-button>
+              <mat-radio-button value="2">Dog</mat-radio-button>
+              <mat-radio-button value="3">Any pet</mat-radio-button>
+              <mat-radio-button value="4">No pet</mat-radio-button>
+            </mat-radio-group>
+
+          </mat-expansion-panel>
+
+
+          <!-- Smokers and drinkers -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Smokers & Drinkers
+              </mat-panel-title>
+              <mat-panel-description class="description">
+                Current :
+                <p> Smokers ? </p>
+                <p *ngIf="smokers==1">&nbsp;YES&nbsp; </p>
+                <p *ngIf="smokers==2">&nbsp;NO&nbsp; </p>
+                <p> Smokers ? </p>
+                <p *ngIf="drinkers==1">&nbsp;YES&nbsp; </p>
+                <p *ngIf="drinkers==2">&nbsp;NO&nbsp; </p>
+
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <div class="row">
+              <div class="col-2">
+                <p>Smokers</p>
+              </div>
+              <div class="col-3">
+                <mat-radio-group aria-label="Select an option" [(ngModel)]="smokers">
+                  <mat-radio-button value="1">YES</mat-radio-button>
+                  <mat-radio-button value="2">NO</mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <div class="col-2">
+
+              </div>
+              <div class="col-2">
+                <p>Drinkers</p>
+              </div>
+              <div class="col-3">
+                <mat-radio-group aria-label="Select an option" [(ngModel)]="drinkers">
+                  <mat-radio-button value="1">YES</mat-radio-button>
+                  <mat-radio-button value="2">NO</mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+            </div>
+
+          </mat-expansion-panel>
+
+
+          <!-- Mutual friends -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Mutual friends
+              </mat-panel-title>
+              <mat-panel-description class="description">
+                Current :
+                <p *ngIf="mutual==1">&nbsp;Include&nbsp; </p>
+                <p *ngIf="mutual==2">&nbsp;Omit&nbsp; </p>
+
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="mutual">
+              <mat-radio-button value="1">Include</mat-radio-button>
+              <mat-radio-button value="2">Omit</mat-radio-button>
+            </mat-radio-group>
+
+          </mat-expansion-panel>
+
+
+
+          <!-- Children -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Children ?
+              </mat-panel-title>
+              <mat-panel-description class="description">
+                Current :
+                <p *ngIf="childrenPrefference==1">&nbsp;Has&nbsp; </p>
+                <p *ngIf="childrenPrefference==2">&nbsp;Dosen't have&nbsp; </p>
+
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-radio-group    aria-label="Select an option" [(ngModel)]="childrenPrefference">
+              <mat-radio-button   value="1">Has</mat-radio-button>
+              <mat-radio-button   value="2">Dosen't have</mat-radio-button>
+            </mat-radio-group>
+
+          </mat-expansion-panel>
+
+
+          <!-- Proffesion -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Proffesion ?
+              </mat-panel-title>
+              <mat-panel-description class="description">
+                Current :
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-form-field style="width:100%" >
+              <textarea rows="2" cols="100"  [(ngModel)]="proffesion" matInput placeholder="Describe your proffesion"></textarea>
+            </mat-form-field>
+
+
+          </mat-expansion-panel>
+
+
+
+
+
+          <!-- Religion -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Religion
+              </mat-panel-title>
+              <mat-panel-description class="description">
+                Current :
+                <p *ngIf="religion==1">&nbsp;Athiest&nbsp; </p>
+                <p *ngIf="religion==2">&nbsp;Buddhist&nbsp; </p>
+                <p *ngIf="religion==3">&nbsp;Catholic&nbsp; </p>
+                <p *ngIf="religion==4">&nbsp;Hindu&nbsp; </p>
+                <p *ngIf="religion==5">&nbsp;Jewish&nbsp; </p>
+                <p *ngIf="religion==6">&nbsp;Islam&nbsp; </p>
+
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="religion">
+              <mat-radio-button value="1">Athiest</mat-radio-button>
+              <mat-radio-button value="2">Buddhist</mat-radio-button>
+              <mat-radio-button value="3">Catholic</mat-radio-button>
+              <mat-radio-button value="4">Hindu</mat-radio-button>
+              <mat-radio-button value="5">Jewish</mat-radio-button>
+              <mat-radio-button value="6">Islam</mat-radio-button>
+            </mat-radio-group>
+
+          </mat-expansion-panel>
+
+
+
+        </mat-accordion>
+
+
+
+
+
+
+
+      </mat-card-content>
+
+
+    </mat-card-content>
+
+
+  </mat-card>
+</div>
