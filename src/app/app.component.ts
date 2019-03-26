@@ -226,6 +226,8 @@ export class AppComponent implements OnInit {
 
       cancelButtonText: 'Cancel',
 
+      allowOutsideClick: false,
+
       customClass: {
         popup: 'animated tada'
       }

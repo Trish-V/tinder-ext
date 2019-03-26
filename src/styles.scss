@@ -15,10 +15,11 @@
 }
 
 .body-propertise {
-  min-width: 720px;
-  min-height: 467px;
-  max-width: 720px;
-  max-height: 467px;
+  min-width: 720px !important;
+  min-height: 467px !important;
+  max-width: 720px !important;
+  max-height: 467px !important;
+
   background: -webkit-linear-gradient(350deg, #ff4b2b, #df4781); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(
     350deg,
@@ -26,3 +27,4 @@
     #df4781
   ); 
 }
+
