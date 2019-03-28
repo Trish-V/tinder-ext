@@ -103,7 +103,16 @@ export class ProfileCardComponent implements OnInit {
     private tinderAPI: TinderAPI,
     private sibilingsCommService: SibilingsCommunicationService
   ) {
-    sibilingsCommService.notificationAnnounced$.subscribe(msg => {
+
+   
+  }
+
+  ngOnInit() {
+ this.school = '000'
+    this.job = '000'
+    this.profileDataSet.distance_mi = 0
+    
+    this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
       if (msg.topic == 'pass' || msg.topic == 'like') {
 
         this.carouselTileItems$ = this.placeHolderImages
@@ -112,16 +121,13 @@ export class ProfileCardComponent implements OnInit {
 
         this.school = '000'
         this.job = '000'
+        this.profileDataSet.distance_mi = 0
 
         this.myCarousel.moveTo(0, false)
 
       }
 
     })
-  }
-
-  ngOnInit() {
-
   }
 
   allowDrop(ev) {
