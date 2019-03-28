@@ -237,6 +237,7 @@ export class HomeComponent implements OnInit {
         id: "000",
         name: "000"
       })
+ 
 
       result.jobs.push({
         "title": {

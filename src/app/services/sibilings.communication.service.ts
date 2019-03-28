@@ -8,10 +8,23 @@ export class SibilingsCommunicationService {
 
     messageAnnounced$ = this.messageSource.asObservable();
 
-   public pushMessage(message: string) {
+    public pushMessage(message: string) {
 
-    this.messageSource.next(message);
+        this.messageSource.next(message);
 
-}
+    }
+
+
+
+
+    private notificationeSource = new Subject<{ topic: string, message: string }>();
+
+    notificationAnnounced$ = this.notificationeSource.asObservable();
+
+    public pushNotification(topic: string, message: string) {
+
+        this.notificationeSource.next(  { topic : topic , message: message}  );
+
+    }
 
 }

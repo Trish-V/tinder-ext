@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser'
 import { NguCarouselConfig, NguCarousel } from '@ngu/carousel'
 import { slider } from './animation'
 import { TinderAPI } from 'src/app/services/tinder.message.retrival.service';
+import { SibilingsCommunicationService } from 'src/app/services/sibilings.communication.service';
 
 
 declare var Swal: any
@@ -45,18 +46,39 @@ export class ProfileCardComponent implements OnInit {
       ]
     }
 
-  img1: any
+  backUpProfileDataSet =
+    {
+      _id: '',
+      name: '',
+      age: '',
+      schools: [
+        {
+          // id: '',
+          name: ''
+        }
+      ],
+      distance_mi: 0,
+      jobs: [
+        {
+          title: {
+            name: ''
+          }
+        }
+
+      ]
+    }
+
   school = this.profileDataSet.schools[0].name
+
   job = this.profileDataSet.jobs[0].title.name
 
-
-  imgags = [
+  placeHolderImages = [
     '../../../assets/sample/sample.png', '../../../assets/sample/sample2.png'
   ]
 
   @Input() name: string
 
-  public carouselTileItems$: Array<any> = this.imgags
+  public carouselTileItems$: Array<any> = this.placeHolderImages
 
   public carouselTileConfig: NguCarouselConfig = {
     grid: { xs: 1, sm: 1, md: 1, lg: 1, all: 0 },
@@ -76,10 +98,30 @@ export class ProfileCardComponent implements OnInit {
 
   private recId = ''
 
-  constructor(private sanitizer: DomSanitizer, private tinderAPI: TinderAPI) { }
+  constructor(
+    private sanitizer: DomSanitizer,
+    private tinderAPI: TinderAPI,
+    private sibilingsCommService: SibilingsCommunicationService
+  ) {
+    sibilingsCommService.notificationAnnounced$.subscribe(msg => {
+      if (msg.topic == 'pass' || msg.topic == 'like') {
+
+        this.carouselTileItems$ = this.placeHolderImages
+
+        this.profileDataSet = this.backUpProfileDataSet
+
+        this.school = '000'
+        this.job = '000'
+
+        this.myCarousel.moveTo(0, false)
+
+      }
+
+    })
+  }
 
   ngOnInit() {
-    // this.img1 = this.sanitizer.bypassSecurityTrustStyle('url( ' + this.profileDataSet.imgUrl + ' )')
+
   }
 
   allowDrop(ev) {
@@ -94,6 +136,9 @@ export class ProfileCardComponent implements OnInit {
   }
 
   drop(ev) {
+    this.stateLike = false
+
+    this.stateDislike = false
 
     this.dropState = false
 
@@ -162,6 +207,8 @@ export class ProfileCardComponent implements OnInit {
 
     this.tinderAPI.services.like(recID).subscribe(res => {
 
+      this.sibilingsCommService.pushNotification('like', recID)
+
       const Toast = Swal.mixin({
         toast: true,
 
@@ -188,6 +235,8 @@ export class ProfileCardComponent implements OnInit {
     this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
 
     this.tinderAPI.services.pass(recID).subscribe(res => {
+
+      this.sibilingsCommService.pushNotification('pass', recID)
 
       const Toast = Swal.mixin({
         toast: true,

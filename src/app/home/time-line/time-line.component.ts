@@ -26,6 +26,23 @@ export class TimeLineComponent implements OnInit {
 
     })
 
+    sibilingsCommService.notificationAnnounced$.subscribe(msg => {
+      if (msg.topic == 'pass') {
+        var rec = this.listOfProfiles.find(u => u._id == msg.message)
+
+        this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
+
+      } else if (msg.topic == 'like') {
+        var rec = this.listOfProfiles.find(u => u._id == msg.message)
+
+        this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
+
+      }
+
+    })
+
+
+
   }
 
   ngOnInit() {
@@ -38,7 +55,7 @@ export class TimeLineComponent implements OnInit {
   drag(ev, profile) {
 
     ev.dataTransfer.setData("text", JSON.stringify(profile))
-    
+
   }
 
 
