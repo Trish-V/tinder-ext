@@ -171,12 +171,22 @@ export class TinderAPI {
 
         like: (_id) => {
 
-            return this.httpClient.get<any>(this.like_url, { headers: new HttpHeaders(JSON.stringify(this.headers)) })
+            return this.httpClient.get<any>(this.like_url + _id, {
+                headers: {
+
+                    'x-auth-token': TinderAPI.t_token,
+                }
+            })
 
         },
         pass: (_id) => {
 
-            return this.httpClient.get<any>(this.pass_url, { headers: new HttpHeaders(JSON.stringify(this.headers)) })
+            return this.httpClient.get<any>(this.pass_url + _id, {
+                headers: {
+
+                    'x-auth-token': TinderAPI.t_token,
+                }
+            })
 
         }
     };

@@ -3,6 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser'
 
 import { NguCarouselConfig, NguCarousel } from '@ngu/carousel'
 import { slider } from './animation'
+import { TinderAPI } from 'src/app/services/tinder.message.retrival.service';
 
 
 declare var Swal: any
@@ -24,6 +25,7 @@ export class ProfileCardComponent implements OnInit {
 
   @Input() profileDataSet =
     {
+      _id: '',
       name: '',
       age: '',
       schools: [
@@ -70,11 +72,11 @@ export class ProfileCardComponent implements OnInit {
 
   tempData: any[]
 
-
-
   dropState = false
 
-  constructor(private sanitizer: DomSanitizer) { }
+  private recId = ''
+
+  constructor(private sanitizer: DomSanitizer, private tinderAPI: TinderAPI) { }
 
   ngOnInit() {
     // this.img1 = this.sanitizer.bypassSecurityTrustStyle('url( ' + this.profileDataSet.imgUrl + ' )')
@@ -106,7 +108,7 @@ export class ProfileCardComponent implements OnInit {
     console.log(JSON.stringify(this.profileDataSet))
     this.school = this.profileDataSet.schools[0].name
     this.job = this.profileDataSet.jobs[0].title.name
-  
+
     // this.profileDataSet.name = JSON.parse(data).name
     // this.profileDataSet.age = JSON.parse(data).age
 
@@ -122,14 +124,14 @@ export class ProfileCardComponent implements OnInit {
 
   dragenter(ev) {
 
-    this.dropState = (String(ev.target.className).trim().includes('tile') ) ? true : this.dropState;
+    this.dropState = (String(ev.target.className).trim().includes('tile')) ? true : this.dropState;
 
     ev.preventDefault();
 
   }
 
   dragleave(ev) {
-    this.dropState = (String(ev.target.className).trim().includes('tile') ) ? false : this.dropState;
+    this.dropState = (String(ev.target.className).trim().includes('tile')) ? false : this.dropState;
 
     ev.preventDefault();
 
@@ -137,44 +139,73 @@ export class ProfileCardComponent implements OnInit {
 
   like() {
     this.stateLike = true
-    const Toast = Swal.mixin({
-      toast: true,
 
-      position: 'top-end',
+    this.stateDislike = true
 
-      showConfirmButton: false,
-
-      timer: 3000
-
-    })
-
-    Toast.fire({
-      type: 'success',
-
-      title: 'Liked'
-
-    })
+    this.serviceLikeImpl(this.profileDataSet._id);
 
   }
   pass() {
     this.stateDislike = true
 
-    const Toast = Swal.mixin({
-      toast: true,
+    this.stateLike = true
 
-      position: 'top-end',
+    this.servicePassImpl(this.profileDataSet._id);
 
-      showConfirmButton: false,
+  }
 
-      timer: 3000
+  serviceLikeImpl(recID) {
 
+    var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'))
+
+    this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
+
+    this.tinderAPI.services.like(recID).subscribe(res => {
+
+      const Toast = Swal.mixin({
+        toast: true,
+
+        position: 'top-end',
+
+        showConfirmButton: false,
+
+        timer: 3000
+
+      })
+
+      Toast.fire({
+        type: 'success',
+
+        title: 'Liked'
+
+      })
     })
+  }
+  servicePassImpl(recID) {
 
-    Toast.fire({
-      type: 'error',
+    var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'))
 
-      title: 'Disliked'
+    this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
 
+    this.tinderAPI.services.pass(recID).subscribe(res => {
+
+      const Toast = Swal.mixin({
+        toast: true,
+
+        position: 'top-end',
+
+        showConfirmButton: false,
+
+        timer: 3000
+
+      })
+
+      Toast.fire({
+        type: 'error',
+
+        title: 'Disliked'
+
+      })
     })
   }
 
