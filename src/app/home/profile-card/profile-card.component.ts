@@ -104,14 +104,14 @@ export class ProfileCardComponent implements OnInit {
     private sibilingsCommService: SibilingsCommunicationService
   ) {
 
-   
+
   }
 
   ngOnInit() {
- this.school = '000'
+    this.school = '000'
     this.job = '000'
     this.profileDataSet.distance_mi = 0
-    
+
     this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
       if (msg.topic == 'pass' || msg.topic == 'like') {
 
@@ -125,6 +125,9 @@ export class ProfileCardComponent implements OnInit {
 
         this.myCarousel.moveTo(0, false)
 
+      }
+      if (msg.topic == 'selectOnClick') {
+        this.carouselProfileSetup('selectOnClick', null, msg.message)
       }
 
     })
@@ -142,34 +145,8 @@ export class ProfileCardComponent implements OnInit {
   }
 
   drop(ev) {
-    this.stateLike = false
 
-    this.stateDislike = false
-
-    this.dropState = false
-
-    var data = ev.dataTransfer.getData("text")
-
-    this.carouselTileItems$ = []
-
-    this.myCarousel.moveTo(0, false)
-
-    this.profileDataSet = JSON.parse(data)
-
-    console.log(JSON.stringify(this.profileDataSet))
-    this.school = this.profileDataSet.schools[0].name
-    this.job = this.profileDataSet.jobs[0].title.name
-
-    // this.profileDataSet.name = JSON.parse(data).name
-    // this.profileDataSet.age = JSON.parse(data).age
-
-    for (var photos of JSON.parse(data).photos) {
-
-      this.carouselTileItems$.push(photos.processedFiles[0].url)
-    }
-
-    ev.preventDefault()
-
+    this.carouselProfileSetup('drag', ev, null)
 
   }
 
@@ -262,6 +239,49 @@ export class ProfileCardComponent implements OnInit {
 
       })
     })
+  }
+
+  carouselProfileSetup(type: String, ev, dataPayLoadOfProfile) {
+
+    this.stateLike = false
+
+    this.stateDislike = false
+
+    this.dropState = false
+
+    var data;
+
+    if (type == 'drag') {
+
+      data = ev.dataTransfer.getData("text")
+
+      ev.preventDefault()
+
+    } else if (type == 'selectOnClick') {
+
+      data = JSON.stringify(dataPayLoadOfProfile)
+
+    }
+
+    this.carouselTileItems$ = []
+
+    this.myCarousel.moveTo(0, false)
+
+    this.profileDataSet = JSON.parse(data)
+
+    console.log(JSON.stringify(this.profileDataSet))
+
+    this.school = this.profileDataSet.schools[0].name
+
+    this.job = this.profileDataSet.jobs[0].title.name
+
+    for (var photos of JSON.parse(data).photos) {
+
+      this.carouselTileItems$.push(photos.processedFiles[0].url)
+    }
+
+
+
   }
 
 }

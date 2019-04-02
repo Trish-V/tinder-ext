@@ -17,11 +17,11 @@ export class SibilingsCommunicationService {
 
 
 
-    private notificationeSource = new Subject<{ topic: string, message: string }>();
+    private notificationeSource = new Subject<{ topic: string, message: any }>();
 
     notificationAnnounced$ = this.notificationeSource.asObservable();
 
-    public pushNotification(topic: string, message: string) {
+    public pushNotification(topic: string, message: any) {
 
         this.notificationeSource.next(  { topic : topic , message: message}  );
 

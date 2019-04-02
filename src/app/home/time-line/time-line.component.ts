@@ -18,7 +18,7 @@ export class TimeLineComponent implements OnInit {
 
 
 
-  constructor(sibilingsCommService: SibilingsCommunicationService) {
+  constructor(private sibilingsCommService: SibilingsCommunicationService) {
 
     sibilingsCommService.messageAnnounced$.subscribe(msg => {
 
@@ -57,7 +57,9 @@ export class TimeLineComponent implements OnInit {
     ev.dataTransfer.setData("text", JSON.stringify(profile))
 
   }
-
+  selectOnClick(profile) {
+   this.sibilingsCommService.pushNotification('selectOnClick',profile);
+  }
 
 
 }

@@ -219,7 +219,7 @@ export class HomeComponent implements OnInit {
   }
 
 
-  updateEveryMS = 1000
+  updateEveryMS = 250
 
   async poll(results: any) {
 

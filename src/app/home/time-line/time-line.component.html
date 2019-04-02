@@ -5,7 +5,7 @@
   <div title="Recomendations" >
      
 
-    <div *ngFor="let profile of listOfProfiles" draggable="true" (dragstart)="drag($event,profile)" class="listStyle target">
+    <div *ngFor="let profile of listOfProfiles" (click)="selectOnClick(profile)" draggable="true" (dragstart)="drag($event,profile)" class="listStyle target">
 
       <div class="row">
         <div class="col-8"> 
