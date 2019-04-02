@@ -16,7 +16,7 @@
                     <div style="z-index:1000" class="tile " [style.background]="'url('+item+')'"    (dragenter)="dragenter($event)" (dragleave)="dragleave($event)" (dragover)="allowDrop($event)"
                     (drop)="drop($event)" >
                         <!-- <h1  >Drop Here</h1> -->
-                        <div class="rec-info">
+                        <div class="rec-info"  *ngIf="profileDataSet.distance_mi != 0  " >
                                 <small><b>{{profileDataSet.name}} {{profileDataSet.age}}</b><br></small>
                                 <small *ngIf="profileDataSet.distance_mi != 0  ">{{profileDataSet.distance_mi}} miles away <br></small>
                                 <small *ngIf="school!='000'">{{school}}   <br></small>

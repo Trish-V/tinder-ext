@@ -73,7 +73,8 @@ export class ProfileCardComponent implements OnInit {
   job = this.profileDataSet.jobs[0].title.name
 
   placeHolderImages = [
-    '../../../assets/sample/sample.png', '../../../assets/sample/sample2.png'
+    '../../../assets/images/placeholder.jpg',
+    '../../../assets/images/placeholder.jpg'
   ]
 
   @Input() name: string
@@ -104,13 +105,15 @@ export class ProfileCardComponent implements OnInit {
     private sibilingsCommService: SibilingsCommunicationService
   ) {
 
-
+    
   }
 
   ngOnInit() {
     this.school = '000'
     this.job = '000'
     this.profileDataSet.distance_mi = 0
+
+    this.myCarousel.moveTo(1, false)
 
     this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
       if (msg.topic == 'pass' || msg.topic == 'like') {
@@ -128,6 +131,10 @@ export class ProfileCardComponent implements OnInit {
       }
       if (msg.topic == 'selectOnClick') {
         this.carouselProfileSetup('selectOnClick', null, msg.message)
+      }
+      if (msg.topic == 'initialProfile') {
+        this.carouselProfileSetup('initialProfile', null, msg.message)
+        
       }
 
     })
@@ -257,15 +264,13 @@ export class ProfileCardComponent implements OnInit {
 
       ev.preventDefault()
 
-    } else if (type == 'selectOnClick') {
+    } else if (type == 'selectOnClick' || type == 'initialProfile') {
 
       data = JSON.stringify(dataPayLoadOfProfile)
 
     }
 
-    this.carouselTileItems$ = []
-
-    this.myCarousel.moveTo(0, false)
+    this.carouselTileItems$ = [] 
 
     this.profileDataSet = JSON.parse(data)
 
@@ -281,6 +286,7 @@ export class ProfileCardComponent implements OnInit {
     }
 
 
+    this.myCarousel.moveTo(0, false)
 
   }
 

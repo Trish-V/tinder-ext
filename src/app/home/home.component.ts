@@ -150,8 +150,12 @@ export class HomeComponent implements OnInit {
       } catch (error) {
 
       }
-
+      // this.profileDataSet = res.results[0]
       this.poll(res.results)
+
+      // alert(JSON.stringify(  res.results[0]   ))
+      this.sibilingsCommService.pushNotification('initialProfile',res.results[0])
+      this.sibilingsCommService.pushNotification('initialProfile',res.results[0])
 
     }, err => {
 
@@ -237,7 +241,7 @@ export class HomeComponent implements OnInit {
         id: "000",
         name: "000"
       })
- 
+
 
       result.jobs.push({
         "title": {

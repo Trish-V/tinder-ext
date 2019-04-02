@@ -41,11 +41,15 @@ export class TimeLineComponent implements OnInit {
 
     })
 
+      // alert(this.listOfProfiles[0])
+   
 
+    // this.selectOnClick(this.listOfProfiles[0])
 
   }
 
   ngOnInit() {
+   
   }
 
   allowDrop(ev) {
@@ -58,7 +62,7 @@ export class TimeLineComponent implements OnInit {
 
   }
   selectOnClick(profile) {
-   this.sibilingsCommService.pushNotification('selectOnClick',profile);
+    this.sibilingsCommService.pushNotification('selectOnClick', profile)
   }
 
 

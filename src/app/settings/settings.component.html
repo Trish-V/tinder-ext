@@ -1,9 +1,15 @@
 <div class="container-fluid content">
   <mat-card class="result">
     <mat-card-content>
-      <mat-card-header>
-        <mat-card-title>Settings</mat-card-title>
-      </mat-card-header>
+
+      <mat-toolbar>
+
+        <a mat-button routerLink=""> <i class="fas fa-chevron-left"></i> </a>
+
+        <span> Settings</span>
+
+      </mat-toolbar>
+     
       <mat-card-content>
 
 
@@ -24,15 +30,15 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-slider id="height" class="example-margin" [invert]="invert" [max]="max"
-              [min]="min" [step]="step" [displayWith]="formatLabel" [thumbLabel]="thumbLabel"
-              [tickInterval]="tickInterval" [(ngModel)]="value" [vertical]="vertical">
+            <mat-slider id="height" class="example-margin" [invert]="invert" [max]="max" [min]="min" [step]="step"
+              [displayWith]="formatLabel" [thumbLabel]="thumbLabel" [tickInterval]="tickInterval" [(ngModel)]="value"
+              [vertical]="vertical">
             </mat-slider>
 
           </mat-expansion-panel>
 
           <!-- ethnicity -->
-          <mat-expansion-panel  >
+          <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title>
                 Ethnicity
@@ -48,28 +54,22 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.asian" 
-              >
+            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.asian">
               Asian
             </mat-checkbox>
-            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.black" 
-              >
+            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.black">
               Black
             </mat-checkbox>
-            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.indian" 
-              >
+            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.indian">
               Indian
             </mat-checkbox>
-            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.hispanic" 
-              >
+            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.hispanic">
               Hispanic
             </mat-checkbox>
-            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.arabic" 
-              >
+            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.arabic">
               Arabic
             </mat-checkbox>
-            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.white" 
-              >
+            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.white">
               White
             </mat-checkbox>
           </mat-expansion-panel>
@@ -237,9 +237,9 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-radio-group    aria-label="Select an option" [(ngModel)]="childrenPrefference">
-              <mat-radio-button   value="1">Has</mat-radio-button>
-              <mat-radio-button   value="2">Dosen't have</mat-radio-button>
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="childrenPrefference">
+              <mat-radio-button value="1">Has</mat-radio-button>
+              <mat-radio-button value="2">Dosen't have</mat-radio-button>
             </mat-radio-group>
 
           </mat-expansion-panel>
@@ -256,8 +256,9 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-form-field style="width:100%" >
-              <textarea rows="2" cols="100"  [(ngModel)]="proffesion" matInput placeholder="Describe your proffesion"></textarea>
+            <mat-form-field style="width:100%">
+              <textarea rows="2" cols="100" [(ngModel)]="proffesion" matInput
+                placeholder="Describe your proffesion"></textarea>
             </mat-form-field>
 
 
