@@ -21,6 +21,7 @@ declare var Toast: any
 })
 export class HomeComponent implements OnInit {
 
+  toggleStateAutoLiking = false
 
 
   @Input()
@@ -54,7 +55,6 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private sanitizer: DomSanitizer
   ) {
-    console.log('started')
 
     HomeComponent.context = this
 
@@ -153,9 +153,7 @@ export class HomeComponent implements OnInit {
       // this.profileDataSet = res.results[0]
       this.poll(res.results)
 
-      // alert(JSON.stringify(  res.results[0]   ))
-      this.sibilingsCommService.pushNotification('initialProfile',res.results[0])
-      this.sibilingsCommService.pushNotification('initialProfile',res.results[0])
+      this.sibilingsCommService.pushNotification('initialProfile', res.results[0])
 
     }, err => {
 
@@ -165,19 +163,6 @@ export class HomeComponent implements OnInit {
 
 
 
-
-
-  likeAll() {
-
-
-
-  }
-
-  likeWithInterval() {
-
-    alert(JSON.stringify(this.profileDataSet))
-
-  }
 
   testLocalStorage() {// injecting localstorage script
 
@@ -312,6 +297,11 @@ export class HomeComponent implements OnInit {
 
     this.getRecs(0)
 
+  }
+
+
+  autoLiking(toggleState) {
+    this.toggleStateAutoLiking = toggleState
   }
 
 

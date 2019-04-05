@@ -22,9 +22,9 @@
 <div style="margin-top:10px; margin-bottom:10px;" class="container bottom-bar">
 
   <div class="btn-group w3-card-4" role="group">
-      <button (click)="likeAll()" type="button" class="btn btn1 btn-light btn-outline-danger">Like  Humanly</button>
-      <button (click)="likeWithInterval()" type="button" class="btn btn3 btn-light btn-outline-danger">Like With 5s
-          interval</button>
+      <!-- <button (click)="likeAll()" type="button" class="btn btn1 btn-light btn-outline-danger">Like  Humanly</button> -->
+      <button  *ngIf="!toggleStateAutoLiking" (click)="autoLiking(true)" type="button" class="btn btn1 btn3 btn-light btn-outline-danger">Start Auto Liking</button>
+      <button  *ngIf="toggleStateAutoLiking" (click)="autoLiking(false)" type="button" class="btn btn1 btn3 btn-danger ">Stop Auto Liking</button>
   </div>
  
 </div>

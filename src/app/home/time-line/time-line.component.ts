@@ -39,12 +39,7 @@ export class TimeLineComponent implements OnInit {
 
       }
 
-    })
-
-      // alert(this.listOfProfiles[0])
-   
-
-    // this.selectOnClick(this.listOfProfiles[0])
+    }) 
 
   }
 

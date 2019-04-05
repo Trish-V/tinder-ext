@@ -272,9 +272,7 @@ export class ProfileCardComponent implements OnInit {
 
     this.carouselTileItems$ = [] 
 
-    this.profileDataSet = JSON.parse(data)
-
-    console.log(JSON.stringify(this.profileDataSet))
+    this.profileDataSet = JSON.parse(data)  
 
     this.school = this.profileDataSet.schools[0].name
 

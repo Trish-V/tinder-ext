@@ -55,7 +55,10 @@ export class AppComponent implements OnInit {
     private router: Router,
     private sanitizer: DomSanitizer
   ) {
-    console.log('started')
+    var firstOpenning = JSON.stringify(localStorage.getItem('opened_state')).toString().length > 0
+
+
+    // this.checkIfIntialOpenOfApp()
 
     AppComponent.context = this
 
@@ -93,6 +96,7 @@ export class AppComponent implements OnInit {
 
         localStorage.setItem('tinder_local_storage', request.source)
 
+
       }
 
     })
@@ -102,13 +106,19 @@ export class AppComponent implements OnInit {
       this.setUserProfile()
 
     } catch (error) {
+ 
 
       this.openAlertToReLogUser()
     }
 
+
+
+
+
   }
 
   setUserProfile() {
+
     var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'))
 
     this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
@@ -118,6 +128,8 @@ export class AppComponent implements OnInit {
       this.profileDisplayPicture = res.photos[0].url
 
       this.username = res.name
+
+      localStorage.setItem('user_profile', JSON.stringify(res))
 
       const Toast = Swal.mixin({
         toast: true,
@@ -137,15 +149,39 @@ export class AppComponent implements OnInit {
 
       })
 
-      // console.log(res.photos[0].url)
+
     }, err => {
       if (err.status) {
+
         console.log('No Access ' + err.status)
-        this.openAlertToReLogUser()
+
+        // this.checkIfIntialOpenOfApp()
+
+
 
       }
 
     })
+  }
+  checkIfIntialOpenOfApp(): boolean {
+    try {
+
+      if (localStorage.getItem('tinder_local_storage') === null) {
+        alert('1st open try')
+
+      } else {
+        alert('else chk ' + localStorage.getItem('tinder_local_storage') )
+
+        return true
+
+      }
+    } catch (e) {
+      console.log('local storage empty')
+      alert('1st open catch')
+
+
+    }
+
   }
 
 
@@ -212,6 +248,49 @@ export class AppComponent implements OnInit {
 
 
   openAlertToReLogUser() {
+    if (this.checkIfIntialOpenOfApp()) {
+
+      Swal.fire({
+        title: '<strong>User Agreement </strong>',
+        
+        type: 'warning',
+
+        html:
+          'To view User Agreement, Terms and Conditions , Privacy policy and other information, ' +
+          '<a href="//github.com">Click</a> here' +
+          ' <b>By clicking <u>Start Swiping</u> you are agreeing with above agreement and privacy policy',
+
+        showCloseButton: true,
+
+        showCancelButton: false,
+
+        focusConfirm: false,
+
+        confirmButtonText:
+          'Start Swiping',
+
+        confirmButtonAriaLabel: 'Start Swiping',
+
+        allowOutsideClick: false,
+
+      }).then(result => {
+
+        if (result.value) {
+   
+          this.openAlertToLogUserSweetAlert()
+           
+        }
+  
+      })
+      return
+    }
+
+    this.openAlertToLogUserSweetAlert()
+
+  }
+
+  openAlertToLogUserSweetAlert(){
+
     Swal.fire({
 
       title: 'You are not logged in?',

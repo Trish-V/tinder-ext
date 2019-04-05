@@ -32,26 +32,7 @@ export class TinderAPI {
 
 
     services = {
-        // init: () => {
-        //     this.headers.append('Accept', 'application/json');
-        //     this.headers.append('app-version', '1020333');
-        //     this.headers.append('Content-Type', 'application/json');
-        //     this.headers.append('Origin', 'https://tinder.com');
-        //     this.headers.append('platform', 'web');
-        //     this.headers.append('Referer', 'https://tinder.com');
-        //     this.headers.append('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1');
-        //     this.headers.append('x-supported-image-formats', 'webp,jpeg');
-        //     this.headers.append('x-auth-token', TinderAPI.t_token);
-
-
-        //     this.matches_url = "https://api.gotinder.com/v2/matches";
-        //     this.messages_url = "https://api.gotinder.com/v2/matches/" + this.matchId + "/messages";
-        //     this.profile_url = "https://api.gotinder.com/profile";
-        //     this.recs_url = "https://api.gotinder.com/user/recs";
-        //     this.fb_auth_url = "https://api.gotinder.com/auth";
-        //     this.like_url = "https://api.gotinder.com/like/"
-        //     this.pass_url = "https://api.gotinder.com/pass/"
-        // },
+  
         initTinderToken: (t_token: string) => {
 
             this.headers.append('Origin', 'https://tinder.com');
