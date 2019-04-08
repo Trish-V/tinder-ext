@@ -62,23 +62,3 @@ setTimeout(function run() {
 
 
 
-
-function backgroundDataPublish() {
-
-  var data = null;
-
-  var xhr = new XMLHttpRequest();
-  xhr.withCredentials = true;
-
-  xhr.addEventListener("readystatechange", function () {
-    if (this.readyState === 4) {
-      console.log(this.responseText);
-    }
-  });
-
-  xhr.open("GET", "../json/match_data.json");
-  xhr.setRequestHeader("cache-control", "no-cache");
-  xhr.setRequestHeader("Postman-Token", "611eca2b-4874-49b5-bc4c-c8010ee3ec74");
-
-  xhr.send(data);
-}

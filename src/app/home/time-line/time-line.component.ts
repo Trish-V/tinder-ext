@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core'
 import { SibilingsCommunicationService } from '../../services/sibilings.communication.service'
 import PerfectScrollbar from 'perfect-scrollbar'
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar'
+import { async } from 'q';
 
 @Component({
   selector: 'app-time-line',
@@ -32,19 +33,27 @@ export class TimeLineComponent implements OnInit {
 
         this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
 
+
+        this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
+
       } else if (msg.topic == 'like') {
         var rec = this.listOfProfiles.find(u => u._id == msg.message)
 
         this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
 
+        console.log(JSON.stringify(this.listOfProfiles[0]))
+
+        
+        this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
+
       }
 
-    }) 
+    })
 
   }
 
   ngOnInit() {
-   
+
   }
 
   allowDrop(ev) {
@@ -60,5 +69,6 @@ export class TimeLineComponent implements OnInit {
     this.sibilingsCommService.pushNotification('selectOnClick', profile)
   }
 
+  
 
 }

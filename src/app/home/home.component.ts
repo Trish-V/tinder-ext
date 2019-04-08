@@ -14,6 +14,10 @@ declare var openTinder: any
 declare var Swal: any
 
 declare var Toast: any
+
+declare var backgroundDataPublish: any
+
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -45,6 +49,11 @@ export class HomeComponent implements OnInit {
 
 
   ngOnInit(): void {
+    HomeComponent.context = this
+
+
+  
+
   }
 
 
@@ -55,6 +64,7 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private sanitizer: DomSanitizer
   ) {
+
 
     HomeComponent.context = this
 
@@ -105,6 +115,9 @@ export class HomeComponent implements OnInit {
     } catch (error) {
 
     }
+
+    // message json read from background js in assets chromejs
+    backgroundDataPublish()
 
   }
 
@@ -240,6 +253,7 @@ export class HomeComponent implements OnInit {
 
       await this.sleep(this.updateEveryMS)
     }
+
   }
 
   sleep(ms) {
@@ -299,10 +313,35 @@ export class HomeComponent implements OnInit {
 
   }
 
+  timer
+  id = 0
 
   autoLiking(toggleState) {
-    this.toggleStateAutoLiking = toggleState
+    this.toggleStateAutoLiking = toggleState 
+
+    if (toggleState) {
+
+      this.id = 0
+
+      this.autoLikinScheduler()
+
+    } 
+    else
+
+      clearTimeout(this.timer)
+ 
   }
 
+  async autoLikinScheduler() {
+
+    while (this.toggleStateAutoLiking && Object.keys(this.listOfProfiles).length > this.id) { 
+
+      this.sibilingsCommService.pushNotification('selectOnAutoLike', this.listOfProfiles[this.id])
+      this.id++
+
+      await this.sleep(4000); 
+    }
+
+  }
 
 }

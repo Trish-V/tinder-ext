@@ -89,7 +89,7 @@ export class ProfileCardComponent implements OnInit {
     },
     touch: true,
     loop: true,
-    interval: { timing: 3000 },
+    interval: { timing: 2000 },
     animation: 'lazy'
   }
 
@@ -105,7 +105,7 @@ export class ProfileCardComponent implements OnInit {
     private sibilingsCommService: SibilingsCommunicationService
   ) {
 
-    
+
   }
 
   ngOnInit() {
@@ -113,20 +113,16 @@ export class ProfileCardComponent implements OnInit {
     this.job = '000'
     this.profileDataSet.distance_mi = 0
 
-    this.myCarousel.moveTo(1, false)
 
     this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
       if (msg.topic == 'pass' || msg.topic == 'like') {
 
-        this.carouselTileItems$ = this.placeHolderImages
+        // this.carouselTileItems$ = this.placeHolderImages
 
-        this.profileDataSet = this.backUpProfileDataSet
+        // this.profileDataSet = this.backUpProfileDataSet
 
-        this.school = '000'
-        this.job = '000'
-        this.profileDataSet.distance_mi = 0
 
-        this.myCarousel.moveTo(0, false)
+        this.myCarousel.reset(false)
 
       }
       if (msg.topic == 'selectOnClick') {
@@ -134,7 +130,11 @@ export class ProfileCardComponent implements OnInit {
       }
       if (msg.topic == 'initialProfile') {
         this.carouselProfileSetup('initialProfile', null, msg.message)
-        
+
+      }
+      if (msg.topic == 'selectOnAutoLike') {
+        this.carouselProfileSetup('selectOnAutoLike', null, msg.message)
+
       }
 
     })
@@ -142,12 +142,6 @@ export class ProfileCardComponent implements OnInit {
 
   allowDrop(ev) {
     ev.preventDefault()
-
-  }
-
-  drag(ev) {
-
-    ev.dataTransfer.setData("text", ev.target.id)
 
   }
 
@@ -179,6 +173,11 @@ export class ProfileCardComponent implements OnInit {
 
     this.serviceLikeImpl(this.profileDataSet._id);
 
+
+    this.school = '000'
+    this.job = '000'
+    this.profileDataSet.distance_mi = 0
+
   }
   pass() {
     this.stateDislike = true
@@ -186,6 +185,11 @@ export class ProfileCardComponent implements OnInit {
     this.stateLike = true
 
     this.servicePassImpl(this.profileDataSet._id);
+
+
+    this.school = '000'
+    this.job = '000'
+    this.profileDataSet.distance_mi = 0
 
   }
 
@@ -264,27 +268,53 @@ export class ProfileCardComponent implements OnInit {
 
       ev.preventDefault()
 
-    } else if (type == 'selectOnClick' || type == 'initialProfile') {
+    } else if (type == 'selectOnClick' || type == 'initialProfile' || type == 'selectOnAutoLike') {
 
       data = JSON.stringify(dataPayLoadOfProfile)
 
+
+
     }
 
-    this.carouselTileItems$ = [] 
+    try {
 
-    this.profileDataSet = JSON.parse(data)  
 
-    this.school = this.profileDataSet.schools[0].name
 
-    this.job = this.profileDataSet.jobs[0].title.name
+      this.profileDataSet = JSON.parse(data)
 
-    for (var photos of JSON.parse(data).photos) {
+      this.school = this.profileDataSet.schools[0].name
 
-      this.carouselTileItems$.push(photos.processedFiles[0].url)
+      this.job = this.profileDataSet.jobs[0].title.name
+
+      this.carouselTileItems$ = []
+
+      for (var photos of JSON.parse(data).photos) {
+
+        this.myCarousel.moveTo(0, true)
+        this.carouselTileItems$.push(photos.processedFiles[0].url)
+        this.myCarousel.moveTo(0, true)
+      }
+
+      this.myCarousel.reset(true)
+
+      if (type == 'selectOnAutoLike') {
+        // this.profileDataSet =  dataPayLoadOfProfile
+
+        setTimeout(() => {
+
+          this.like() 
+
+        }, 4000);
+
+
+      }
+
+
+
+    } catch (error) {
+
     }
 
-
-    this.myCarousel.moveTo(0, false)
 
   }
 

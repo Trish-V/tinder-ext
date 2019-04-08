@@ -40,11 +40,13 @@ export class AppComponent implements OnInit {
   }
 
   listOfProfiles = []
-  static context
+  static context 
 
 
 
   ngOnInit(): void {
+
+    AppComponent.context = this
   }
 
 
