@@ -2,9 +2,9 @@ import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy, V
 import { DomSanitizer } from '@angular/platform-browser'
 
 import { NguCarouselConfig, NguCarousel } from '@ngu/carousel'
-import { slider } from './animation'
-import { TinderAPI } from 'src/app/services/tinder.message.retrival.service';
+import { slider } from './animation' 
 import { SibilingsCommunicationService } from 'src/app/services/sibilings.communication.service';
+import { TinderAPIService } from 'src/app/services/tinder-api.service';
 
 
 declare var Swal: any
@@ -101,7 +101,7 @@ export class ProfileCardComponent implements OnInit {
 
   constructor(
     private sanitizer: DomSanitizer,
-    private tinderAPI: TinderAPI,
+    private tinderAPI: TinderAPIService,
     private sibilingsCommService: SibilingsCommunicationService
   ) {
 

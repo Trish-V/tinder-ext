@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
-export class TinderAPI {
+export class TinderAPIService {
 
     headers: HttpHeaders;
 
@@ -44,7 +44,7 @@ export class TinderAPI {
             this.headers.append('Referer', 'https://tinder.com');
             this.headers.append('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36');
             this.headers.append('x-supported-image-formats', 'webp,jpeg');
-            this.headers.append('x-auth-token', TinderAPI.t_token = t_token);
+            this.headers.append('x-auth-token', TinderAPIService.t_token = t_token);
 
 
             this.matches_url = "https://api.gotinder.com/v2/matches";
@@ -129,7 +129,7 @@ export class TinderAPI {
             return this.httpClient.get(this.profile_url, {
                 headers: {
 
-                    'x-auth-token': TinderAPI.t_token,
+                    'x-auth-token': TinderAPIService.t_token,
                 }
             })
 
@@ -145,7 +145,7 @@ export class TinderAPI {
             return this.httpClient.get<any>(this.recs_url, {
                 headers: {
 
-                    'x-auth-token': TinderAPI.t_token,
+                    'x-auth-token': TinderAPIService.t_token,
                 }
             })
         },
@@ -155,7 +155,7 @@ export class TinderAPI {
             return this.httpClient.get<any>(this.like_url + _id, {
                 headers: {
 
-                    'x-auth-token': TinderAPI.t_token,
+                    'x-auth-token': TinderAPIService.t_token,
                 }
             })
 
@@ -165,7 +165,7 @@ export class TinderAPI {
             return this.httpClient.get<any>(this.pass_url + _id, {
                 headers: {
 
-                    'x-auth-token': TinderAPI.t_token,
+                    'x-auth-token': TinderAPIService.t_token,
                 }
             })
 

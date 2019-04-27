@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core'
 import { environment } from '../../environments/environment'
-import { SibilingsCommunicationService } from '../services/sibilings.communication.service'
-import { TinderAPI } from '../services/tinder.message.retrival.service'
+import { SibilingsCommunicationService } from '../services/sibilings.communication.service' 
 import { Router } from '@angular/router'
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser'
 import { async } from '@angular/core/testing'
 import { TimeLineComponent } from './time-line/time-line.component'
+import { TinderAPIService } from '../services/tinder-api.service';
 
 declare var getChrome: any
 
@@ -14,8 +14,7 @@ declare var openTinder: any
 declare var Swal: any
 
 declare var Toast: any
-
-declare var backgroundDataPublish: any
+ 
 
 
 @Component({
@@ -60,7 +59,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     public sibilingsCommService: SibilingsCommunicationService,
-    private tinderAPI: TinderAPI,
+    private tinderAPI: TinderAPIService,
     private router: Router,
     private sanitizer: DomSanitizer
   ) {
@@ -115,9 +114,7 @@ export class HomeComponent implements OnInit {
     } catch (error) {
 
     }
-
-    // message json read from background js in assets chromejs
-    backgroundDataPublish()
+ 
 
   }
 

@@ -13,13 +13,14 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations'
 
 
 
-import { TinderAPI } from './services/tinder.message.retrival.service'
+import { TinderAPIService } from './services/tinder-api.service'
 import { SibilingsCommunicationService } from './services/sibilings.communication.service'
 import { NguCarouselModule } from '@ngu/carousel'
 import { HomeComponent } from './home/home.component'
 import { SettingsComponent } from './settings/settings.component' 
 import { MaterialCDKModule } from './_material/cdk/material.cdk.module'
 import { FormsModule } from '@angular/forms'
+import { CupidoAPIService } from './services/cupido-api.service'; 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -33,7 +34,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ProfileCardComponent,
     TimeLineComponent,
     HomeComponent,
-    SettingsComponent
+    SettingsComponent 
   ],
   imports: [
     BrowserModule,
@@ -49,8 +50,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     provide: PERFECT_SCROLLBAR_CONFIG,
     useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
   },
-    TinderAPI,
-    SibilingsCommunicationService
+    TinderAPIService,
+    SibilingsCommunicationService,
+    CupidoAPIService
   ],
   bootstrap: [AppComponent]
 })

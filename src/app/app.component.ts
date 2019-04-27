@@ -1,10 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core'
 import { environment } from '../environments/environment'
 import { SibilingsCommunicationService } from './services/sibilings.communication.service'
-import { TinderAPI } from './services/tinder.message.retrival.service'
 import { Router } from '@angular/router'
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser'
 import { async } from '@angular/core/testing'
+import { TinderAPIService } from './services/tinder-api.service';
+import { CupidoAPIService } from './services/cupido-api.service';
 
 declare var getChrome: any
 
@@ -40,7 +41,7 @@ export class AppComponent implements OnInit {
   }
 
   listOfProfiles = []
-  static context 
+  static context
 
 
 
@@ -53,7 +54,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     public sibilingsCommService: SibilingsCommunicationService,
-    private tinderAPI: TinderAPI,
+    private tinderAPI: TinderAPIService,
+    private cupidoAPI: CupidoAPIService,
     private router: Router,
     private sanitizer: DomSanitizer
   ) {
@@ -108,7 +110,7 @@ export class AppComponent implements OnInit {
       this.setUserProfile()
 
     } catch (error) {
- 
+
 
       this.openAlertToReLogUser()
     }
@@ -150,16 +152,23 @@ export class AppComponent implements OnInit {
         title: 'Signed in successfully'
 
       })
+      this.cupidoAPI.services.createProfile(localStorage.getItem('user_profile')).subscribe(res => {
 
+        alert("RES : "+JSON.stringify(res))
+
+      },
+        (error: any) => {
+
+          alert("ERR : "+JSON.stringify(error) + ' ' + error.status)
+
+        })
 
     }, err => {
       if (err.status) {
 
         console.log('No Access ' + err.status)
-
+        this.openAlertToReLogUser()
         // this.checkIfIntialOpenOfApp()
-
-
 
       }
 
@@ -172,7 +181,7 @@ export class AppComponent implements OnInit {
         alert('1st open try')
 
       } else {
-        alert('else chk ' + localStorage.getItem('tinder_local_storage') )
+        alert('else chk ' + localStorage.getItem('tinder_local_storage'))
 
         return true
 
@@ -249,12 +258,13 @@ export class AppComponent implements OnInit {
   }
 
 
+  //  checks the state of initial open or not( normal frequant user)
   openAlertToReLogUser() {
-    if (this.checkIfIntialOpenOfApp()) {
+    if (!this.checkIfIntialOpenOfApp()) {
 
       Swal.fire({
         title: '<strong>User Agreement </strong>',
-        
+
         type: 'warning',
 
         html:
@@ -278,11 +288,11 @@ export class AppComponent implements OnInit {
       }).then(result => {
 
         if (result.value) {
-   
+
           this.openAlertToLogUserSweetAlert()
-           
+
         }
-  
+
       })
       return
     }
@@ -291,7 +301,7 @@ export class AppComponent implements OnInit {
 
   }
 
-  openAlertToLogUserSweetAlert(){
+  openAlertToLogUserSweetAlert() {
 
     Swal.fire({
 
