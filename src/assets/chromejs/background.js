@@ -61,6 +61,9 @@ setTimeout(function run() {
 
 
 
+// var messages= new TinderMessages();
+
+
 
 
 function backgroundDataPublish() {
@@ -85,3 +88,4 @@ function backgroundDataPublish() {
 
   xhr.send(data);
 }
+

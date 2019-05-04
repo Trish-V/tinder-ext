@@ -23,7 +23,7 @@ export class CupidoAPIService {
 
         initCupidoAPI: () => {
             this.host = 'https://3a99fe9d.ngrok.io'
-            this.createProfielUrl = '/ext/profile'
+            this.createProfielUrl = '/ext/profiles'
             this.matchDetailsSharing = '/ext/match'
             this.lastMsgIdPerMatchId = '/ext/'+this.match_id+'/messages'
             this.saveMessagesForTheMatch= '/ext/'+this.match_id+'/messages'

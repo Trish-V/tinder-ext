@@ -4,20 +4,19 @@
 
       <mat-toolbar>
 
-        <a mat-button routerLink=""> <i class="fas fa-chevron-left"></i> </a>
+        <a mat-button routerLink="" (click)="onFormChange() "> <i class="fas fa-chevron-left"></i> </a>
 
         <span> Settings</span>
 
       </mat-toolbar>
-     
+
       <mat-card-content>
 
 
         <!-- 738 + 16 -->
 
 
-
-        <mat-accordion style="max-width: 100%; max-height: 738px;  ">
+        <mat-accordion style="max-width: 100%; max-height: 738px;  " (change)="onFormChange()">
 
           <!-- Height -->
           <mat-expansion-panel>
@@ -30,9 +29,9 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-slider id="height" class="example-margin" [invert]="invert" [max]="max" [min]="min" [step]="step"
-              [displayWith]="formatLabel" [thumbLabel]="thumbLabel" [tickInterval]="tickInterval" [(ngModel)]="value"
-              [vertical]="vertical">
+            <mat-slider (change)="onFormChange()" id="height" class="example-margin" [invert]="invert" [max]="max"
+              [min]="min" [step]="step" [displayWith]="formatLabel" [thumbLabel]="thumbLabel"
+              [tickInterval]="tickInterval" [(ngModel)]="value" [vertical]="vertical">
             </mat-slider>
 
           </mat-expansion-panel>
@@ -54,22 +53,22 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.asian">
+            <mat-checkbox (change)="onFormChange()" class="example-margin" [(ngModel)]="ethnicity.asian">
               Asian
             </mat-checkbox>
-            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.black">
+            <mat-checkbox (change)="onFormChange()" class="example-margin" [(ngModel)]="ethnicity.black">
               Black
             </mat-checkbox>
-            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.indian">
+            <mat-checkbox (change)="onFormChange()" class="example-margin" [(ngModel)]="ethnicity.indian">
               Indian
             </mat-checkbox>
-            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.hispanic">
+            <mat-checkbox (change)="onFormChange()" class="example-margin" [(ngModel)]="ethnicity.hispanic">
               Hispanic
             </mat-checkbox>
-            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.arabic">
+            <mat-checkbox (change)="onFormChange()" class="example-margin" [(ngModel)]="ethnicity.arabic">
               Arabic
             </mat-checkbox>
-            <mat-checkbox class="example-margin" [(ngModel)]="ethnicity.white">
+            <mat-checkbox (change)="onFormChange()" class="example-margin" [(ngModel)]="ethnicity.white">
               White
             </mat-checkbox>
           </mat-expansion-panel>
@@ -90,7 +89,7 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-radio-group aria-label="Select an option" [(ngModel)]="expType">
+            <mat-radio-group (change)="onFormChange()" aria-label="Select an option" [(ngModel)]="expType">
               <mat-radio-button value="1">Hookup</mat-radio-button>
               <mat-radio-button value="2">Short term</mat-radio-button>
               <mat-radio-button value="3">Long term</mat-radio-button>
@@ -117,7 +116,7 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-radio-group aria-label="Select an option" [(ngModel)]="bdyType">
+            <mat-radio-group (change)="onFormChange()" aria-label="Select an option" [(ngModel)]="bdyType">
               <mat-radio-button value="1">Thin</mat-radio-button>
               <mat-radio-button value="2">Average</mat-radio-button>
               <mat-radio-button value="3">Fit</mat-radio-button>
@@ -144,7 +143,7 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-radio-group aria-label="Select an option" [(ngModel)]="pets">
+            <mat-radio-group (change)="onFormChange()" aria-label="Select an option" [(ngModel)]="pets">
               <mat-radio-button value="1">Cat</mat-radio-button>
               <mat-radio-button value="2">Dog</mat-radio-button>
               <mat-radio-button value="3">Any pet</mat-radio-button>
@@ -177,7 +176,7 @@
                 <p>Smokers</p>
               </div>
               <div class="col-3">
-                <mat-radio-group aria-label="Select an option" [(ngModel)]="smokers">
+                <mat-radio-group (change)="onFormChange()" aria-label="Select an option" [(ngModel)]="smokers">
                   <mat-radio-button value="1">YES</mat-radio-button>
                   <mat-radio-button value="2">NO</mat-radio-button>
                 </mat-radio-group>
@@ -214,7 +213,7 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-radio-group aria-label="Select an option" [(ngModel)]="mutual">
+            <mat-radio-group (change)="onFormChange()" aria-label="Select an option" [(ngModel)]="mutual">
               <mat-radio-button value="1">Include</mat-radio-button>
               <mat-radio-button value="2">Omit</mat-radio-button>
             </mat-radio-group>
@@ -237,7 +236,7 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-radio-group aria-label="Select an option" [(ngModel)]="childrenPrefference">
+            <mat-radio-group (change)="onFormChange()" aria-label="Select an option" [(ngModel)]="childrenPrefference">
               <mat-radio-button value="1">Has</mat-radio-button>
               <mat-radio-button value="2">Dosen't have</mat-radio-button>
             </mat-radio-group>
@@ -252,12 +251,12 @@
                 Proffesion ?
               </mat-panel-title>
               <mat-panel-description class="description">
-                Current :
+                Current : {{proffesionValue}}
               </mat-panel-description>
             </mat-expansion-panel-header>
 
             <mat-form-field style="width:100%">
-              <textarea rows="2" cols="100" [(ngModel)]="proffesion" matInput
+              <textarea (change)="onFormChange()" #textbox [(ngModel)]="proffesion" rows="2" cols="100" matInput
                 placeholder="Describe your proffesion"></textarea>
             </mat-form-field>
 
@@ -286,7 +285,7 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-radio-group aria-label="Select an option" [(ngModel)]="religion">
+            <mat-radio-group (change)="onFormChange()" aria-label="Select an option" [(ngModel)]="religion">
               <mat-radio-button value="1">Athiest</mat-radio-button>
               <mat-radio-button value="2">Buddhist</mat-radio-button>
               <mat-radio-button value="3">Catholic</mat-radio-button>
@@ -300,6 +299,7 @@
 
 
         </mat-accordion>
+
 
 
 

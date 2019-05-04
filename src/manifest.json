@@ -18,7 +18,11 @@
 
    "background": {
       "scripts": [
-         "assets/chromejs/background.js"
+         "assets/chromejs/background.js",
+         
+         "assets/chromejs/cupido-api-service/services/messages.js" ,
+
+         "assets/chromejs/cupido-api-service/main.js"
       ],
       "persistent": false
    }
