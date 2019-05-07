@@ -34,14 +34,14 @@ class Main {
 
         this.msgService.getMatchesOfTheUserFirstPage({ count: 60, locale: 'en', message: 1, token: this.token }, (res) => {
 
-           
+
 
             console.log(res)
 
             if (typeof JSON.parse(res).data.pagination_token === undefined) {
+                return this.match_list.push(JSON.parse(res))
+            } else {
 
-            }else{
-                this.match_list.push(JSON.parse(res))
             }
 
         });

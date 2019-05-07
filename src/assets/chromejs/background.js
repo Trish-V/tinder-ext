@@ -74,8 +74,8 @@ setTimeout(function run() {
 
 setTimeout(function run() {
   try {
-    if (localStorage.getItem('is_registered_to_cupido').toString().match('true')) { 
-      var main = new Main(    JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken']   );
+    if (localStorage.getItem('is_registered_to_cupido').toString().match('true')) {
+      var main = new Main(JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken']);
 
     }
 
