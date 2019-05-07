@@ -81,10 +81,10 @@
               </mat-panel-title>
               <mat-panel-description class="description">
                 Current :
-                <p *ngIf="expType==1">&nbsp;Hookup&nbsp; </p>
-                <p *ngIf="expType==2">&nbsp;Short term&nbsp; </p>
-                <p *ngIf="expType==3">&nbsp;Long term&nbsp; </p>
-                <p *ngIf="expType==4">&nbsp;Friends&nbsp; </p>
+                <p *ngIf="expType=='1'">&nbsp;Hookup&nbsp; </p>
+                <p *ngIf="expType=='2'">&nbsp;Short term&nbsp; </p>
+                <p *ngIf="expType=='3'">&nbsp;Long term&nbsp; </p>
+                <p *ngIf="expType=='4'">&nbsp;Friends&nbsp; </p>
 
               </mat-panel-description>
             </mat-expansion-panel-header>
@@ -106,12 +106,12 @@
               </mat-panel-title>
               <mat-panel-description class="description">
                 Current :
-                <p *ngIf="bdyType==1">&nbsp;Thin&nbsp; </p>
-                <p *ngIf="bdyType==2">&nbsp;Average&nbsp; </p>
-                <p *ngIf="bdyType==3">&nbsp;Fit&nbsp; </p>
-                <p *ngIf="bdyType==4">&nbsp;Muscular&nbsp; </p>
-                <p *ngIf="bdyType==5">&nbsp;Curvy&nbsp; </p>
-                <p *ngIf="bdyType==6">&nbsp;Full figured&nbsp; </p>
+                <p *ngIf="bdyType=='1'">&nbsp;Thin&nbsp; </p>
+                <p *ngIf="bdyType=='2'">&nbsp;Average&nbsp; </p>
+                <p *ngIf="bdyType=='3'">&nbsp;Fit&nbsp; </p>
+                <p *ngIf="bdyType=='4'">&nbsp;Muscular&nbsp; </p>
+                <p *ngIf="bdyType=='5'">&nbsp;Curvy&nbsp; </p>
+                <p *ngIf="bdyType=='6'">&nbsp;Full figured&nbsp; </p>
 
               </mat-panel-description>
             </mat-expansion-panel-header>
@@ -135,10 +135,10 @@
               </mat-panel-title>
               <mat-panel-description class="description">
                 Current :
-                <p *ngIf="pets==1">&nbsp;Cat&nbsp; </p>
-                <p *ngIf="pets==2">&nbsp;Dog&nbsp; </p>
-                <p *ngIf="pets==3">&nbsp;Any pet&nbsp; </p>
-                <p *ngIf="pets==4">&nbsp;No pet&nbsp; </p>
+                <p *ngIf="pets=='1'">&nbsp;Cat&nbsp; </p>
+                <p *ngIf="pets=='2'">&nbsp;Dog&nbsp; </p>
+                <p *ngIf="pets=='3'">&nbsp;Any pet&nbsp; </p>
+                <p *ngIf="pets=='4'">&nbsp;No pet&nbsp; </p>
 
               </mat-panel-description>
             </mat-expansion-panel-header>
@@ -162,11 +162,11 @@
               <mat-panel-description class="description">
                 Current :
                 <p> Smokers ? </p>
-                <p *ngIf="smokers==1">&nbsp;YES&nbsp; </p>
-                <p *ngIf="smokers==2">&nbsp;NO&nbsp; </p>
-                <p> Smokers ? </p>
-                <p *ngIf="drinkers==1">&nbsp;YES&nbsp; </p>
-                <p *ngIf="drinkers==2">&nbsp;NO&nbsp; </p>
+                <p *ngIf="smokers=='1'">&nbsp;YES&nbsp; </p>
+                <p *ngIf="smokers=='2'">&nbsp;NO&nbsp; </p>
+                <p> Drinkers ? </p>
+                <p *ngIf="drinkers=='1'">&nbsp;YES&nbsp; </p>
+                <p *ngIf="drinkers=='2'">&nbsp;NO&nbsp; </p>
 
               </mat-panel-description>
             </mat-expansion-panel-header>
@@ -207,8 +207,8 @@
               </mat-panel-title>
               <mat-panel-description class="description">
                 Current :
-                <p *ngIf="mutual==1">&nbsp;Include&nbsp; </p>
-                <p *ngIf="mutual==2">&nbsp;Omit&nbsp; </p>
+                <p *ngIf="mutual=='1'">&nbsp;Include&nbsp; </p>
+                <p *ngIf="mutual=='2'">&nbsp;Omit&nbsp; </p>
 
               </mat-panel-description>
             </mat-expansion-panel-header>
@@ -230,13 +230,13 @@
               </mat-panel-title>
               <mat-panel-description class="description">
                 Current :
-                <p *ngIf="childrenPrefference==1">&nbsp;Has&nbsp; </p>
-                <p *ngIf="childrenPrefference==2">&nbsp;Dosen't have&nbsp; </p>
+                <p *ngIf="childrenPreference=='1'">&nbsp;Has&nbsp; </p>
+                <p *ngIf="childrenPreference=='2'">&nbsp;Dosen't have&nbsp; </p>
 
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-radio-group (change)="onFormChange()" aria-label="Select an option" [(ngModel)]="childrenPrefference">
+            <mat-radio-group (change)="onFormChange()" aria-label="Select an option" [(ngModel)]="childrenPreference">
               <mat-radio-button value="1">Has</mat-radio-button>
               <mat-radio-button value="2">Dosen't have</mat-radio-button>
             </mat-radio-group>
@@ -248,15 +248,15 @@
           <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title>
-                Proffesion ?
+                Profession ?
               </mat-panel-title>
               <mat-panel-description class="description">
-                Current : {{proffesionValue}}
+                Current : {{professionValue}}
               </mat-panel-description>
             </mat-expansion-panel-header>
 
             <mat-form-field style="width:100%">
-              <textarea (change)="onFormChange()" #textbox [(ngModel)]="proffesion" rows="2" cols="100" matInput
+              <textarea (change)="onFormChange()" #textbox [(ngModel)]="profession" rows="2" cols="100" matInput
                 placeholder="Describe your proffesion"></textarea>
             </mat-form-field>
 
@@ -275,12 +275,12 @@
               </mat-panel-title>
               <mat-panel-description class="description">
                 Current :
-                <p *ngIf="religion==1">&nbsp;Athiest&nbsp; </p>
-                <p *ngIf="religion==2">&nbsp;Buddhist&nbsp; </p>
-                <p *ngIf="religion==3">&nbsp;Catholic&nbsp; </p>
-                <p *ngIf="religion==4">&nbsp;Hindu&nbsp; </p>
-                <p *ngIf="religion==5">&nbsp;Jewish&nbsp; </p>
-                <p *ngIf="religion==6">&nbsp;Islam&nbsp; </p>
+                <p *ngIf="religion=='1'">&nbsp;Athiest&nbsp; </p>
+                <p *ngIf="religion=='2'">&nbsp;Buddhist&nbsp; </p>
+                <p *ngIf="religion=='3'">&nbsp;Catholic&nbsp; </p>
+                <p *ngIf="religion=='4'">&nbsp;Hindu&nbsp; </p>
+                <p *ngIf="religion=='5'">&nbsp;Jewish&nbsp; </p>
+                <p *ngIf="religion=='6'">&nbsp;Islam&nbsp; </p>
 
               </mat-panel-description>
             </mat-expansion-panel-header>

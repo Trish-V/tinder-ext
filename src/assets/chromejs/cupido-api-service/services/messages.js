@@ -2,6 +2,7 @@
 class TinderMessages {
 
     xhr = new XMLHttpRequest();
+    // match_list = []
 
     constructor() {
         this.xhr = new XMLHttpRequest();
@@ -9,20 +10,21 @@ class TinderMessages {
     }
 
 
-    getMatchesOfTheUserFirstPage(options = { count: 60, locale: 'en', message: 1, token: '' }, subscribe = { res: '' }) {
+
+    getMatchesOfTheUserFirstPage(options = { count: 60, locale: 'en', message: 1, token: '' }, pagination_token = 'start', match_list = [], subscribe = { res: '' }) {
 
         this.xhr.open("GET", "https://api.gotinder.com/v2/matches?" +
-            "count=" + options.count +
-            "&locale=" + options.locale +
-            "&message=" + options.message);
+            "count=" + (options.count) +
+            "&locale=" + (options.locale) +
+            "&message=" + (options.message));
 
         this.xhr.setRequestHeader("platform", "web");
 
-        this.xhr.setRequestHeader("x-auth-token", options.token);
+        this.xhr.setRequestHeader("x-auth-token", (options.token));
 
         this.xhr.addEventListener("readystatechange", function () {
 
-            if (this.readyState === 4) {
+            if (this.readyState === 4) {  
 
                 subscribe(this.responseText);
 

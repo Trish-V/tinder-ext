@@ -129,9 +129,9 @@ export class AppComponent implements OnInit {
 
     this.tinderAPI.services.get_profile_of_the_logged_in_user().subscribe(res => {
 
-      this.profileDisplayPicture = res.photos[0].url
+      this.profileDisplayPicture = res.data.user.photos[0].url
 
-      this.username = res.name
+      this.username = res.data.user.name
 
       localStorage.setItem('user_profile', JSON.stringify(res))
 
@@ -152,14 +152,42 @@ export class AppComponent implements OnInit {
         title: 'Signed in successfully'
 
       })
-      this.cupidoAPI.services.createProfile(localStorage.getItem('user_profile')).subscribe(res => {
 
-        alert("RES : "+JSON.stringify(res))
+      this.cupidoAPI.services.initCupidoAPI()
+
+      this.cupidoAPI.services.createProfile(JSON.parse(localStorage.getItem('user_profile'))).subscribe(res => {
+
+        console.log("RES : " + JSON.stringify(res) + res)
+
+        localStorage.setItem('is_registered_to_cupido', 'true') 
+
+        localStorage.setItem('platform_user_id', String(JSON.parse(localStorage.getItem('user_profile')).data.user._id)     )
+
+        if (res.id != null)
+
+          getChrome().runtime.sendMessage({
+
+            action: "is_registered_to_cupido",
+
+            source: 'true'
+
+          })
+
+        getChrome().runtime.sendMessage({
+
+          action: "platform_user_id",
+
+          source: String(localStorage.getItem('platform_user_id'))
+
+        })
+
 
       },
-        (error: any) => {
+        error => {
 
-          alert("ERR : "+JSON.stringify(error) + ' ' + error.status)
+          console.log("ERR : " + JSON.stringify(error) + ' ' + error)
+
+        }, () => {
 
         })
 
@@ -199,38 +227,13 @@ export class AppComponent implements OnInit {
 
 
 
-  likeAll() {
 
+  // likeWithInterval() {
 
+  //   alert(JSON.stringify(this.profileDataSet))
 
-  }
+  // }
 
-  likeWithInterval() {
-
-    alert(JSON.stringify(this.profileDataSet))
-
-  }
-
-  feelingLucky() {
-
-  }
-  testLocalStorage() {// injecting localstorage script
-
-    alert('local')
-
-    getChrome().tabs.executeScript(null, {
-
-      file: "assets/chromejs/localstorage.js"
-
-    }, function () {
-
-      if (getChrome().runtime.lastError) {
-
-      }
-
-    })
-
-  }
 
 
   popUp() { // popup window

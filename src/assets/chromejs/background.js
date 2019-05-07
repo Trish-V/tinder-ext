@@ -14,7 +14,16 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
     // alert(request.source)
 
   }
+  if (request.action == "is_registered_to_cupido") {
+    // callback for local storage  
+    localStorage.setItem('is_registered_to_cupido', request.source)
+  }
 
+  if (request.action == "platform_user_id") {
+    // callback for local storage  
+    localStorage.setItem('platform_user_id', String(request.source))
+
+  }
 });
 
 
@@ -27,7 +36,6 @@ setTimeout(function run() {
     var tablink = tab.url;
 
     if (tablink.includes('tinder.com')) {
-
 
       chrome.tabs.executeScript(null, { // injecting retriving dom
 
@@ -64,28 +72,19 @@ setTimeout(function run() {
 // var messages= new TinderMessages();
 
 
+setTimeout(function run() {
+  try {
+    if (localStorage.getItem('is_registered_to_cupido').toString().match('true')) { 
+      var main = new Main(    JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken']   );
 
+    }
 
-function backgroundDataPublish() {
-  var arrayLength;
-  var data = null;
+  } catch (error) {
 
-  var xhr = new XMLHttpRequest();
-  xhr.withCredentials = true;
+  }
+  console.log('running...cupido')
 
-  xhr.addEventListener("readystatechange", function () {
-      if (this.readyState === 4) {
+  setTimeout(run, 30000);
+}, 1000);
 
-          arrayLength = Object.keys( JSON.parse(this.responseText)).length;
-
-          // console.log(this.responseText);
-          console.log(arrayLength);
-      }
-  });
-
-  xhr.open("GET", "../../assets/json/match_data.json");
-  xhr.setRequestHeader("cache-control", "no-cache"); 
-
-  xhr.send(data);
-}
 

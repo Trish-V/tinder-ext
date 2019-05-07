@@ -33,7 +33,7 @@ export class TinderAPIService {
 
     services = {
   
-        initTinderToken: (t_token: string) => {
+        initTinderToken: (t_token?: string) => {
 
             this.headers.append('Origin', 'https://tinder.com');
             this.headers.append('Access-Control-Allow-Origin', '*');
@@ -49,7 +49,7 @@ export class TinderAPIService {
 
             this.matches_url = "https://api.gotinder.com/v2/matches";
             this.messages_url = "https://api.gotinder.com/v2/matches/" + this.matchId + "/messages";
-            this.profile_url = "https://api.gotinder.com/profile";
+            this.profile_url = "https://api.gotinder.com/v2/profile"+"?include=account%2Cboost%2Cemail_settings%2Cinstagram%2Clikes%2Cnotifications%2Cplus_control%2Cproducts%2Cpurchase%2Cspotify%2Csuper_likes%2Ctinder_u%2Ctravel%2Ctutorials%2Cuser";
             this.recs_url = "https://api.gotinder.com/user/recs";
             this.fb_auth_url = "https://api.gotinder.com/auth";
             this.like_url = "https://api.gotinder.com/like/"

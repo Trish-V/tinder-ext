@@ -24,12 +24,12 @@ export class SettingsComponent implements OnInit {
 
   mutual = '1'
 
-  proffesion: any
-  proffesionValue = ''
+  profession: any
+  professionValue = ''
 
   religion = '1'
 
-  childrenPrefference = '1'
+  childrenPreference = '1'
 
   ethnicity = {
     asian: true,
@@ -39,6 +39,8 @@ export class SettingsComponent implements OnInit {
     arabic: false,
     white: false
   }
+
+  
 
 
 
@@ -66,9 +68,9 @@ export class SettingsComponent implements OnInit {
     drinkers: this.drinkers,
     orientation: this.orientation,
     mutual: this.mutual,
-    proffesion: this.proffesionValue,
+    profession: this.professionValue,
     religion: this.religion,
-    childrenPrefference: this.childrenPrefference,
+    childrenPreference: this.childrenPreference,
     ethnicity: this.ethnicity
 
 
@@ -102,7 +104,7 @@ export class SettingsComponent implements OnInit {
 
   onFormChange() {
     // alert(JSON.stringify(this.proffesion))  
-    this.proffesionValue = this.proffesion.toString()
+    this.professionValue = this.profession.toString()
     this.userPreferences = {
       expType: this.expType,
       bdyType: this.bdyType,
@@ -111,9 +113,9 @@ export class SettingsComponent implements OnInit {
       drinkers: this.drinkers,
       orientation: this.orientation,
       mutual: this.mutual,
-      proffesion: this.proffesionValue,
+      profession: this.professionValue,
       religion: this.religion,
-      childrenPrefference: this.childrenPrefference,
+      childrenPreference: this.childrenPreference,
       ethnicity: this.ethnicity
     }
 
