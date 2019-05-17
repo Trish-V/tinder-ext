@@ -1,4 +1,6 @@
 
+
+
 chrome.runtime.onMessage.addListener(function (request, sender) {
 
   if (request.action == "open_tinder") { // callback for liked recomendations 
@@ -74,9 +76,16 @@ setTimeout(function run() {
 
 setTimeout(function run() {
   try {
-    if (localStorage.getItem('is_registered_to_cupido').toString().match('true')) {
+
+    if (
+      localStorage.getItem('is_registered_to_cupido').toString().match('true')
+      //  && typeof localStorage.getItem('tinder_local_storage')['TinderWeb/APIToken'] !== 'undefined'
+    ) {
+
       var main = new Main(JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken']);
 
+    } else {
+      console.log('else')
     }
 
   } catch (error) {
@@ -84,7 +93,7 @@ setTimeout(function run() {
   }
   console.log('running...cupido')
 
-  setTimeout(run, 30000);
-}, 1000);
+  setTimeout(run, 15000);
+}, 10000);
 
 

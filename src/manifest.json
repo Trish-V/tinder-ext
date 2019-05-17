@@ -20,7 +20,9 @@
       "scripts": [
          "assets/chromejs/background.js",
          
-         "assets/chromejs/cupido-api-service/services/messages.js" ,
+         "assets/chromejs/cupido-api-service/services/tinder.service.js" ,
+         
+         "assets/chromejs/cupido-api-service/services/cupido.service.js" ,
 
          "assets/chromejs/cupido-api-service/main.js"
       ],

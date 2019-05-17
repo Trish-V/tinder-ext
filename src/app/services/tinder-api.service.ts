@@ -136,7 +136,7 @@ export class TinderAPIService {
         },
         authenticate_with_fb: () => {
 
-            return this.httpClient.get<any>(this.fb_auth_url, { headers: new HttpHeaders(JSON.stringify(this.headers)) })
+            return this.httpClient.get<any>(this.fb_auth_url, { headers: new HttpHeaders(JSON.stringify(this.headers)) })    
 
         },
 

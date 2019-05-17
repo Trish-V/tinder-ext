@@ -14,6 +14,7 @@ export class CupidoAPIService {
     host: string
     match_id: string
     saveMessagesForTheMatch: string
+    state: any;
 
     constructor(private httpClient: HttpClient) {
 
@@ -22,8 +23,9 @@ export class CupidoAPIService {
 
     services = {
 
-        initCupidoAPI: () => {
-            this.host = 'https://06b4ff9b.ngrok.io'
+        initCupidoAPI: (state) => {
+            this.state = state
+            this.host = 'https://e752a67a.ngrok.io'
             this.createProfielUrl = '/ext/profiles'
             this.matchDetailsSharing = '/ext/match'
             this.lastMsgIdPerMatchId = '/ext/' + this.match_id + '/messages'
@@ -33,13 +35,15 @@ export class CupidoAPIService {
 
         createProfile: (profile): Observable<any> => {
             console.log(profile)
-            return this.httpClient.post<any>(   this.host + this.createProfielUrl, profile,
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
+            
+            if (this.state)
+                return this.httpClient.post<any>(this.host + this.createProfielUrl, profile,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
                     }
-                }
-            )
+                )
 
         }
 

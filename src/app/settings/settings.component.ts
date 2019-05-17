@@ -40,7 +40,7 @@ export class SettingsComponent implements OnInit {
     white: false
   }
 
-  
+
 
 
 
@@ -122,8 +122,14 @@ export class SettingsComponent implements OnInit {
 
 
     alert(JSON.stringify(this.userPreferences, null, 2))
+
+
+    
   }
 
+  goToHomePage() {
+
+  }
 
 
 

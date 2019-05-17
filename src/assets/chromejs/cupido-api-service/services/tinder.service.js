@@ -1,8 +1,8 @@
 
-class TinderMessages {
+class TinderService {
 
     xhr = new XMLHttpRequest();
-    // match_list = []
+
 
     constructor() {
         this.xhr = new XMLHttpRequest();
@@ -11,7 +11,7 @@ class TinderMessages {
 
 
 
-    getMatchesOfTheUserFirstPage(options = { count: 60, locale: 'en', message: 1, token: '' }, pagination_token = 'start', match_list = [], subscribe = { res: '' }) {
+    getMatchesOfTheUserFirstPage(options = { count: 60, locale: 'en', message: 1, token: '' }, subscribe = { res: '' }) {
 
         this.xhr.open("GET", "https://api.gotinder.com/v2/matches?" +
             "count=" + (options.count) +
@@ -24,7 +24,7 @@ class TinderMessages {
 
         this.xhr.addEventListener("readystatechange", function () {
 
-            if (this.readyState === 4) {  
+            if (this.readyState === 4) {
 
                 subscribe(this.responseText);
 
@@ -37,7 +37,7 @@ class TinderMessages {
 
     getMatchesOfTheUserSecondPage(options = { count: 60, locale: 'en', message: 1, page_token: '', token: '' }, subscribe = { res: '' }) {
 
-        xhr.open("GET", "https://api.gotinder.com/v2/matches?" +
+        this.xhr.open("GET", "https://api.gotinder.com/v2/matches?" +
             "count=" + options.count +
             "&locale=" + options.locale +
             "&message=" + options.message +
@@ -80,8 +80,10 @@ class TinderMessages {
 
     }
     getMessagesOfTheUserSecondPage(options = { count: 60, locale: 'en', match_id: '', page_token: '', token: '' }, subscribe = { res: '' }) {
+        
+        console.log(options.page_token)
 
-        xhr.open("GET", "https://api.gotinder.com/v2/matches/" + options.match_id +
+        this.xhr.open("GET", "https://api.gotinder.com/v2/matches/" + options.match_id +
             "/messages?count=" + options.count +
             "&locale=" + options.locale +
             "&page_token=" + options.page_token);

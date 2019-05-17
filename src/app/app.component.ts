@@ -153,7 +153,8 @@ export class AppComponent implements OnInit {
 
       })
 
-      this.cupidoAPI.services.initCupidoAPI()
+      // toggling false will stop saving profile and throw subscribe undefined
+      this.cupidoAPI.services.initCupidoAPI(true)
 
       this.cupidoAPI.services.createProfile(JSON.parse(localStorage.getItem('user_profile'))).subscribe(res => {
 
@@ -172,6 +173,7 @@ export class AppComponent implements OnInit {
             source: 'true'
 
           })
+
 
         getChrome().runtime.sendMessage({
 
@@ -201,6 +203,9 @@ export class AppComponent implements OnInit {
       }
 
     })
+
+
+    
   }
   checkIfIntialOpenOfApp(): boolean {
     try {
