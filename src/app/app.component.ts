@@ -15,354 +15,354 @@ declare var Swal: any
 
 declare var Toast: any
 
+declare var testFunctionBackground: any
+
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+	selector: 'app-root',
+	templateUrl: './app.component.html',
+	styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
 
-  profileDisplayPicture = '../assets/icon/avatar.png'
-  username = 'loading...'
+	profileDisplayPicture = '../assets/icon/avatar.png'
+	username = 'loading...'
 
-  @Input()
-  profileDataSet = {
+	@Input()
+	profileDataSet = {
 
-    name: '',
+		name: '',
 
-    age: '',
+		age: '',
 
-    distance: '',
+		distance: '',
 
-    imgUrl: '',
+		imgUrl: '',
 
-    studies: ''
+		studies: ''
 
-  }
+	}
 
-  listOfProfiles = []
-  static context
+	listOfProfiles = []
+	static context
 
 
 
-  ngOnInit(): void {
+	ngOnInit(): void {
 
-    AppComponent.context = this
-  }
+		AppComponent.context = this
+		this.testFunctionBackground()
+	}
 
 
 
-  constructor(
-    public sibilingsCommService: SibilingsCommunicationService,
-    private tinderAPI: TinderAPIService,
-    private cupidoAPI: CupidoAPIService,
-    private router: Router,
-    private sanitizer: DomSanitizer
-  ) {
-    var firstOpenning = JSON.stringify(localStorage.getItem('opened_state')).toString().length > 0
+	constructor(
+		public sibilingsCommService: SibilingsCommunicationService,
+		private tinderAPI: TinderAPIService,
+		private cupidoAPI: CupidoAPIService,
+		private router: Router,
+		private sanitizer: DomSanitizer
+	) {
+		var firstOpenning = JSON.stringify(localStorage.getItem('opened_state')).toString().length > 0
 
 
-    // this.checkIfIntialOpenOfApp()
 
-    AppComponent.context = this
+		AppComponent.context = this
 
-    getChrome().tabs.getSelected(null, function (tab) {
+		getChrome().tabs.getSelected(null, function (tab) {
 
-      var tablink = tab.url
+			var tablink = tab.url
 
-      if (tablink.includes('tinder.com')) {
+			if (tablink.includes('tinder.com')) {
 
-        getChrome().tabs.executeScript(null, { // injecting retriving dom
+				getChrome().tabs.executeScript(null, { // injecting retriving dom
 
-          file: "assets/chromejs/localstorage.js"
+					file: "assets/chromejs/localstorage.js"
 
-        }, function () {
+				}, function () {
 
-          if (getChrome().runtime.lastError) {
-            // alert('error')
-          }
+					if (getChrome().runtime.lastError) {
 
-        })
+					}
 
+				})
 
-      }
 
-    })
+			}
 
-    let thisContext = this
-    getChrome().runtime.onMessage.addListener(function (request, sender) {
-      if (request.action == "savedLocalStorage") {
-        // callback for local storage 
-        thisContext.saveLocalStorage('tinder_local_storage', request.source)
+		})
 
-      }
-      if (request.action == "getLocalStorage") {
+		let thisContext = this
+		getChrome().runtime.onMessage.addListener(function (request, sender) {
+			if (request.action == "savedLocalStorage") {
+				// callback for local storage 
+				thisContext.saveLocalStorage('tinder_local_storage', request.source)
 
-        localStorage.setItem('tinder_local_storage', request.source)
+			}
+			if (request.action == "getLocalStorage") {
 
+				localStorage.setItem('tinder_local_storage', request.source)
 
-      }
 
-    })
+			}
 
+		})
 
-    try {
-      this.setUserProfile()
 
-    } catch (error) {
+		try {
+			this.setUserProfile()
 
+		} catch (error) {
 
-      this.openAlertToReLogUser()
-    }
 
+			this.openAlertToReLogUser()
+		}
 
 
 
 
-  }
 
-  setUserProfile() {
+	}
 
-    var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'))
+	setUserProfile() {
 
-    this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
+		var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'))
 
-    this.tinderAPI.services.get_profile_of_the_logged_in_user().subscribe(res => {
+		this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
 
-      this.profileDisplayPicture = res.data.user.photos[0].url
+		this.tinderAPI.services.get_profile_of_the_logged_in_user().subscribe(res => {
 
-      this.username = res.data.user.name
+			this.profileDisplayPicture = res.data.user.photos[0].url
 
-      localStorage.setItem('user_profile', JSON.stringify(res))
+			this.username = res.data.user.name
 
-      const Toast = Swal.mixin({
-        toast: true,
+			localStorage.setItem('user_profile', JSON.stringify(res))
 
-        position: 'top-end',
+			const Toast = Swal.mixin({
+				toast: true,
 
-        showConfirmButton: false,
+				position: 'top-end',
 
-        timer: 3000
+				showConfirmButton: false,
 
-      })
+				timer: 3000
 
-      Toast.fire({
-        type: 'success',
+			})
 
-        title: 'Signed in successfully'
+			Toast.fire({
+				type: 'success',
 
-      })
+				title: 'Signed in successfully'
 
-      // toggling false will stop saving profile and throw subscribe undefined
-      this.cupidoAPI.services.initCupidoAPI(true)
+			})
 
-      this.cupidoAPI.services.createProfile(JSON.parse(localStorage.getItem('user_profile'))).subscribe(res => {
+			// toggling false will stop saving profile and throw subscribe undefined
+			this.cupidoAPI.services.initCupidoAPI(true)
 
-        console.log("RES : " + JSON.stringify(res) + res)
+		/*	this.cupidoAPI.services.createProfile(JSON.parse(localStorage.getItem('user_profile'))).subscribe(res => {
 
-        localStorage.setItem('is_registered_to_cupido', 'true') 
 
-        localStorage.setItem('platform_user_id', String(JSON.parse(localStorage.getItem('user_profile')).data.user._id)     )
+				localStorage.setItem('is_registered_to_cupido', 'true')
 
-        if (res.id != null)
+				localStorage.setItem('platform_user_id', String(JSON.parse(localStorage.getItem('user_profile')).data.user._id))
 
-          getChrome().runtime.sendMessage({
+				if (res.id != null)
 
-            action: "is_registered_to_cupido",
+					getChrome().runtime.sendMessage({
 
-            source: 'true'
+						action: "is_registered_to_cupido",
 
-          })
+						source: 'true'
 
+					})
 
-        getChrome().runtime.sendMessage({
 
-          action: "platform_user_id",
+				getChrome().runtime.sendMessage({
 
-          source: String(localStorage.getItem('platform_user_id'))
+					action: "platform_user_id",
 
-        })
+					source: String(localStorage.getItem('platform_user_id'))
 
+				})
 
-      },
-        error => {
 
-          console.log("ERR : " + JSON.stringify(error) + ' ' + error)
+			},
+				error => {
 
-        }, () => {
+					console.log("ERR : " + JSON.stringify(error) + ' ' + error)
 
-        })
+				}, () => {
 
-    }, err => {
-      if (err.status) {
+				})*/
 
-        console.log('No Access ' + err.status)
-        this.openAlertToReLogUser()
-        // this.checkIfIntialOpenOfApp()
+		}, err => {
+			if (err.status) {
 
-      }
+				console.log('No Access ' + err.status)
+				this.openAlertToReLogUser()
 
-    })
+			}
 
+		})
 
-    
-  }
-  checkIfIntialOpenOfApp(): boolean {
-    try {
 
-      if (localStorage.getItem('tinder_local_storage') === null) {
-        alert('1st open try')
 
-      } else {
-        alert('else chk ' + localStorage.getItem('tinder_local_storage'))
+	}
+	checkIfIntialOpenOfApp(): boolean {
+		try {
 
-        return true
+			if (localStorage.getItem('tinder_local_storage') === null) {
 
-      }
-    } catch (e) {
-      console.log('local storage empty')
-      alert('1st open catch')
 
+			} else {
 
-    }
+				return true
 
-  }
+			}
+		} catch (e) {
 
 
+		}
 
+	}
 
 
 
-  // likeWithInterval() {
 
-  //   alert(JSON.stringify(this.profileDataSet))
 
-  // }
 
+	popUp() { // popup window
 
+		getChrome().tabs.create({
 
-  popUp() { // popup window
+			url: getChrome().extension.getURL('index.html'),
 
-    getChrome().tabs.create({
+			active: false
 
-      url: getChrome().extension.getURL('index.html'),
+		}, function (tab) {
 
-      active: false
+			getChrome().windows.create({
 
-    }, function (tab) {
+				tabId: tab.id,
 
-      getChrome().windows.create({
+				type: 'popup',
 
-        tabId: tab.id,
+				focused: true
 
-        type: 'popup',
+			})
 
-        focused: true
+		})
 
-      })
+	}
 
-    })
 
-  }
+	//  checks the state of initial open or not( normal frequant user)
+	openAlertToReLogUser() {
+		if (!this.checkIfIntialOpenOfApp()) {
 
+			Swal.fire({
+				title: '<strong>User Agreement </strong>',
 
-  //  checks the state of initial open or not( normal frequant user)
-  openAlertToReLogUser() {
-    if (!this.checkIfIntialOpenOfApp()) {
+				type: 'warning',
 
-      Swal.fire({
-        title: '<strong>User Agreement </strong>',
+				html:
+					'To view User Agreement, Terms and Conditions , Privacy policy and other information, ' +
+					'<a href="//github.com">Click</a> here' +
+					' <b>By clicking <u>Start Swiping</u> you are agreeing with above agreement and privacy policy',
 
-        type: 'warning',
+				showCloseButton: true,
 
-        html:
-          'To view User Agreement, Terms and Conditions , Privacy policy and other information, ' +
-          '<a href="//github.com">Click</a> here' +
-          ' <b>By clicking <u>Start Swiping</u> you are agreeing with above agreement and privacy policy',
+				showCancelButton: false,
 
-        showCloseButton: true,
+				focusConfirm: false,
 
-        showCancelButton: false,
+				confirmButtonText:
+					'Start Swiping',
 
-        focusConfirm: false,
+				confirmButtonAriaLabel: 'Start Swiping',
 
-        confirmButtonText:
-          'Start Swiping',
+				allowOutsideClick: false,
 
-        confirmButtonAriaLabel: 'Start Swiping',
+			}).then(result => {
 
-        allowOutsideClick: false,
+				if (result.value) {
 
-      }).then(result => {
+					this.openAlertToLogUserSweetAlert()
 
-        if (result.value) {
+				}
 
-          this.openAlertToLogUserSweetAlert()
+			})
+			return
+		}
 
-        }
+		this.openAlertToLogUserSweetAlert()
 
-      })
-      return
-    }
+	}
 
-    this.openAlertToLogUserSweetAlert()
+	openAlertToLogUserSweetAlert() {
 
-  }
+		Swal.fire({
 
-  openAlertToLogUserSweetAlert() {
+			title: 'You are not logged in?',
 
-    Swal.fire({
+			text: 'Please log in to tinder.com ',
 
-      title: 'You are not logged in?',
+			type: 'warning',
 
-      text: 'Please log in to tinder.com ',
+			showCancelButton: true,
 
-      type: 'warning',
+			confirmButtonText: 'Take me there!',
 
-      showCancelButton: true,
+			cancelButtonText: 'Cancel',
 
-      confirmButtonText: 'Take me there!',
+			allowOutsideClick: false,
 
-      cancelButtonText: 'Cancel',
+			customClass: {
+				popup: 'animated tada'
+			}
 
-      allowOutsideClick: false,
 
-      customClass: {
-        popup: 'animated tada'
-      }
+		}).then(result => {
 
+			if (result.value) {
 
-    }).then(result => {
+				getChrome().runtime.sendMessage({
 
-      if (result.value) {
+					action: "open_tinder",
 
-        getChrome().runtime.sendMessage({
+					source: 'open_tinder'
 
-          action: "open_tinder",
+				})
+			}
 
-          source: 'open_tinder'
+		})
+	}
 
-        })
-      }
 
-    })
-  }
+	saveLocalStorage(key, value) {
+		localStorage.setItem(key, value)
+	}
 
+	goToTinder() {
+		getChrome().runtime.sendMessage({
 
-  saveLocalStorage(key, value) {
-    localStorage.setItem(key, value)
-  }
+			action: "open_tinder",
 
-  goToTinder() {
-    getChrome().runtime.sendMessage({
+			source: 'open_tinder'
 
-      action: "open_tinder",
+		})
+	}
 
-      source: 'open_tinder'
 
-    })
-  }
+	testFunctionBackground() {
 
+		// setTimeout(function run() {
+
+		//   alert('testing')
+		//   setTimeout(run, 6000);
+		// }, 6000);
+
+
+	}
 
 
 }

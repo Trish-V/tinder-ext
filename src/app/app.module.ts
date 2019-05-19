@@ -21,6 +21,7 @@ import { SettingsComponent } from './settings/settings.component'
 import { MaterialCDKModule } from './_material/cdk/material.cdk.module'
 import { FormsModule } from '@angular/forms'
 import { CupidoAPIService } from './services/cupido-api.service'; 
+import { ChromeStorageService } from './services/chrome-storage.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -52,7 +53,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   },
     TinderAPIService,
     SibilingsCommunicationService,
-    CupidoAPIService
+    CupidoAPIService,
+    ChromeStorageService
   ],
   bootstrap: [AppComponent]
 })

@@ -80,8 +80,7 @@ class TinderService {
 
     }
     getMessagesOfTheUserSecondPage(options = { count: 60, locale: 'en', match_id: '', page_token: '', token: '' }, subscribe = { res: '' }) {
-        
-        console.log(options.page_token)
+         
 
         this.xhr.open("GET", "https://api.gotinder.com/v2/matches/" + options.match_id +
             "/messages?count=" + options.count +

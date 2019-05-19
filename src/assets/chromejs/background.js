@@ -1,6 +1,7 @@
 
 
-
+var autoLikeList = []
+var state = false
 chrome.runtime.onMessage.addListener(function (request, sender) {
 
   if (request.action == "open_tinder") { // callback for liked recomendations 
@@ -13,7 +14,7 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
   if (request.action == "getLocalStorage") {
 
     localStorage.setItem('tinder_local_storage', request.source);
-    // alert(request.source)
+   
 
   }
   if (request.action == "is_registered_to_cupido") {
@@ -26,6 +27,13 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
     localStorage.setItem('platform_user_id', String(request.source))
 
   }
+  if (request.action == "auto_like_start") {
+    // callback for local storage  
+    localStorage.setItem('recs', String(request.source))
+
+  }
+
+
 });
 
 
@@ -46,7 +54,7 @@ setTimeout(function run() {
       }, function () {
 
         if (chrome.runtime.lastError) {
-          // alert('error')
+          
         }
 
       });
@@ -82,18 +90,20 @@ setTimeout(function run() {
       //  && typeof localStorage.getItem('tinder_local_storage')['TinderWeb/APIToken'] !== 'undefined'
     ) {
 
-      var main = new Main(JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken']);
+      // var main = new Main(JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken']);
 
-    } else {
-      console.log('else')
+    } else { 
     }
 
   } catch (error) {
 
-  }
-  console.log('running...cupido')
+  } 
 
   setTimeout(run, 15000);
 }, 10000);
 
 
+
+function continueAutoLikeFromBackground(list){
+
+}

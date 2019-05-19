@@ -34,7 +34,7 @@ export class CupidoAPIService {
         },
 
         createProfile: (profile): Observable<any> => {
-            console.log(profile)
+            
             
             if (this.state)
                 return this.httpClient.post<any>(this.host + this.createProfielUrl, profile,

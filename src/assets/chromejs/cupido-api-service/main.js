@@ -1,12 +1,6 @@
 
 
-
-// tinderService.getMatchesOfTheUserFirstPage({ token: '2f231359-3cc8-45dd-a1b1-909b942bc5d1' }, (res) => {
-//     alert(res)
-// });
-
-
-
+ 
 
 
 
@@ -28,7 +22,7 @@ class Main {
 
     constructor(token) {
 
-        console.log('main')
+        
         try {
             this.tinderService = new TinderService();
 
@@ -38,17 +32,16 @@ class Main {
             this.getMatchList();
 
         } catch (error) {
-            console.log(error)
+          
         }
 
     }
 
     getMatchList(pagination_token = "start") {
-
-        console.log('getMatchList')
+ 
 
         this.tinderService.getMatchesOfTheUserFirstPage({ count: 60, locale: 'en', message: 1, token: this.token }, res => {
-            // console.log( JSON.stringify  ( JSON.parse (res).data.matches[0] )     )
+            
             this.saveMatches(res)
 
 
@@ -60,13 +53,11 @@ class Main {
     saveMatches(matches) {
         var matchesArray = []
         matchesArray = JSON.parse(matches).data.matches
-
-        // console.log(JSON.stringify(JSON.parse(matches).data.matches))
+ 
         if (typeof matchesArray !== 'undefined')
             matchesArray.forEach(match => {
                 match['platform_user_id'] = localStorage.getItem('platform_user_id').toString()
-                // console.log(JSON.stringify(match, null, 3));
-
+                 
                 this.saveMatch(match)
             })
 
@@ -75,8 +66,7 @@ class Main {
 
     }
 
-    saveMatch(match) {
-        // console.log(JSON.stringify(match, null, 4))
+    saveMatch(match) { 
         this.cupidoService.saveMatch(match, res => {
 
             this.getMessageListForTheMatch(res)
@@ -84,8 +74,7 @@ class Main {
 
     }
 
-    getMessageListForTheMatch(match) {
-        // console.log('_id main : ' + JSON.parse(match).data._id)
+    getMessageListForTheMatch(match) { 
         if (typeof JSON.parse(match).data._id !== 'undefined')
             this.cupidoService.messageIdListForTheMatch(JSON.parse(match).data._id, res => {
 
@@ -122,17 +111,14 @@ class Main {
                     })
 
                 })
-
-                console.log(msgArray)
+ 
                 msgArray.forEach(msg => {
                     this.cupidoService.saveMessage(match_id, msg, res => {
-
-                        console.log('MSG Saved : ' + res)
+ 
 
                     })
                 })
-                if (Object.keys(msgArray).length === 0) {
-                    console.log('1st page published , next page token : ' + next_page_token)
+                if (Object.keys(msgArray).length === 0) { 
 
                     if (typeof next_page_token !== 'undefined') {
                         this.saveMessageSecondPageForMatch(list, match_id, next_page_token)
@@ -173,18 +159,15 @@ class Main {
                     })
 
                 })
-
-                console.log(msgArray)
+ 
                 msgArray.forEach(msg => {
                     this.cupidoService.saveMessage(match_id, msg, res => {
-
-                        console.log('MSG Saved : ' + res)
+ 
 
                     })
                 })
                 if (Object.keys(msgArray).length === 0) {
-
-                    console.log(' page ' + page + ' published , next page token : ' + next_page_token2)
+ 
 
                     if (typeof next_page_token2 !== 'undefined') {
                         this.saveMessageSecondPageForMatch(list, match_id, next_page_token2, ++page)

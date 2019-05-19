@@ -40,8 +40,7 @@ export class TimeLineComponent implements OnInit {
         var rec = this.listOfProfiles.find(u => u._id == msg.message)
 
         this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
-
-        console.log(JSON.stringify(this.listOfProfiles[0]))
+ 
 
         
         this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])

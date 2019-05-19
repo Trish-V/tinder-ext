@@ -21,7 +21,7 @@ class CupidoService {
         var data = JSON.stringify(match);
         this.xhr.addEventListener('readystatechange', function () {
             if (this.readyState === 4) {
-                // console.log(this.responseText);
+                 
                 subscribe(this.responseText)
             }
         });
@@ -39,11 +39,10 @@ class CupidoService {
 
         this.xhr.addEventListener('readystatechange', function () {
             if (this.readyState === 4) {
-                // console.log(this.responseText);
+                 
                 subscribe(this.responseText)
             }
-        });
-        // console.log('match id :: ' + url_match_id)
+        }); 
 
         var url = this.host + '/ext/matches/' + url_match_id + '/messages'
         this.xhr.open('GET', url);
@@ -55,20 +54,17 @@ class CupidoService {
 
     saveMessage(match_id, msg, subscribe = { res: '' }) {
         var data = []
-        data.push(msg);
-        // console.log(JSON.stringify(data, null, 4))
+        data.push(msg); 
         this.xhr = new XMLHttpRequest();
         this.xhr.withCredentials = true;
 
         this.xhr.addEventListener('readystatechange', function () {
-            if (this.readyState === 4) {
-                // console.log(this.responseText);
+            if (this.readyState === 4) { 
                 subscribe(this.responseText)
             }
         });
         var url = this.host + '/ext/matches/' + String(match_id) + '/messages'
-
-        // console.log(url)
+ 
 
         this.xhr.open('POST', url);
         this.xhr.setRequestHeader('Content-Type', 'application/json');

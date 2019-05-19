@@ -32,7 +32,7 @@ export class TinderAPIService {
 
 
     services = {
-  
+
         initTinderToken: (t_token?: string) => {
 
             this.headers.append('Origin', 'https://tinder.com');
@@ -49,7 +49,7 @@ export class TinderAPIService {
 
             this.matches_url = "https://api.gotinder.com/v2/matches";
             this.messages_url = "https://api.gotinder.com/v2/matches/" + this.matchId + "/messages";
-            this.profile_url = "https://api.gotinder.com/v2/profile"+"?include=account%2Cboost%2Cemail_settings%2Cinstagram%2Clikes%2Cnotifications%2Cplus_control%2Cproducts%2Cpurchase%2Cspotify%2Csuper_likes%2Ctinder_u%2Ctravel%2Ctutorials%2Cuser";
+            this.profile_url = "https://api.gotinder.com/v2/profile" + "?include=account%2Cboost%2Cemail_settings%2Cinstagram%2Clikes%2Cnotifications%2Cplus_control%2Cproducts%2Cpurchase%2Cspotify%2Csuper_likes%2Ctinder_u%2Ctravel%2Ctutorials%2Cuser";
             this.recs_url = "https://api.gotinder.com/user/recs";
             this.fb_auth_url = "https://api.gotinder.com/auth";
             this.like_url = "https://api.gotinder.com/like/"
@@ -136,7 +136,7 @@ export class TinderAPIService {
         },
         authenticate_with_fb: () => {
 
-            return this.httpClient.get<any>(this.fb_auth_url, { headers: new HttpHeaders(JSON.stringify(this.headers)) })    
+            return this.httpClient.get<any>(this.fb_auth_url, { headers: new HttpHeaders(JSON.stringify(this.headers)) })
 
         },
 
@@ -154,8 +154,12 @@ export class TinderAPIService {
 
             return this.httpClient.get<any>(this.like_url + _id, {
                 headers: {
-
+                    'Access-Control-Request-Method': 'GET',
                     'x-auth-token': TinderAPIService.t_token,
+                    Origin: 'https://tinder.com',
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
+                    'Access-Control-Request-Headers': 'app-session-id,app-session-time-elapsed,app-version,persistent-device-id,platform,user-session-id,user-session-time-elapsed,x-auth-token,x-supported-image-formats',
+                    'Accept': '*/*'
                 }
             })
 
@@ -163,10 +167,16 @@ export class TinderAPIService {
         pass: (_id) => {
 
             return this.httpClient.get<any>(this.pass_url + _id, {
-                headers: {
-
-                    'x-auth-token': TinderAPIService.t_token,
-                }
+                headers: this.headers
+                
+                // {
+                //     'Access-Control-Request-Method': 'GET',
+                //     'x-auth-token': TinderAPIService.t_token,
+                //     Origin: 'https://tinder.com',
+                //     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
+                //     'Access-Control-Request-Headers': 'app-session-id,app-session-time-elapsed,app-version,persistent-device-id,platform,user-session-id,user-session-time-elapsed,x-auth-token,x-supported-image-formats',
+                //     'Accept': '*/*'
+                // }
             })
 
         }

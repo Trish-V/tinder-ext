@@ -103,7 +103,7 @@ export class SettingsComponent implements OnInit {
 
 
   onFormChange() {
-    // alert(JSON.stringify(this.proffesion))  
+      
     this.professionValue = this.profession.toString()
     this.userPreferences = {
       expType: this.expType,
@@ -121,7 +121,7 @@ export class SettingsComponent implements OnInit {
 
 
 
-    alert(JSON.stringify(this.userPreferences, null, 2))
+    console.log(JSON.stringify(this.userPreferences, null, 2))
 
 
     

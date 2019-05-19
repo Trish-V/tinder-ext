@@ -1,34 +1,41 @@
-
 <div class="container-fluid content">
-  <div class="row  justify-content-center">
-      <div class="col-6">
-          <button style="float:right; right:0;" title="Refresh recomendations" (click)="refresh()" type="button" class="btn btn-link"><i
-            class="fas fa-sync "></i></button>
-          <app-time-line [listOfProfiles]="listOfProfiles"></app-time-line>
+	<div class="row  justify-content-center">
+		<div class="col-6">
+			<div class="row  justify-content-center">
+				<div class="col-6">
+					<p style="padding-top: 12px; padding-bottom: -5px; color: white " >{{recCount}}</p>
+				</div>
+				<div class="col-6"> <button style="float:right; right:0;" title="Refresh recomendations"
+						(click)="refresh()" type="button" class="btn btn-link"><i class="fas fa-sync "></i></button>
+				</div>
+			</div>
+			<app-time-line [listOfProfiles]="listOfProfiles"></app-time-line>
 
 
 
 
-      </div>
+		</div>
 
-      <div class="col-6 ">
-          <app-profile-card [profileDataSet]="profileDataSet"></app-profile-card>
-      </div>
+		<div class="col-6 ">
+			<app-profile-card [profileDataSet]="profileDataSet"></app-profile-card>
+		</div>
 
-  </div>
+	</div>
 
 
 </div>
 <div style="margin-top:10px; margin-bottom:10px;" class="container bottom-bar">
 
-  <div class="btn-group w3-card-4" role="group">
-      <!-- <button (click)="likeAll()" type="button" class="btn btn1 btn-light btn-outline-danger">Like  Humanly</button> -->
-      <button  *ngIf="!toggleStateAutoLiking" (click)="autoLiking(true)" type="button" class="btn btn1 btn3 btn-light btn-outline-danger">Start Auto Liking</button>
-      <button  *ngIf="toggleStateAutoLiking" (click)="autoLiking(false)" type="button" class="btn btn1 btn3 btn-danger ">Stop Auto Liking</button>
-  </div>
- 
+	<div class="btn-group w3-card-4" role="group">
+		<!-- <button (click)="likeAll()" type="button" class="btn btn1 btn-light btn-outline-danger">Like  Humanly</button> -->
+		<button *ngIf="!toggleStateAutoLiking" (click)="autoLiking(true)" type="button"
+			class="btn btn1 btn3 btn-light btn-outline-danger">Start Auto Liking</button>
+		<button *ngIf="toggleStateAutoLiking" (click)="autoLiking(false)" type="button"
+			class="btn btn1 btn3 btn-danger ">Stop Auto Liking</button>
+	</div>
+
 </div>
 
 <div class="overlay-drag-n-drop">
-  
+
 </div>

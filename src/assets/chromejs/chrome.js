@@ -6,14 +6,13 @@ function getChrome() {
 
 }
 
-function openTinder() {
 
+async function testFunctionBackground() {
 
-    // getChrome().tabs.create({ url: "../html/redirect.html" })
+    setTimeout(function run() {
+        alert('Testing')
 
-    // getChrome().browserAction.onClicked.addListener(() => {
-    //     getChrome().tabs.create({ url: "www.tinder.com/_/chrome/newtab" })
-    //   })
+        setTimeout(testFunctionBackground(), 15000);
+    }, 10000);
+
 }
-
-
