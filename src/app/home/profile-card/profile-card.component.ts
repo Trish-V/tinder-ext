@@ -200,14 +200,9 @@ export class ProfileCardComponent implements OnInit {
 
 	}
 	superLike() {
-	
+
 
 		this.serviceSuperLikeImpl(this.profileDataSet._id);
-
-
-		this.school = '000'
-		this.job = '000'
-		this.profileDataSet.distance_mi = 0
 
 
 		this.sibilingsCommService.pushNotification('refreshCount', [])
@@ -282,7 +277,14 @@ export class ProfileCardComponent implements OnInit {
 					this.stateDislike = true
 
 					this.stateLike = true
-					
+
+
+
+					this.school = '000'
+					this.job = '000'
+					this.profileDataSet.distance_mi = 0
+
+
 					const Toast = Swal.mixin({
 						toast: true,
 
