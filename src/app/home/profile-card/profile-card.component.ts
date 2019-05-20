@@ -133,6 +133,7 @@ export class ProfileCardComponent implements OnInit {
 
       }
       if (msg.topic == 'selectOnAutoLike') {
+        console.log('auto liked')
         this.carouselProfileSetup('selectOnAutoLike', null, msg.message)
 
       }

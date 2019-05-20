@@ -7,6 +7,7 @@ import { async } from '@angular/core/testing'
 import { TimeLineComponent } from './time-line/time-line.component'
 import { TinderAPIService } from '../services/tinder-api.service';
 import { ChromeStorageService } from '../services/chrome-storage.service';
+import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
 
 declare var getChrome: any
 
@@ -48,6 +49,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 	static context
 	static toggleStateAutoLiking = false;
 	recCount: number;
+	static notificationService: SibilingsCommunicationService;
 
 
 
@@ -110,6 +112,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
 		HomeComponent.context = this
+		HomeComponent.notificationService = sibilingsCommService
 
 		getChrome().tabs.getSelected(null, function (tab) {
 
@@ -390,7 +393,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		if (toggleState) {
 
 			this.id = 0
-
+			HomeComponent.i = 0
 			this.autoLikinScheduler()
 
 
@@ -403,7 +406,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		}
 	}
 
- 	async autoLikinScheduler() {
+	async autoLikinScheduler() {
 
 
 
@@ -412,28 +415,28 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
 		// console.log(Object.keys(this.listOfProfiles).length)
-
-
-		for (let i = 0; i < Object.keys(this.listOfProfiles).length; i++) {
-
-			if (this.toggleStateAutoLiking) {
-
-				console.log(i)
-
-				console.log('testing')
-				this.sibilingsCommService.pushNotification('selectOnAutoLike', this.listOfProfiles[i])
-
-			} else {
-
-				break;
-
+		/*	 
+	
+			for (let i = 0; i < Object.keys(this.listOfProfiles).length; i++) {
+	
+				if (this.toggleStateAutoLiking) {
+	
+					console.log(i)
+	
+					console.log('testing')
+					this.sibilingsCommService.pushNotification('selectOnAutoLike', this.listOfProfiles[i])
+	
+				} else {
+	
+					break;
+	
+				}
+				await this.sleep(8000);
 			}
-			await this.sleep(8000);
-		}
-		this.toggleStateAutoLiking = !this.toggleStateAutoLiking
-
-
-		/*	  */
+			this.toggleStateAutoLiking = !this.toggleStateAutoLiking
+	
+	
+		 */
 
 		// while (this.toggleStateAutoLiking && Object.keys(this.listOfProfiles).length + 1 >= this.id) {
 
@@ -458,7 +461,27 @@ export class HomeComponent implements OnInit, OnDestroy {
 	static autoLikeBackground(index, state) {
 		var autoLiking = localStorage.getItem('auto_like_state')
 		if (autoLiking.match('true')) {
-			 
+			// var notificationService = new SibilingsCommunicationService()
+			var chromeService = new ChromeStorageService()
+
+
+			var lsitOfProfiles = []
+			chromeService.getItem('recs', (result) => {
+				lsitOfProfiles = result.recs
+				// console.log(JSON.stringify(lsitOfProfiles))
+
+				if (Object.keys(lsitOfProfiles).length > 0) {
+					HomeComponent.notificationService.pushNotification('selectOnAutoLike', lsitOfProfiles[0])
+					console.log('liked ' + JSON.stringify(lsitOfProfiles[0]))
+				} else if (Object.keys(lsitOfProfiles).length == 0) {
+					localStorage.setItem('auto_like_state', 'false')
+				}
+			})
+
+
+			/*		
+		
+		*/
 			console.log('testing ' + index + ' ' + autoLiking)
 		}
 
