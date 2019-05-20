@@ -23,7 +23,7 @@ export class TimeLineComponent implements OnInit {
 
     sibilingsCommService.messageAnnounced$.subscribe(msg => {
 
-      this.componentRef.directiveRef.scrollToBottom()
+      // this.componentRef.directiveRef.scrollToBottom()
 
     })
 

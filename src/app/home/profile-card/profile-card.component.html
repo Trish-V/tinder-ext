@@ -3,51 +3,61 @@
     <div class="col-2"></div>
     <div class="col-8" style="z-index:1000">
         <div class="row" style="border-radius:20px; z-index:1000" [style.border]="dropState ? '3px dotted white ':''  ">
- 
+
             <h3 class="drop" [style.opacity]="dropState ? '1':'0'  ">Drop Here</h3>
             <ngu-carousel style="width:100%; height: 280px;  z-index:999" [style.opacity]="dropState ? '0.2':'1'  "
                 #myCarousel [inputs]="carouselTileConfig" [dataSource]="carouselTileItems$ ">
 
 
 
-                <ngu-tile  style="z-index:1000" *nguCarouselDef="let item; let i = index; let ani = animate"  
-                  >
+                <ngu-tile style="z-index:1000" *nguCarouselDef="let item; let i = index; let ani = animate">
 
-                    <div style="z-index:1000" class="tile " [style.background]="'url('+item+')'"    (dragenter)="dragenter($event)" (dragleave)="dragleave($event)" (dragover)="allowDrop($event)"
-                    (drop)="drop($event)" >
+                    <div style="z-index:1000" class="tile " [style.background]="'url('+item+')'"
+                        (dragenter)="dragenter($event)" (dragleave)="dragleave($event)" (dragover)="allowDrop($event)"
+                        (drop)="drop($event)">
                         <!-- <h1  >Drop Here</h1> -->
-                        <div class="rec-info"  *ngIf="profileDataSet.distance_mi != 0  " >
-                                <small><b>{{profileDataSet.name}} {{profileDataSet.age}}</b><br></small>
-                                <small *ngIf="profileDataSet.distance_mi != 0  ">{{profileDataSet.distance_mi}} miles away <br></small>
-                                <small *ngIf="school!='000'">{{school}}   <br></small>
-                                <small *ngIf="job!='000'">{{job}} <br> </small>
-    
-    
-                            </div>
+                        <div class="rec-info" *ngIf="profileDataSet.distance_mi != 0  ">
+                            <small><b>{{profileDataSet.name}} {{profileDataSet.age}}</b><br></small>
+                            <small *ngIf="profileDataSet.distance_mi != 0  ">{{profileDataSet.distance_mi}} miles away
+                                <br></small>
+                            <small *ngIf="school!='000'">{{school}} <br></small>
+                            <small *ngIf="job!='000'">{{job}} <br> </small>
+
+
+                        </div>
                     </div>
                 </ngu-tile>
 
                 <button NguCarouselNext style="z-index:5000" [style.opacity]="myCarousel.isLast ? 0.5:1"
                     class="rightRs">></button>
-               
+
                 <button NguCarouselPrev style="z-index:5000" [style.opacity]="myCarousel.isFirst ? 0.5:1"
                     class="leftRs">
                     <</button> <ul class="myPoint" NguCarouselPoint>
                         <li *ngFor="let i of myCarousel.pointNumbers; let i = index"
                             [class.active]="i==myCarousel.activePoint" (click)="myCarousel.moveTo(i)"></li>
                         </ul>
-                 
+
 
 
             </ngu-carousel>
-        
+
         </div>
-        <div class="row"   >
+        <div class="row">
             <div style="margin-top:30px; margin-bottom:10px;" class="   bottom-bar">
 
                 <div class="btn-group w3-card-4" role="group">
-                    <button [disabled]=" stateDislike || stateLike" (click)="pass()" type="button" [ngClass]="{'btn-outline-warning' : !stateDislike,'btn-light': !stateDislike ,'btn-warning':  stateDislike}" class="btn btn1 "><i class="fas fa-heart-broken  animated infinite jello  hearts"></i></button>
-                    <button [disabled]=" stateDislike || stateLike" (click)="like()" type="button"  [ngClass]="{'btn-outline-danger' : !stateLike,'btn-light': !stateLike ,'btn-danger':  stateLike}" class="btn btn3  "><i class="fas fa-heart animated infinite heartBeat hearts "></i></button>
+                    <button [disabled]=" stateDislike || stateLike" (click)="pass()" type="button"
+                        [ngClass]="{'btn-outline-warning' : !stateDislike,'btn-light': !stateDislike ,'btn-warning':  stateDislike}"
+                        class="btn btn1 "><i class="fas fa-heart-broken  animated infinite jello  hearts"></i></button>
+
+                    <button [disabled]=" stateDislike || stateLike" (click)="superLike()" type="button"
+                        [ngClass]="{'btn-outline-warning' : !stateDislike,'btn-light': !stateDislike ,'btn-warning':  stateDislike}"
+                        class="btn btn2 "><i class="fas fa-heartbeat   animated infinite swing  hearts"></i> </button>
+
+                    <button [disabled]=" stateDislike || stateLike" (click)="like()" type="button"
+                        [ngClass]="{'btn-outline-danger' : !stateLike,'btn-light': !stateLike ,'btn-danger':  stateLike}"
+                        class="btn btn3  "><i class="fas fa-heart animated infinite heartBeat hearts "></i></button>
                 </div>
 
 

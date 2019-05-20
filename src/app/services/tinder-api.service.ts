@@ -25,6 +25,7 @@ export class TinderAPIService {
     fb_auth_url: string;
     like_url: string;
     pass_url: string;
+    meta_url: string
 
     constructor(private httpClient: HttpClient) {
         this.headers = new HttpHeaders();
@@ -54,6 +55,7 @@ export class TinderAPIService {
             this.fb_auth_url = "https://api.gotinder.com/auth";
             this.like_url = "https://api.gotinder.com/like/"
             this.pass_url = "https://api.gotinder.com/pass/"
+            this.meta_url = " https://api.gotinder.com/meta"
         },
 
         get_match_list: (pagination_token = "start") => {
@@ -168,7 +170,7 @@ export class TinderAPIService {
 
             return this.httpClient.get<any>(this.pass_url + _id, {
                 headers: //this.headers
-                
+
                 {
                     // 'Access-Control-Request-Method': 'GET',
                     'x-auth-token': TinderAPIService.t_token,
@@ -179,6 +181,28 @@ export class TinderAPIService {
                 }
             })
 
+        },
+        super_like: (_id) => {
+            return this.httpClient.get<any>(this.pass_url + _id +'/super', {
+                headers:  
+
+                { 
+                    'x-auth-token': TinderAPIService.t_token, 
+                }
+            })
+        }
+        ,
+        meta: () => {
+            return this.httpClient.get<any>(this.meta_url  ,
+                {
+                    headers:  
+
+                    {
+                        'x-auth-token': TinderAPIService.t_token,
+                    }
+                }
+
+            )
         }
     };
 

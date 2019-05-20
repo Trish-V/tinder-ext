@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy, V
 import { DomSanitizer } from '@angular/platform-browser'
 
 import { NguCarouselConfig, NguCarousel } from '@ngu/carousel'
-import { slider } from './animation' 
+import { slider } from './animation'
 import { SibilingsCommunicationService } from 'src/app/services/sibilings.communication.service';
 import { TinderAPIService } from 'src/app/services/tinder-api.service';
 
@@ -10,319 +10,398 @@ import { TinderAPIService } from 'src/app/services/tinder-api.service';
 declare var Swal: any
 
 @Component({
-  selector: 'app-profile-card',
-  templateUrl: './profile-card.component.html',
-  styleUrls: ['./profile-card.component.scss'],
-  animations: [slider],
-  changeDetection: ChangeDetectionStrategy.OnPush
+	selector: 'app-profile-card',
+	templateUrl: './profile-card.component.html',
+	styleUrls: ['./profile-card.component.scss'],
+	animations: [slider],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileCardComponent implements OnInit {
 
-  @ViewChild('myCarousel') myCarousel: any
-
-  stateLike = false
-
-  stateDislike = false
-
-  @Input() profileDataSet =
-    {
-      _id: '',
-      name: '',
-      age: '',
-      schools: [
-        {
-          // id: '',
-          name: ''
-        }
-      ],
-      distance_mi: 0,
-      jobs: [
-        {
-          title: {
-            name: ''
-          }
-        }
-
-      ]
-    }
-
-  backUpProfileDataSet =
-    {
-      _id: '',
-      name: '',
-      age: '',
-      schools: [
-        {
-          // id: '',
-          name: ''
-        }
-      ],
-      distance_mi: 0,
-      jobs: [
-        {
-          title: {
-            name: ''
-          }
-        }
+	@ViewChild('myCarousel') myCarousel: any
+
+	stateLike = false
+
+	stateDislike = false
+
+	@Input() profileDataSet =
+		{
+			_id: '',
+			name: '',
+			age: '',
+			schools: [
+				{
+					// id: '',
+					name: ''
+				}
+			],
+			distance_mi: 0,
+			jobs: [
+				{
+					title: {
+						name: ''
+					}
+				}
+
+			]
+		}
+
+	backUpProfileDataSet =
+		{
+			_id: '',
+			name: '',
+			age: '',
+			schools: [
+				{
+					// id: '',
+					name: ''
+				}
+			],
+			distance_mi: 0,
+			jobs: [
+				{
+					title: {
+						name: ''
+					}
+				}
 
-      ]
-    }
+			]
+		}
 
-  school = this.profileDataSet.schools[0].name
+	school = this.profileDataSet.schools[0].name
 
-  job = this.profileDataSet.jobs[0].title.name
+	job = this.profileDataSet.jobs[0].title.name
 
-  placeHolderImages = [
-    '../../../assets/images/placeholder.jpg',
-    '../../../assets/images/placeholder.jpg'
-  ]
+	placeHolderImages = [
+		'../../../assets/images/placeholder.jpg',
+		'../../../assets/images/placeholder.jpg'
+	]
 
-  @Input() name: string
+	@Input() name: string
 
-  public carouselTileItems$: Array<any> = this.placeHolderImages
+	public carouselTileItems$: Array<any> = this.placeHolderImages
 
-  public carouselTileConfig: NguCarouselConfig = {
-    grid: { xs: 1, sm: 1, md: 1, lg: 1, all: 0 },
-    speed: 250,
-    point: {
-      visible: true
-    },
-    touch: true,
-    loop: true,
-    interval: { timing: 2000 },
-    animation: 'lazy'
-  }
+	public carouselTileConfig: NguCarouselConfig = {
+		grid: { xs: 1, sm: 1, md: 1, lg: 1, all: 0 },
+		speed: 250,
+		point: {
+			visible: true
+		},
+		touch: true,
+		loop: true,
+		interval: { timing: 2000 },
+		animation: 'lazy'
+	}
 
-  tempData: any[]
+	tempData: any[]
 
-  dropState = false
+	dropState = false
 
-  private recId = ''
+	private recId = ''
 
-  constructor(
-    private sanitizer: DomSanitizer,
-    private tinderAPI: TinderAPIService,
-    private sibilingsCommService: SibilingsCommunicationService
-  ) {
+	constructor(
+		private sanitizer: DomSanitizer,
+		private tinderAPI: TinderAPIService,
+		private sibilingsCommService: SibilingsCommunicationService
+	) {
 
 
-  }
+	}
 
-  ngOnInit() {
-    this.school = '000'
-    this.job = '000'
-    this.profileDataSet.distance_mi = 0
+	ngOnInit() {
+		this.school = '000'
+		this.job = '000'
+		this.profileDataSet.distance_mi = 0
 
 
-    this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
-      if (msg.topic == 'pass' || msg.topic == 'like') {
+		this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
+			if (msg.topic == 'pass' || msg.topic == 'like') {
 
-        // this.carouselTileItems$ = this.placeHolderImages
+				// this.carouselTileItems$ = this.placeHolderImages
 
-        // this.profileDataSet = this.backUpProfileDataSet
+				// this.profileDataSet = this.backUpProfileDataSet
 
 
-        this.myCarousel.reset(false)
+				this.myCarousel.reset(false)
 
-      }
-      if (msg.topic == 'selectOnClick') {
-        this.carouselProfileSetup('selectOnClick', null, msg.message)
-      }
-      if (msg.topic == 'initialProfile') {
-        this.carouselProfileSetup('initialProfile', null, msg.message)
+			}
+			if (msg.topic == 'selectOnClick') {
+				this.carouselProfileSetup('selectOnClick', null, msg.message)
+			}
+			if (msg.topic == 'initialProfile') {
+				this.carouselProfileSetup('initialProfile', null, msg.message)
 
-      }
-      if (msg.topic == 'selectOnAutoLike') {
-        console.log('auto liked')
-        this.carouselProfileSetup('selectOnAutoLike', null, msg.message)
+			}
+			if (msg.topic == 'selectOnAutoLike') {
+				console.log('auto liked')
+				this.carouselProfileSetup('selectOnAutoLike', null, msg.message)
 
-      }
+			}
 
-    })
-  }
+		})
+	}
 
-  allowDrop(ev) {
-    ev.preventDefault()
+	allowDrop(ev) {
+		ev.preventDefault()
 
-  }
+	}
 
-  drop(ev) {
+	drop(ev) {
 
-    this.carouselProfileSetup('drag', ev, null)
+		this.carouselProfileSetup('drag', ev, null)
 
-  }
+	}
 
-  dragenter(ev) {
+	dragenter(ev) {
 
-    this.dropState = (String(ev.target.className).trim().includes('tile')) ? true : this.dropState;
+		this.dropState = (String(ev.target.className).trim().includes('tile')) ? true : this.dropState;
 
-    ev.preventDefault();
+		ev.preventDefault();
 
-  }
+	}
 
-  dragleave(ev) {
-    this.dropState = (String(ev.target.className).trim().includes('tile')) ? false : this.dropState;
+	dragleave(ev) {
+		this.dropState = (String(ev.target.className).trim().includes('tile')) ? false : this.dropState;
 
-    ev.preventDefault();
+		ev.preventDefault();
 
-  }
+	}
 
-  like() {
-    this.stateLike = true
+	like() {
+		this.stateLike = true
 
-    this.stateDislike = true
+		this.stateDislike = true
 
-    this.serviceLikeImpl(this.profileDataSet._id);
+		this.serviceLikeImpl(this.profileDataSet._id);
 
 
-    this.school = '000'
-    this.job = '000'
-    this.profileDataSet.distance_mi = 0
+		this.school = '000'
+		this.job = '000'
+		this.profileDataSet.distance_mi = 0
 
 
-    this.sibilingsCommService.pushNotification('refreshCount', [])
+		this.sibilingsCommService.pushNotification('refreshCount', [])
 
-  }
-  pass() {
-    this.stateDislike = true
+	}
+	pass() {
+		this.stateDislike = true
 
-    this.stateLike = true
+		this.stateLike = true
 
-    this.servicePassImpl(this.profileDataSet._id);
+		this.servicePassImpl(this.profileDataSet._id);
 
 
-    this.school = '000'
-    this.job = '000'
-    this.profileDataSet.distance_mi = 0
+		this.school = '000'
+		this.job = '000'
+		this.profileDataSet.distance_mi = 0
 
 
-    this.sibilingsCommService.pushNotification('refreshCount', [])
+		this.sibilingsCommService.pushNotification('refreshCount', [])
 
-  }
+	}
+	superLike() {
+	
 
-  serviceLikeImpl(recID) {
+		this.serviceSuperLikeImpl(this.profileDataSet._id);
 
-    var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'))
 
-    this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
+		this.school = '000'
+		this.job = '000'
+		this.profileDataSet.distance_mi = 0
 
-    this.tinderAPI.services.like(recID).subscribe(res => {
 
-      this.sibilingsCommService.pushNotification('like', recID)
+		this.sibilingsCommService.pushNotification('refreshCount', [])
+	}
 
-      const Toast = Swal.mixin({
-        toast: true,
+	serviceLikeImpl(recID) {
 
-        position: 'top-end',
+		var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'))
 
-        showConfirmButton: false,
+		this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
 
-        timer: 3000
+		this.tinderAPI.services.like(recID).subscribe(res => {
 
-      })
+			this.sibilingsCommService.pushNotification('like', recID)
 
-      Toast.fire({
-        type: 'success',
+			const Toast = Swal.mixin({
+				toast: true,
 
-        title: 'Liked'
+				position: 'top-end',
 
-      })
-    })
-  }
-  servicePassImpl(recID) {
+				showConfirmButton: false,
 
-    var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'))
+				timer: 3000
 
-    this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
+			})
 
-    this.tinderAPI.services.pass(recID).subscribe(res => {
+			Toast.fire({
+				type: 'success',
 
-      this.sibilingsCommService.pushNotification('pass', recID)
+				title: 'Liked'
 
-      const Toast = Swal.mixin({
-        toast: true,
+			})
+		})
+	}
+	serviceSuperLikeImpl(recID) {
 
-        position: 'top-end',
+		var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'))
 
-        showConfirmButton: false,
+		this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
 
-        timer: 3000
+		this.tinderAPI.services.meta().subscribe(meta => {
+			var superLikesRemaining = meta.rating.super_likes.remaining
 
-      })
+			if (superLikesRemaining == 0) {
 
-      Toast.fire({
-        type: 'error',
+				this.stateDislike = false
 
-        title: 'Disliked'
+				this.stateLike = false
 
-      })
-    })
-  }
+				const Toast = Swal.mixin({
+					toast: true,
 
-  carouselProfileSetup(type: String, ev, dataPayLoadOfProfile) {
+					position: 'top-end',
 
-    this.stateLike = false
+					showConfirmButton: false,
 
-    this.stateDislike = false
+					timer: 3000
 
-    this.dropState = false
+				})
 
-    var data;
+				Toast.fire({
+					type: 'info',
 
-    if (type == 'drag') {
+					title: 'No More Super Likes Available'
 
-      data = ev.dataTransfer.getData("text")
+				})
+			} else {
 
-      ev.preventDefault()
+				this.tinderAPI.services.super_like(recID).subscribe(res => {
 
-    } else if (type == 'selectOnClick' || type == 'initialProfile' || type == 'selectOnAutoLike') {
+					this.sibilingsCommService.pushNotification('like', recID)
+					this.stateDislike = true
 
-      data = JSON.stringify(dataPayLoadOfProfile)
+					this.stateLike = true
+					
+					const Toast = Swal.mixin({
+						toast: true,
 
+						position: 'top-end',
 
+						showConfirmButton: false,
 
-    }
+						timer: 3000
 
-    try {
+					})
 
+					Toast.fire({
+						type: 'success',
 
+						title: 'Super Liked - ' + superLikesRemaining + ' Left'
 
-      this.profileDataSet = JSON.parse(data)
+					})
 
-      this.school = this.profileDataSet.schools[0].name
+				})
+			}
 
-      this.job = this.profileDataSet.jobs[0].title.name
+		})
 
-      this.carouselTileItems$ = []
 
-      for (var photos of JSON.parse(data).photos) {
+	}
+	servicePassImpl(recID) {
 
-        this.myCarousel.moveTo(0, true)
-        this.carouselTileItems$.push(photos.processedFiles[0].url)
-        this.myCarousel.moveTo(0, true)
-      }
+		var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'))
 
-      this.myCarousel.reset(true)
+		this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
 
-      if (type == 'selectOnAutoLike') {
-        // this.profileDataSet =  dataPayLoadOfProfile
+		this.tinderAPI.services.pass(recID).subscribe(res => {
 
-        setTimeout(() => {
+			this.sibilingsCommService.pushNotification('pass', recID)
 
-          this.like() 
+			const Toast = Swal.mixin({
+				toast: true,
 
-        }, 4000);
+				position: 'top-end',
 
+				showConfirmButton: false,
 
-      }
+				timer: 3000
 
+			})
 
+			Toast.fire({
+				type: 'error',
 
-    } catch (error) {
+				title: 'Disliked'
 
-    }
+			})
+		})
+	}
 
+	carouselProfileSetup(type: String, ev, dataPayLoadOfProfile) {
 
-  }
+		this.stateLike = false
+
+		this.stateDislike = false
+
+		this.dropState = false
+
+		var data;
+
+		if (type == 'drag') {
+
+			data = ev.dataTransfer.getData("text")
+
+			ev.preventDefault()
+
+		} else if (type == 'selectOnClick' || type == 'initialProfile' || type == 'selectOnAutoLike') {
+
+			data = JSON.stringify(dataPayLoadOfProfile)
+
+
+
+		}
+
+		try {
+
+
+
+			this.profileDataSet = JSON.parse(data)
+
+			this.school = this.profileDataSet.schools[0].name
+
+			this.job = this.profileDataSet.jobs[0].title.name
+
+			this.carouselTileItems$ = []
+
+			for (var photos of JSON.parse(data).photos) {
+
+				this.myCarousel.moveTo(0, true)
+				this.carouselTileItems$.push(photos.processedFiles[0].url)
+				this.myCarousel.moveTo(0, true)
+			}
+
+			this.myCarousel.reset(true)
+
+			if (type == 'selectOnAutoLike') {
+				// this.profileDataSet =  dataPayLoadOfProfile
+
+				setTimeout(() => {
+
+					this.like()
+
+				}, 4000);
+
+
+			}
+
+
+
+		} catch (error) {
+
+		}
+
+
+	}
 
 }

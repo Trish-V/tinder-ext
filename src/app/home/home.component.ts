@@ -472,7 +472,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 				if (Object.keys(lsitOfProfiles).length > 0) {
 					HomeComponent.notificationService.pushNotification('selectOnAutoLike', lsitOfProfiles[0])
-					console.log('liked ' + JSON.stringify(lsitOfProfiles[0]))
+					// console.log('liked ' + JSON.stringify(lsitOfProfiles[0]))
 				} else if (Object.keys(lsitOfProfiles).length == 0) {
 					localStorage.setItem('auto_like_state', 'false')
 				}
