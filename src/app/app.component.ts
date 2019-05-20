@@ -96,10 +96,11 @@ export class AppComponent implements OnInit {
 			if (request.action == "savedLocalStorage") {
 				// callback for local storage 
 				thisContext.saveLocalStorage('tinder_local_storage', request.source)
-
+				// console.log('savedLocalSTorage ' + request.source)
 			}
 			if (request.action == "getLocalStorage") {
 
+				// console.log('getLocalStorage ' + request.source)
 				localStorage.setItem('tinder_local_storage', request.source)
 
 
@@ -158,41 +159,41 @@ export class AppComponent implements OnInit {
 			// toggling false will stop saving profile and throw subscribe undefined
 			this.cupidoAPI.services.initCupidoAPI(true)
 
-		/*	this.cupidoAPI.services.createProfile(JSON.parse(localStorage.getItem('user_profile'))).subscribe(res => {
-
-
-				localStorage.setItem('is_registered_to_cupido', 'true')
-
-				localStorage.setItem('platform_user_id', String(JSON.parse(localStorage.getItem('user_profile')).data.user._id))
-
-				if (res.id != null)
-
+			/*	this.cupidoAPI.services.createProfile(JSON.parse(localStorage.getItem('user_profile'))).subscribe(res => {
+	
+	
+					localStorage.setItem('is_registered_to_cupido', 'true')
+	
+					localStorage.setItem('platform_user_id', String(JSON.parse(localStorage.getItem('user_profile')).data.user._id))
+	
+					if (res.id != null)
+	
+						getChrome().runtime.sendMessage({
+	
+							action: "is_registered_to_cupido",
+	
+							source: 'true'
+	
+						})
+	
+	
 					getChrome().runtime.sendMessage({
-
-						action: "is_registered_to_cupido",
-
-						source: 'true'
-
+	
+						action: "platform_user_id",
+	
+						source: String(localStorage.getItem('platform_user_id'))
+	
 					})
-
-
-				getChrome().runtime.sendMessage({
-
-					action: "platform_user_id",
-
-					source: String(localStorage.getItem('platform_user_id'))
-
-				})
-
-
-			},
-				error => {
-
-					console.log("ERR : " + JSON.stringify(error) + ' ' + error)
-
-				}, () => {
-
-				})*/
+	
+	
+				},
+					error => {
+	
+						console.log("ERR : " + JSON.stringify(error) + ' ' + error)
+	
+					}, () => {
+	
+					})*/
 
 		}, err => {
 			if (err.status) {

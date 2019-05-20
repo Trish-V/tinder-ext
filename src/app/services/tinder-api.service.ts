@@ -154,12 +154,12 @@ export class TinderAPIService {
 
             return this.httpClient.get<any>(this.like_url + _id, {
                 headers: {
-                    'Access-Control-Request-Method': 'GET',
+                    // 'Access-Control-Request-Method': 'GET',
                     'x-auth-token': TinderAPIService.t_token,
-                    Origin: 'https://tinder.com',
-                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
-                    'Access-Control-Request-Headers': 'app-session-id,app-session-time-elapsed,app-version,persistent-device-id,platform,user-session-id,user-session-time-elapsed,x-auth-token,x-supported-image-formats',
-                    'Accept': '*/*'
+                    // Origin: 'https://tinder.com',
+                    // 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
+                    // 'Access-Control-Request-Headers': 'app-session-id,app-session-time-elapsed,app-version,persistent-device-id,platform,user-session-id,user-session-time-elapsed,x-auth-token,x-supported-image-formats',
+                    // 'Accept': '*/*'
                 }
             })
 
@@ -167,16 +167,16 @@ export class TinderAPIService {
         pass: (_id) => {
 
             return this.httpClient.get<any>(this.pass_url + _id, {
-                headers: this.headers
+                headers: //this.headers
                 
-                // {
-                //     'Access-Control-Request-Method': 'GET',
-                //     'x-auth-token': TinderAPIService.t_token,
-                //     Origin: 'https://tinder.com',
-                //     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
-                //     'Access-Control-Request-Headers': 'app-session-id,app-session-time-elapsed,app-version,persistent-device-id,platform,user-session-id,user-session-time-elapsed,x-auth-token,x-supported-image-formats',
-                //     'Accept': '*/*'
-                // }
+                {
+                    // 'Access-Control-Request-Method': 'GET',
+                    'x-auth-token': TinderAPIService.t_token,
+                    // Origin: 'https://tinder.com',
+                    // 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
+                    // 'Access-Control-Request-Headers': 'app-session-id,app-session-time-elapsed,app-version,persistent-device-id,platform,user-session-id,user-session-time-elapsed,x-auth-token,x-supported-image-formats',
+                    // 'Accept': '*/*'
+                }
             })
 
         }

@@ -53,8 +53,48 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		HomeComponent.context = this
+		if (typeof localStorage.getItem('auto_like_state') == 'undefined') {
+			localStorage.setItem('auto_like_state', 'false')
+		}
+		if (localStorage.getItem('auto_like_state').match('true')) {
+			this.toggleStateAutoLiking = true
+		} else {
+			this.toggleStateAutoLiking = false
+		}
 		setTimeout(HomeComponent.autoLikeBackground, 5000, HomeComponent.i += 1, this.toggleStateAutoLiking);
-		// this.autoLikeBackground()
+
+		this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
+			if (msg.topic == 'refreshCount') {
+				// this.refresh()
+			}
+			if (msg.topic == 'pass') {
+				var rec = this.listOfProfiles.find(u => u._id == msg.message)
+
+				this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
+
+
+				this.chromeStorageService.setItem({ 'recs': this.listOfProfiles })
+
+				this.recCount = Object.keys(this.listOfProfiles).length
+
+				// this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
+
+			} else if (msg.topic == 'like') {
+				var rec = this.listOfProfiles.find(u => u._id == msg.message)
+
+				this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
+
+
+				this.chromeStorageService.setItem({ 'recs': this.listOfProfiles })
+
+				this.recCount = Object.keys(this.listOfProfiles).length
+
+				// this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
+
+			}
+		})
+
+
 
 	}
 
@@ -185,6 +225,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 					this.poll(recs)
 
 					this.sibilingsCommService.pushNotification('initialProfile', recs[0])
+					this.recCount = Object.keys(recs).length
 
 				} else {
 
@@ -211,6 +252,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 					this.poll(filteredRecs)
 
 					this.sibilingsCommService.pushNotification('initialProfile', filteredRecs[0])
+					this.recCount = Object.keys(filteredRecs).length
 				}
 
 				// console.log(' ' + JSON.stringify(result.recs, null, 2))
@@ -351,7 +393,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 			this.autoLikinScheduler()
 
-			
+
 
 		}
 		else {
@@ -361,7 +403,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	async autoLikinScheduler() {
+ 	async autoLikinScheduler() {
 
 
 
@@ -371,27 +413,27 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 		// console.log(Object.keys(this.listOfProfiles).length)
 
-		/*
+
 		for (let i = 0; i < Object.keys(this.listOfProfiles).length; i++) {
-	
-		  if (this.toggleStateAutoLiking) {
-	
-			console.log(i)
-	
-			console.log('testing')
-			this.sibilingsCommService.pushNotification('selectOnAutoLike', this.listOfProfiles[i])
-	
-		  } else {
-	
-			break;
-	
-		  }
-		  await this.sleep(8000);
+
+			if (this.toggleStateAutoLiking) {
+
+				console.log(i)
+
+				console.log('testing')
+				this.sibilingsCommService.pushNotification('selectOnAutoLike', this.listOfProfiles[i])
+
+			} else {
+
+				break;
+
+			}
+			await this.sleep(8000);
 		}
 		this.toggleStateAutoLiking = !this.toggleStateAutoLiking
-	
-	    
-		  */
+
+
+		/*	  */
 
 		// while (this.toggleStateAutoLiking && Object.keys(this.listOfProfiles).length + 1 >= this.id) {
 
@@ -414,11 +456,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 	static i = 0
 
 	static autoLikeBackground(index, state) {
+		var autoLiking = localStorage.getItem('auto_like_state')
+		if (autoLiking.match('true')) {
+			 
+			console.log('testing ' + index + ' ' + autoLiking)
+		}
 
 
-		console.log('testing ' + index + ' ' + state)
 
-		setTimeout(HomeComponent.autoLikeBackground, 5000, HomeComponent.i += 1, HomeComponent.toggleStateAutoLiking);
+		setTimeout(HomeComponent.autoLikeBackground, 5000, HomeComponent.i += 1, autoLiking);
 
 	}
 

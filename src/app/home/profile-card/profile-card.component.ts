@@ -178,6 +178,9 @@ export class ProfileCardComponent implements OnInit {
     this.job = '000'
     this.profileDataSet.distance_mi = 0
 
+
+    this.sibilingsCommService.pushNotification('refreshCount', [])
+
   }
   pass() {
     this.stateDislike = true
@@ -190,6 +193,9 @@ export class ProfileCardComponent implements OnInit {
     this.school = '000'
     this.job = '000'
     this.profileDataSet.distance_mi = 0
+
+
+    this.sibilingsCommService.pushNotification('refreshCount', [])
 
   }
 
