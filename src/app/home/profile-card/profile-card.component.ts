@@ -134,8 +134,12 @@ export class ProfileCardComponent implements OnInit {
 			}
 			if (msg.topic == 'selectOnAutoLike') {
 				console.log('auto liked')
-				this.carouselProfileSetup('selectOnAutoLike', null, msg.message)
 
+			}
+			if (msg.topic == 'backgroundLike') {
+
+				this.carouselProfileSetup('selectOnAutoLike', null, msg.message)
+				this.serviceLikeImpl(msg.message._id);
 			}
 
 		})
@@ -180,7 +184,7 @@ export class ProfileCardComponent implements OnInit {
 		this.profileDataSet.distance_mi = 0
 
 
-		this.sibilingsCommService.pushNotification('refreshCount', [])
+		// this.sibilingsCommService.pushNotification('refreshCount', [])
 
 	}
 	pass() {
@@ -195,8 +199,7 @@ export class ProfileCardComponent implements OnInit {
 		this.job = '000'
 		this.profileDataSet.distance_mi = 0
 
-
-		this.sibilingsCommService.pushNotification('refreshCount', [])
+ 
 
 	}
 	superLike() {
@@ -204,8 +207,7 @@ export class ProfileCardComponent implements OnInit {
 
 		this.serviceSuperLikeImpl(this.profileDataSet._id);
 
-
-		this.sibilingsCommService.pushNotification('refreshCount', [])
+ 
 	}
 
 	serviceLikeImpl(recID) {

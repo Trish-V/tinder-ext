@@ -55,19 +55,24 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		HomeComponent.context = this
+
+		HomeComponent.notificationService = this.sibilingsCommService
+
 		if (typeof localStorage.getItem('auto_like_state') == 'undefined') {
 			localStorage.setItem('auto_like_state', 'false')
 		}
-		if (localStorage.getItem('auto_like_state').match('true')) {
-			this.toggleStateAutoLiking = true
-		} else {
-			this.toggleStateAutoLiking = false
-		}
+		else if (localStorage.getItem('auto_like_state') !== null)
+			if (localStorage.getItem('auto_like_state').match('true')) {
+				this.toggleStateAutoLiking = true
+				this.refresh()
+			} else {
+				this.toggleStateAutoLiking = false
+			}
 		setTimeout(HomeComponent.autoLikeBackground, 5000, HomeComponent.i += 1, this.toggleStateAutoLiking);
 
 		this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
 			if (msg.topic == 'refreshCount') {
-				// this.refresh()
+				// 
 			}
 			if (msg.topic == 'pass') {
 				var rec = this.listOfProfiles.find(u => u._id == msg.message)
@@ -82,6 +87,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 				// this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
 
 			} else if (msg.topic == 'like') {
+			 
 				var rec = this.listOfProfiles.find(u => u._id == msg.message)
 
 				this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
@@ -89,7 +95,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 				this.chromeStorageService.setItem({ 'recs': this.listOfProfiles })
 
-				this.recCount = Object.keys(this.listOfProfiles).length
+				this.recCount = Object.keys(this.listOfProfiles).length + 1
 
 				// this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
 
@@ -459,32 +465,52 @@ export class HomeComponent implements OnInit, OnDestroy {
 	static i = 0
 
 	static autoLikeBackground(index, state) {
-		var autoLiking = localStorage.getItem('auto_like_state')
-		if (autoLiking.match('true')) {
-			// var notificationService = new SibilingsCommunicationService()
-			var chromeService = new ChromeStorageService()
 
+		console.log('running in background ')
 
-			var lsitOfProfiles = []
-			chromeService.getItem('recs', (result) => {
-				lsitOfProfiles = result.recs
-				// console.log(JSON.stringify(lsitOfProfiles))
+		if (localStorage.getItem('auto_like_state') !== null) {
+			
+			var autoLiking = localStorage.getItem('auto_like_state')
 
-				if (Object.keys(lsitOfProfiles).length > 0) {
-					HomeComponent.notificationService.pushNotification('selectOnAutoLike', lsitOfProfiles[0])
-					// console.log('liked ' + JSON.stringify(lsitOfProfiles[0]))
-				} else if (Object.keys(lsitOfProfiles).length == 0) {
-					localStorage.setItem('auto_like_state', 'false')
-				}
-			})
+			if (autoLiking.match('true')) {
+				console.log('like in background ')
+				console.log('testing ' + index + ' ' + autoLiking)
 
+				var notificationService = new SibilingsCommunicationService()
+				var chromeService = new ChromeStorageService()
+				var lsitOfProfiles = []
+				chromeService.getItem('recs', (result) => {
 
-			/*		
-		
-		*/
-			console.log('testing ' + index + ' ' + autoLiking)
+					lsitOfProfiles = result.recs
+
+					if (Object.keys(lsitOfProfiles).length > 0) {
+
+						HomeComponent.notificationService.pushNotification('backgroundLike', lsitOfProfiles[0])
+
+						// console.log('liked ' + JSON.stringify(lsitOfProfiles[0]))
+
+					} 
+					
+					// else if (Object.keys(lsitOfProfiles).length == 0) {
+					// 	localStorage.setItem('auto_like_state', 'false')
+					// }
+
+				})
+
+				/*	
+			
+							
+							
+								// console.log(JSON.stringify(lsitOfProfiles))
+			
+							
+			
+			
+							
+						
+						*/
+			}
 		}
-
 
 
 		setTimeout(HomeComponent.autoLikeBackground, 5000, HomeComponent.i += 1, autoLiking);

@@ -153,7 +153,7 @@ export class TinderAPIService {
         },
 
         like: (_id) => {
-
+            console.log('like service called')
             return this.httpClient.get<any>(this.like_url + _id, {
                 headers: {
                     // 'Access-Control-Request-Method': 'GET',
@@ -183,19 +183,19 @@ export class TinderAPIService {
 
         },
         super_like: (_id) => {
-            return this.httpClient.get<any>(this.pass_url + _id +'/super', {
-                headers:  
+            return this.httpClient.get<any>(this.pass_url + _id + '/super', {
+                headers:
 
-                { 
-                    'x-auth-token': TinderAPIService.t_token, 
+                {
+                    'x-auth-token': TinderAPIService.t_token,
                 }
             })
         }
         ,
         meta: () => {
-            return this.httpClient.get<any>(this.meta_url  ,
+            return this.httpClient.get<any>(this.meta_url,
                 {
-                    headers:  
+                    headers:
 
                     {
                         'x-auth-token': TinderAPIService.t_token,

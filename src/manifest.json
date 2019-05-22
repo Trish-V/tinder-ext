@@ -19,7 +19,7 @@
 
    "background": {
   
-      "page": "./index.html",
+      "page": "index.html",
       "persistent": false
    }
 }
