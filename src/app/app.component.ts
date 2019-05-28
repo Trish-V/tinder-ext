@@ -17,6 +17,8 @@ declare var Toast: any
 
 declare var testFunctionBackground: any
 
+declare var getRecsForOneTimeWhenAppOpens : any
+
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
@@ -119,7 +121,7 @@ export class AppComponent implements OnInit {
 		}
 
 
-
+		getRecsForOneTimeWhenAppOpens()
 
 
 	}

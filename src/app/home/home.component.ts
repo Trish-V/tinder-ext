@@ -17,6 +17,8 @@ declare var Swal: any
 
 declare var Toast: any
 
+declare var getRecs: any
+
 
 
 @Component({
@@ -68,7 +70,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 			} else {
 				this.toggleStateAutoLiking = false
 			}
-		setTimeout(HomeComponent.autoLikeBackground, 5000, HomeComponent.i += 1, this.toggleStateAutoLiking);
+
+		// setTimeout(HomeComponent.autoLikeBackground, 5000, HomeComponent.i += 1, this.toggleStateAutoLiking);
 
 		this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
 			if (msg.topic == 'refreshCount') {
@@ -87,7 +90,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 				// this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
 
 			} else if (msg.topic == 'like') {
-			 
+
 				var rec = this.listOfProfiles.find(u => u._id == msg.message)
 
 				this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
@@ -156,13 +159,35 @@ export class HomeComponent implements OnInit, OnDestroy {
 				localStorage.setItem('tinder_local_storage', request.source)
 
 			}
+			if (request.action == "background_retrived_data") {
+
+
+				// localStorage.setItem('background_retrived_data', request.source)
+			 chromeStorageService.getItem('recs', res => {
+					console.log('recieved from background' + JSON.stringify(res.recs))
+
+					 chromeStorageService.setItem({ 'recs': JSON.parse(res.recs) })
+
+					this.poll(JSON.parse(res.recs))
+
+					 sibilingsCommService.pushNotification('initialProfile', JSON.parse(res.recs)[0])
+
+					this.recCount = Object.keys(JSON.parse(res.recs)).length
+
+				})
+
+			 
+
+
+
+			}
 
 		})
 
 
 		try {
 
-			this.getRecs(3050)
+			// this.getRecs(3050)
 
 		} catch (error) {
 
@@ -172,7 +197,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 	}
 
 
+	checkForNewRecs() {
 
+		setTimeout(function run() {
+
+
+			setTimeout(run, 8000);
+		}, 0);
+
+
+	}
 
 
 	getRecs(sleep) {
@@ -399,8 +433,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		if (toggleState) {
 
 			this.id = 0
-			HomeComponent.i = 0
-			this.autoLikinScheduler()
+			HomeComponent.i = 0 
 
 
 
@@ -469,7 +502,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		console.log('running in background ')
 
 		if (localStorage.getItem('auto_like_state') !== null) {
-			
+
 			var autoLiking = localStorage.getItem('auto_like_state')
 
 			if (autoLiking.match('true')) {
@@ -485,30 +518,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 					if (Object.keys(lsitOfProfiles).length > 0) {
 
-						HomeComponent.notificationService.pushNotification('backgroundLike', lsitOfProfiles[0])
+						// HomeComponent.notificationService.pushNotification('backgroundLike', lsitOfProfiles[0])
 
-						// console.log('liked ' + JSON.stringify(lsitOfProfiles[0]))
 
-					} 
-					
-					// else if (Object.keys(lsitOfProfiles).length == 0) {
-					// 	localStorage.setItem('auto_like_state', 'false')
-					// }
+
+
+
+					}
+
+
 
 				})
 
-				/*	
-			
-							
-							
-								// console.log(JSON.stringify(lsitOfProfiles))
-			
-							
-			
-			
-							
-						
-						*/
+
 			}
 		}
 
@@ -519,6 +541,50 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
 
+
+
+	static like(options = { match_id: '', token: '' }, subscribe) {
+
+		var xhr = new XMLHttpRequest();
+		xhr.withCredentials = true;
+
+		xhr.open("GET", "https://api.gotinder.com/like/" + options.match_id);
+
+		xhr.setRequestHeader("x-auth-token", options.token);
+
+		xhr.addEventListener("readystatechange", function () {
+
+			if (this.readyState === 4) {
+
+				subscribe(this.responseText);
+
+			}
+		})
+
+		xhr.send();
+	}
+
+
+	static getRecs(options = { token: '' }, subscribe) {
+		var xhr = new XMLHttpRequest();
+		xhr.withCredentials = true;
+		xhr.open("GET", "https://api.gotinder.com/user/recs");
+
+		xhr.setRequestHeader("x-auth-token", options.token);
+
+		xhr.addEventListener("readystatechange", function () {
+
+			if (this.readyState === 4) {
+
+
+
+				subscribe(this.responseText);
+
+			}
+		})
+
+		xhr.send();
+	}
 
 
 }
