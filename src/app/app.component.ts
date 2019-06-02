@@ -139,9 +139,14 @@ export class AppComponent implements OnInit {
 
 		this.tinderAPI.services.get_profile_of_the_logged_in_user().subscribe(res => {
 
-			this.profileDisplayPicture = res.data.user.photos[0].url
+			console.log(JSON.stringify(res,null,2))
+			if(res.status==401){
+				this.openAlertToReLogUser()
+			}
 
-			this.username = res.data.user.name
+			this.profileDisplayPicture = res.body.data.user.photos[0].url
+
+			this.username = res.body.data.user.name
 
 			localStorage.setItem('user_profile', JSON.stringify(res))
 

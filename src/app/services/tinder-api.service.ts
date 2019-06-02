@@ -132,8 +132,9 @@ export class TinderAPIService {
                 headers: {
 
                     'x-auth-token': TinderAPIService.t_token,
-                }
-            })
+                }, observe: 'response'
+            }
+            )
 
         },
         authenticate_with_fb: () => {

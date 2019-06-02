@@ -59,8 +59,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 
-		getRecsForOneTimeWhenAppOpens()
-
 		HomeComponent.context = this
 
 		HomeComponent.notificationService = this.sibilingsCommService
@@ -95,6 +93,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 			if (request.action == "background_retrived_data") {
 				thisContext.sibilingsCommService.pushNotification('background_recs_set', '')
 				thisContext.refresh()
+				setTimeout(function run() {
+					thisContext.refresh()
+				}, 500)
 
 			}
 
@@ -117,8 +118,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 					if (typeof rec != 'undefined') {
 						rec.state = 'pass'
 						rec.action_performed_on = Date.now()
-						res.push(rec)
-						this.chromeStorageService.setItem(res)
+						res.history.push(rec)
+						this.chromeStorageService.setItem({ 'history': res.history })
 					}
 				})
 
@@ -142,8 +143,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 					if (typeof rec != 'undefined') {
 						rec.state = 'like'
 						rec.action_performed_on = Date.now()
-						res.push(rec)
-						this.chromeStorageService.setItem(res)
+						res.history.push(rec)
+						this.chromeStorageService.setItem({ 'history': res.history })
 					}
 
 				})
@@ -167,15 +168,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 					if (typeof rec != 'undefined') {
 						rec.state = 'superlike'
 						rec.action_performed_on = Date.now()
-						res.push(rec)
-						this.chromeStorageService.setItem(res)
+						res.history.push(rec)
+						this.chromeStorageService.setItem({ history: res.history })
 					}
 				})
 
 
 				this.chromeStorageService.setItem({ 'recs': this.listOfProfiles })
 
-				this.recCount = Object.keys(this.listOfProfiles).length + 1
+				this.recCount = Object.keys(this.listOfProfiles).length
 
 
 				// this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
@@ -183,7 +184,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 			}
 
 			else if (msg.topic == 'background_recs_set') {
-				this.refresh()
+
+				// this.listOfProfiles = []
+
+				// this.refresh()
 				// HomeComponent.context.chromeStorageService.getItem('recs', res => {
 
 
@@ -192,9 +196,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 			}
 		})
 
-		getRecsForOneTimeWhenAppOpens()
 
-		this.refresh()
+		// this.refresh()
+
+		setTimeout(function run() {
+
+			thisContext.refresh()
+			console.log(' 2sec interval for calling list retrival')
+
+		}, 1000)
 	}
 
 
@@ -264,17 +274,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 			this.poll(result.recs)
 			this.sibilingsCommService.pushNotification('selectOnClick', result.recs[0])
-		})
-		this.chromeStorageService.getItem('recs', (result) => {
 
-			this.poll(result.recs)
-			this.sibilingsCommService.pushNotification('selectOnClick', result.recs[0])
 		})
-		this.chromeStorageService.getItem('recs', (result) => {
 
-			this.poll(result.recs)
-			this.sibilingsCommService.pushNotification('selectOnClick', result.recs[0])
-		})
+		// this.chromeStorageService.getItem('recs', (result) => {
+
+		// 	this.poll(result.recs)
+		// 	this.sibilingsCommService.pushNotification('selectOnClick', result.recs[0])
+		// })
+		// this.chromeStorageService.getItem('recs', (result) => {
+
+		// 	this.poll(result.recs)
+		// 	this.sibilingsCommService.pushNotification('selectOnClick', result.recs[0])
+		// })
 
 		/*	this.tinderAPI.services.get_all_recomendations().subscribe(res => {
 	
@@ -394,7 +406,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 	updateEveryMS = 0
 
 	poll(results: any) {
-		this.listOfProfiles = []
+		// this.listOfProfiles = []
 		if (typeof results == 'undefined') {
 			return
 		}
@@ -435,6 +447,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 			// await this.sleep(this.updateEveryMS)
 		}
+		this.recCount = Object.keys(results).length
+
 
 	}
 
@@ -496,18 +510,29 @@ export class HomeComponent implements OnInit, OnDestroy {
 		this.chromeStorageService.getItem('recs', res => {
 
 			let filteredRecs = []
+			console.log(Object.keys(res.recs).length)
+			filteredRecs = res.recs.filter((arr, index, self) =>
+				index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)))
 
 			// filteredRecs = recs.filter((arr, index, self) =>
 			// index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)))
+			try {
+				if (res == null) {
+					return
+				}
+				// filteredRecs = res.recs
+
+				// this.poll(res.recs)
+				this.poll(filteredRecs)
+
+				if (Object.keys(filteredRecs).length != 0)
+					this.sibilingsCommService.pushNotification('selectOnClick', filteredRecs[0])
+				// console.log(JSON.stringify(res.recs, null, 4))
+			} catch (error) {
+
+			}
 
 
-			filteredRecs = res.recs
-
-			this.poll(filteredRecs)
-
-			if (typeof res.recs != 'undefined')
-				this.sibilingsCommService.pushNotification('selectOnClick', res.recs[0])
-			console.log(JSON.stringify(res.recs, null, 4))
 
 		})
 
