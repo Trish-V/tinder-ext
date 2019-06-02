@@ -22,6 +22,7 @@ import { MaterialCDKModule } from './_material/cdk/material.cdk.module'
 import { FormsModule } from '@angular/forms'
 import { CupidoAPIService } from './services/cupido-api.service'; 
 import { ChromeStorageService } from './services/chrome-storage.service';
+import { HistoryComponent } from './history/history.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -35,7 +36,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ProfileCardComponent,
     TimeLineComponent,
     HomeComponent,
-    SettingsComponent 
+    SettingsComponent,
+    HistoryComponent 
   ],
   imports: [
     BrowserModule,

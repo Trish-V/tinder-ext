@@ -20,6 +20,7 @@ declare var Toast: any
 declare var getRecs: any
 
 
+declare var getRecsForOneTimeWhenAppOpens: any
 
 @Component({
 	selector: 'app-home',
@@ -52,10 +53,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 	static toggleStateAutoLiking = false;
 	recCount: number;
 	static notificationService: SibilingsCommunicationService;
+	chrome: any;
 
 
 
 	ngOnInit(): void {
+
+		getRecsForOneTimeWhenAppOpens()
+
 		HomeComponent.context = this
 
 		HomeComponent.notificationService = this.sibilingsCommService
@@ -73,14 +78,49 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 		// setTimeout(HomeComponent.autoLikeBackground, 5000, HomeComponent.i += 1, this.toggleStateAutoLiking);
 
+
+
+		let thisContext = this
+		this.chrome.runtime.onMessage.addListener(function (request, sender) {
+			if (request.action == "savedLocalStorage") {
+
+				thisContext.saveLocalStorage('tinder_local_storage', request.source)
+
+			}
+			if (request.action == "getLocalStorage") {
+
+				localStorage.setItem('tinder_local_storage', request.source)
+
+			}
+			if (request.action == "background_retrived_data") {
+				thisContext.sibilingsCommService.pushNotification('background_recs_set', '')
+				thisContext.refresh()
+
+			}
+
+		})
+
+
+
+
 		this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
 			if (msg.topic == 'refreshCount') {
 				// 
 			}
 			if (msg.topic == 'pass') {
+
 				var rec = this.listOfProfiles.find(u => u._id == msg.message)
 
 				this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
+
+				this.chromeStorageService.getItem('history', res => {
+					if (typeof rec != 'undefined') {
+						rec.state = 'pass'
+						rec.action_performed_on = Date.now()
+						res.push(rec)
+						this.chromeStorageService.setItem(res)
+					}
+				})
 
 
 				this.chromeStorageService.setItem({ 'recs': this.listOfProfiles })
@@ -93,20 +133,68 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 				var rec = this.listOfProfiles.find(u => u._id == msg.message)
 
+				console.log(JSON.stringify(rec, null, 4))
+
 				this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
+
+
+				this.chromeStorageService.getItem('history', res => {
+					if (typeof rec != 'undefined') {
+						rec.state = 'like'
+						rec.action_performed_on = Date.now()
+						res.push(rec)
+						this.chromeStorageService.setItem(res)
+					}
+
+				})
 
 
 				this.chromeStorageService.setItem({ 'recs': this.listOfProfiles })
 
 				this.recCount = Object.keys(this.listOfProfiles).length + 1
 
+
 				// this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
+
+			} else if (msg.topic == 'superlike') {
+
+				var rec = this.listOfProfiles.find(u => u._id == msg.message)
+
+				this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
+
+
+				this.chromeStorageService.getItem('history', res => {
+					if (typeof rec != 'undefined') {
+						rec.state = 'superlike'
+						rec.action_performed_on = Date.now()
+						res.push(rec)
+						this.chromeStorageService.setItem(res)
+					}
+				})
+
+
+				this.chromeStorageService.setItem({ 'recs': this.listOfProfiles })
+
+				this.recCount = Object.keys(this.listOfProfiles).length + 1
+
+
+				// this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
+
+			}
+
+			else if (msg.topic == 'background_recs_set') {
+				this.refresh()
+				// HomeComponent.context.chromeStorageService.getItem('recs', res => {
+
+
+				// })
 
 			}
 		})
 
+		getRecsForOneTimeWhenAppOpens()
 
-
+		this.refresh()
 	}
 
 
@@ -119,6 +207,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		private chromeStorageService: ChromeStorageService
 	) {
 
+		this.chrome = getChrome()
 
 		HomeComponent.context = this
 		HomeComponent.notificationService = sibilingsCommService
@@ -146,52 +235,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 		})
 
-		let thisContext = this
-		getChrome().runtime.onMessage.addListener(function (request, sender) {
-			if (request.action == "savedLocalStorage") {
-
-				// callback for local storage 
-				thisContext.saveLocalStorage('tinder_local_storage', request.source)
-
-			}
-			if (request.action == "getLocalStorage") {
-
-				localStorage.setItem('tinder_local_storage', request.source)
-
-			}
-			if (request.action == "background_retrived_data") {
 
 
-				// localStorage.setItem('background_retrived_data', request.source)
-			 chromeStorageService.getItem('recs', res => {
-					console.log('recieved from background' + JSON.stringify(res.recs))
-
-					 chromeStorageService.setItem({ 'recs': JSON.parse(res.recs) })
-
-					this.poll(JSON.parse(res.recs))
-
-					 sibilingsCommService.pushNotification('initialProfile', JSON.parse(res.recs)[0])
-
-					this.recCount = Object.keys(JSON.parse(res.recs)).length
-
-				})
-
-			 
-
-
-
-			}
-
-		})
-
-
-		try {
-
-			// this.getRecs(3050)
-
-		} catch (error) {
-
-		}
 
 
 	}
@@ -215,97 +260,115 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 		this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
 
-		this.tinderAPI.services.get_all_recomendations().subscribe(res => {
+		this.chromeStorageService.getItem('recs', (result) => {
 
-			try {
-				if (res.message) {
-					setTimeout(() => {
-
-						const Toast = Swal.mixin({
-
-							toast: true,
-
-							position: 'top-end',
-
-							showConfirmButton: false,
-
-							timer: 3000
-
-						})
-
-						Toast.fire({
-							type: 'warning',
-
-							title: 'No new recomendations for now'
-
-						})
-
-					}, sleep)
-
-					return
-				}
-			} catch (error) {
-
-			}
-
-
-
-			// console.log(res.results)
-
-			let recs = []
-			let filteredRecs = []
-
-			this.chromeStorageService.getItem('recs', (result) => {
-
-				if (typeof result.recs == 'undefined') {
-
-					this.chromeStorageService.setItem({ 'recs': res.results })
-
-					console.log('recs initialised')
-
-					recs = res.results
-
-					this.poll(recs)
-
-					this.sibilingsCommService.pushNotification('initialProfile', recs[0])
-					this.recCount = Object.keys(recs).length
-
-				} else {
-
-					console.log('retriving results from local storage')
-
-					recs = result.recs
-
-					console.log('Lneght of res.results : ' + Object.keys(res.results).length)
-
-					console.log('Lneght of  recs : ' + Object.keys(recs).length)
-
-					recs = recs.concat(res.results)
-
-					console.log('Lneght of res.results + recs  : ' + Object.keys(recs).length)
-
-					filteredRecs = recs.filter((arr, index, self) =>
-						index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)))
-
-					console.log('Lneght of filtered list : ' + Object.keys(filteredRecs).length)
-
-					this.chromeStorageService.setItem({ 'recs': filteredRecs })
-					console.log(JSON.stringify(filteredRecs))
-
-					this.poll(filteredRecs)
-
-					this.sibilingsCommService.pushNotification('initialProfile', filteredRecs[0])
-					this.recCount = Object.keys(filteredRecs).length
-				}
-
-				// console.log(' ' + JSON.stringify(result.recs, null, 2))
-
-			})
-
-
-		}, err => {
-
+			this.poll(result.recs)
+			this.sibilingsCommService.pushNotification('selectOnClick', result.recs[0])
 		})
+		this.chromeStorageService.getItem('recs', (result) => {
+
+			this.poll(result.recs)
+			this.sibilingsCommService.pushNotification('selectOnClick', result.recs[0])
+		})
+		this.chromeStorageService.getItem('recs', (result) => {
+
+			this.poll(result.recs)
+			this.sibilingsCommService.pushNotification('selectOnClick', result.recs[0])
+		})
+
+		/*	this.tinderAPI.services.get_all_recomendations().subscribe(res => {
+	
+				try {
+					if (res.message) {
+						setTimeout(() => {
+	
+							const Toast = Swal.mixin({
+	
+								toast: true,
+	
+								position: 'top-end',
+	
+								showConfirmButton: false,
+	
+								timer: 3000
+	
+							})
+	
+							Toast.fire({
+								type: 'warning',
+	
+								title: 'No new recomendations for now'
+	
+							})
+	
+						}, sleep)
+	
+						return
+					}
+				} catch (error) {
+	
+				}
+	
+	
+	
+				// console.log(res.results)
+	
+				let recs = []
+				let filteredRecs = []
+	
+				this.chromeStorageService.getItem('recs', (result) => {
+	
+					if (typeof result.recs == 'undefined') {
+	
+						this.chromeStorageService.setItem({ 'recs': res.results })
+	
+						console.log('recs initialised')
+	
+						recs = res.results
+	
+						this.poll(recs)
+	
+						this.sibilingsCommService.pushNotification('initialProfile', recs[0])
+						this.recCount = Object.keys(recs).length
+	
+					} else {
+	
+						console.log('retriving results from local storage')
+	
+						recs = result.recs
+	
+						console.log('Lneght of res.results : ' + Object.keys(res.results).length)
+	
+						console.log('Lneght of  recs : ' + Object.keys(recs).length)
+	
+						recs = recs.concat(res.results)
+	
+						console.log('Lneght of res.results + recs  : ' + Object.keys(recs).length)
+	
+						filteredRecs = recs.filter((arr, index, self) =>
+							index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)))
+	
+						console.log('Lneght of filtered list : ' + Object.keys(filteredRecs).length)
+	
+						this.chromeStorageService.setItem({ 'recs': filteredRecs })
+						console.log(JSON.stringify(filteredRecs))
+	
+						this.poll(filteredRecs)
+	
+						this.sibilingsCommService.pushNotification('initialProfile', filteredRecs[0])
+						this.recCount = Object.keys(filteredRecs).length
+					}
+	
+					// console.log(' ' + JSON.stringify(result.recs, null, 2))
+	
+				})
+	
+	
+			}, err => {
+	
+			})
+	
+			*/
 
 	}
 
@@ -330,7 +393,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 	updateEveryMS = 0
 
-	async poll(results: any) {
+	poll(results: any) {
+		this.listOfProfiles = []
+		if (typeof results == 'undefined') {
+			return
+		}
+
+		if (results == null) {
+			return
+		}
+
+		if (Object.keys(results).length == 0) {
+			return
+		}
 
 		for (let result of results) {
 			// code to poll server and update models and view ...
@@ -347,7 +422,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 				name: "000"
 			})
 
-
 			result.jobs.push({
 				"title": {
 					"name": "000"
@@ -359,7 +433,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 			this.sibilingsCommService.pushMessage('scrollTop')
 
-			await this.sleep(this.updateEveryMS)
+			// await this.sleep(this.updateEveryMS)
 		}
 
 	}
@@ -417,7 +491,26 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 		this.listOfProfiles = []
 
-		this.getRecs(0)
+		// this.getRecs(0)
+
+		this.chromeStorageService.getItem('recs', res => {
+
+			let filteredRecs = []
+
+			// filteredRecs = recs.filter((arr, index, self) =>
+			// index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)))
+
+
+			filteredRecs = res.recs
+
+			this.poll(filteredRecs)
+
+			if (typeof res.recs != 'undefined')
+				this.sibilingsCommService.pushNotification('selectOnClick', res.recs[0])
+			console.log(JSON.stringify(res.recs, null, 4))
+
+		})
+
 
 	}
 
@@ -432,9 +525,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 		if (toggleState) {
 
-			this.id = 0
-			HomeComponent.i = 0 
 
+			getChrome().runtime.sendMessage({
+
+				action: "auto_like_state",
+
+				source: String(toggleState)
+
+			})
 
 
 		}
@@ -443,51 +541,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 			clearTimeout(this.timer)
 		}
-	}
-
-	async autoLikinScheduler() {
-
-
-
-
-
-
-
-		// console.log(Object.keys(this.listOfProfiles).length)
-		/*	 
-	
-			for (let i = 0; i < Object.keys(this.listOfProfiles).length; i++) {
-	
-				if (this.toggleStateAutoLiking) {
-	
-					console.log(i)
-	
-					console.log('testing')
-					this.sibilingsCommService.pushNotification('selectOnAutoLike', this.listOfProfiles[i])
-	
-				} else {
-	
-					break;
-	
-				}
-				await this.sleep(8000);
-			}
-			this.toggleStateAutoLiking = !this.toggleStateAutoLiking
-	
-	
-		 */
-
-		// while (this.toggleStateAutoLiking && Object.keys(this.listOfProfiles).length + 1 >= this.id) {
-
-		//   this.sibilingsCommService.pushNotification('selectOnAutoLike', this.listOfProfiles[this.id])
-		//   this.id++
-
-		//   await this.sleep(4000);
-		// }
-
-
-
-
 	}
 
 

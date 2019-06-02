@@ -275,7 +275,7 @@ export class ProfileCardComponent implements OnInit {
 
 				this.tinderAPI.services.super_like(recID).subscribe(res => {
 
-					this.sibilingsCommService.pushNotification('like', recID)
+					this.sibilingsCommService.pushNotification('superlike', recID)
 					this.stateDislike = true
 
 					this.stateLike = true

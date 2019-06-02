@@ -1,14 +1,31 @@
 
 
+class Util {
+	static _id
+	setId(id) {
+		Util._id = id
+	}
+
+	getId() {
+		return Util._id
+	}
+}
+
 var autoLikeList = []
+
 var state = false
 
 var recomendationsCheckMultipiler = 3
-var recomendationsTimeInterval = 10000	// in millis
 
-var constRecomendationsTimeInterval = 10000	// in millis
+var recomendationsTimeInterval = 900000	// in millis
+
+var  constRecomendationsTimeInterval = 900000	// in millis
 
 var thresholdTimeInterval = 60 * 1000 * 60 * 12 // 12 hrs
+
+var minRecsLimit = 5
+
+var autoLikingTimeGap = 8 * 1000
 
 chrome.runtime.onMessage.addListener(function (request, sender) {
 
@@ -20,7 +37,22 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
 	}
 
 	if (request.action == "getLocalStorage") {
+		try {
 
+			if (
+				typeof JSON.parse(localStorage.getItem('tinder_local_storage')) != 'undefined'
+				&& JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken'] != null
+			) {
+				if (
+					!String(JSON.parse(request.source)['TinderWeb/APIToken']).match(JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken'])
+				) {
+					getRecsForOneTimeWhenAppOpens()
+					console.log('new recs')
+				}
+			}
+		} catch (error) {
+
+		}
 		localStorage.setItem('tinder_local_storage', request.source);
 
 
@@ -40,10 +72,19 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
 		localStorage.setItem('recs', String(request.source))
 
 	}
+	if (request.action == "auto_like_state") {
+		// callback for local storage  
+		localStorage.setItem('auto_like_state', String(request.source))
+		var auto_like_state = localStorage.getItem('auto_like_state')
+
+		// if (auto_like_state === 'true') {
+		// 
+		// }
+
+	}
 
 
 });
-
 
 
 
@@ -110,8 +151,8 @@ setTimeout(function run() {
 	setTimeout(run, 15000);
 }, 10000);
 
- 
- 
+
+
 function getRecs(subscribe) {
 	getItem('recs', result => {
 		subscribe(result.recs)
@@ -162,8 +203,36 @@ function getRecsForOneTimeWhenAppOpens() {
 
 			tinderService.getRecs({ token: tinderToken }, res => {
 
-				if (res.status == 401) return
+				if (res.status == 401) {
+					notifyApplication('re_log_user', '')
+					return
+				}
+				if (res.status == 429) {
+					recomendationsTimeInterval = recomendationsTimeInterval * recomendationsCheckMultipiler
+					if (recomendationsTimeInterval >= thresholdTimeInterval) {
 
+						recomendationsTimeInterval = constRecomendationsTimeInterval
+					}
+					return
+				}
+				try {
+					if (res.results == null) {
+						return
+					}
+				} catch (error) {
+
+				}
+				if (Object.keys(res.results).length == 0) {
+
+					recomendationsTimeInterval = recomendationsTimeInterval * recomendationsCheckMultipiler
+					if (recomendationsTimeInterval >= thresholdTimeInterval) {
+
+						recomendationsTimeInterval = constRecomendationsTimeInterval
+					}
+					return
+				}
+
+				recomendationsTimeInterval = constRecomendationsTimeInterval * 10
 				// console.log(JSON.stringify(res))
 
 				getItem('recs', result => {
@@ -189,6 +258,7 @@ function getRecsForOneTimeWhenAppOpens() {
 
 						setItem({ 'recs': filteredRecs })
 
+
 						notifyApplication("background_retrived_data", JSON.stringify(filteredRecs))
 
 						// console.log(JSON.stringify(filteredRecs)  )
@@ -207,4 +277,97 @@ function getRecsForOneTimeWhenAppOpens() {
 	}
 
 
+
 }
+
+
+setTimeout(function run() {
+	getRecsForOneTimeWhenAppOpens()
+
+	setTimeout(run, recomendationsTimeInterval)
+
+
+}, 2000);
+
+setTimeout(function run() {
+
+
+	try {
+		if (
+
+			localStorage.getItem('tinder_local_storage') !== null
+		) {
+
+			if (auto_like_state === 'true') {
+				getItem('recs', result => {
+
+					if (typeof result.recs[0] != 'undefined' && result.recs[0]._id != null) {
+
+						var tinderToken = JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken']
+
+						var auto_like_state = localStorage.getItem('auto_like_state')
+
+						var tinderService = new TinderService();
+						var util = new Util()
+						util.setId(result.recs[0]._id)
+
+
+						console.log("auto like continues")
+						tinderService.like({ match_id: util.getId(), token: tinderToken }, res => {
+							if (res.status == 401) {
+
+							} else {
+
+								var rec = result.recs.find(u => u._id == util.getId())
+
+								console.log(rec.name)
+								// result.recs.shift()
+
+								// result.recs.splice(rec, 1)
+								if (result.recs[0] == rec) {
+
+									result.recs.splice(rec, 1)
+								}
+								getItem('history', res => {
+
+									rec.state = 'liked'
+									rec.action_performed_on = Date.now()
+									res.push(rec)
+									setItem({ 'history': res })
+								})
+
+
+								setItem({ 'recs': result.recs })
+
+								notifyApplication("background_retrived_data", '')
+
+
+							}
+						})
+
+
+
+
+					}
+
+
+				})
+
+
+			}
+
+
+		}
+
+	} catch (error) {
+
+	}
+
+
+	setTimeout(run, 10000);
+}, 4000);
+
+
+
+
+

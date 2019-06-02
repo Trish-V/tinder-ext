@@ -17,7 +17,7 @@ declare var Toast: any
 
 declare var testFunctionBackground: any
 
-declare var getRecsForOneTimeWhenAppOpens : any
+declare var getRecsForOneTimeWhenAppOpens: any
 
 @Component({
 	selector: 'app-root',
@@ -107,6 +107,11 @@ export class AppComponent implements OnInit {
 
 
 			}
+			if (request.action == "re_log_user") {
+				thisContext.openAlertToReLogUser()
+
+
+			}
 
 		})
 
@@ -121,7 +126,7 @@ export class AppComponent implements OnInit {
 		}
 
 
-		getRecsForOneTimeWhenAppOpens()
+		// getRecsForOneTimeWhenAppOpens()
 
 
 	}

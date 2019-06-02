@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
 import { HomeComponent } from './home/home.component'
 import { SettingsComponent } from './settings/settings.component'
+import { HistoryComponent } from './history/history.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'settings',
     component: SettingsComponent
+  },
+  {
+    path: 'history',
+    component: HistoryComponent
   }
 ]
 
