@@ -7,6 +7,7 @@ class TinderService {
 	constructor() {
 		this.xhr = new XMLHttpRequest();
 		this.xhr.withCredentials = true;
+
 	}
 
 
@@ -102,60 +103,6 @@ class TinderService {
 
 	}
 
-	like(options = { match_id: '', token: '' }, subscribe = { res: '' }) {
-
-		console.log(options.match_id)
-
-		var settings = {
-			"async": true,
-			"crossDomain": true,
-			"url": "https://api.gotinder.com/like/" + options.match_id,
-			"method": "GET",
-			"headers": {
-				"X-Auth-Token": options.token
-			}
-		}
-
-		var i = 0
-		$.ajax(settings).done(function (response) {
-			if (i == 0) {
-				console.log(response);
-				subscribe(response);
-				i++
-			}
-		});
-
-		/*	this.xhr.open("GET", "https://api.gotinder.com/like/" + options.match_id);
-	
-			this.xhr.setRequestHeader("x-auth-token", options.token);
-	
-	
-			this.xhr.onload = function () {
-				if (this.readyState === 4 && this.status == 200 && i == 0) {
-					subscribe(this.responseText);
-					i++
-				}
-			};
-	
-			this.xhr.addEventListener("readystatechange", function () {
-	
-	
-				if (this.readyState === 4 && this.status == 200 && i == 0) {
-					if (this.responseText) {
-						i++
-						// subscribe(this.responseText);
-					}
-				}
-	
-	
-			})
-	
-			this.xhr.send();
-	*/
-
-	}
-
-
 	getRecs(options = { token: '' }, subscribe = { res: '' }) {
 		try {
 			this.xhr.open("GET", "https://api.gotinder.com/user/recs");
@@ -183,6 +130,60 @@ class TinderService {
 
 	}
 
+	performRemoeOperationOnRecs(recs, rec, index) {
+		if (rec._id === util.getId() && rec._id === recs[0]._id) {
+			newRecs.splice(index, 1)
+
+		}
+	}
+
+	static like(options = { match_id: '', token: '' }, recs, rec, index, subscribe = { res: '' }) {
+
+		console.log(options.match_id)
+
+		this.xhr.open("GET", "https://api.gotinder.com/like/" + options.match_id);
+
+		this.xhr.setRequestHeader("x-auth-token", options.token);
+
+		var context = this
+		this.xhr.onload = function () {
+			if (this.readyState === 4 && this.status == 200) {
+
+				context.performRemoeOperationOnRecs(recs, rec, index)
+
+				subscribe(this.responseText);
+
+			}
+		};
+
+		this.xhr.send();
+
+
+	}
+	static like(options = { match_id: '', token: '' }, subscribe = { res: '' }) {
+		var xhr = new XMLHttpRequest();
+
+		console.log(options.match_id)
+
+		xhr.open("GET", "https://api.gotinder.com/like/" + options.match_id);
+
+		xhr.setRequestHeader("x-auth-token", options.token);
+
+		var context = this
+		xhr.onload = function () {
+			if (this.readyState === 4 && this.status == 200) {
+
+				// context.performRemoeOperationOnRecs(recs, rec, index)
+
+				subscribe(this.responseText);
+
+			}
+		};
+
+		xhr.send();
+
+
+	}
 
 
 }

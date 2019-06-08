@@ -1,5 +1,4 @@
 
-
 // setItem({ 'history': [] })
 localStorage.setItem('logged_in', 'true')
 class Util {
@@ -78,10 +77,16 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
 		// callback for local storage  
 		localStorage.setItem('auto_like_state', String(request.source))
 		var auto_like_state = localStorage.getItem('auto_like_state')
-
+		autoLike()
 		// if (auto_like_state === 'true') {
 		// 
 		// }
+
+	}
+
+	if (request.action == "auto_like_rec") {
+
+		likeOnFirstElement()
 
 	}
 
@@ -163,6 +168,17 @@ function getRecs(subscribe) {
 
 function setItem(keyValue) {
 	chrome.storage.local.set(keyValue, function () {
+
+	});
+}
+
+function setRecs(keyValue, flag) {
+	chrome.storage.local.set(keyValue, function () {
+		if (flag === 'recs') {
+			notifyApplication("background_retrived_data", '')
+			autoLike()
+		}
+
 	});
 }
 
@@ -237,7 +253,7 @@ function getRecsForOneTimeWhenAppOpens() {
 				}
 
 				recomendationsTimeInterval = constRecomendationsTimeInterval * 10
-				// console.log(JSON.stringify(res))
+				console.log(JSON.stringify(res))
 
 				getItem('recs', result => {
 
@@ -301,135 +317,123 @@ setTimeout(function run() {
 
 }, 2000);
 
-setTimeout(function run() {
+
+function autoLike() {
+
+	setTimeout(function callLike() {
+		try {
+			if (
+
+				localStorage.getItem('tinder_local_storage') !== null
+			) {
+				var auto_like_state = localStorage.getItem('auto_like_state')
+				if (auto_like_state === 'true') {
+
+					chrome.runtime.sendMessage({
+
+						action: "auto_like_rec",
+
+						source: ''
+
+					});
+
+				}
+			}
+		} catch (error) {
+
+		}
+	}, 8000)
+}
+
+function likeOnFirstElement() {
+
+	var util = new Util()
+
+	getItem('recs', result => {
+
+		if (typeof result.recs[0] != 'undefined' && result.recs[0]._id != null) {
+
+			util.setId(result.recs[0]._id)
+			console.log('deleting 0th' + result.recs[0].name + ' id ' + ' ' + util.getId() + ' ' + result.recs[0]._id)
+
+			var tinderToken = JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken']
+
+			var rec = result.recs.find(u => u._id == util.getId())
+
+			var index = result.recs.indexOf(rec);
+
+			console.log("auto like continues")
+			TinderService.like({ match_id: util.getId(), token: tinderToken }, res => {
+				console.log(JSON.stringify		(res))
+
+				if (res.status == 401) {
+					console.log('401 error')
+				} else {
+
+					console.log('deleting 0th' + result.recs[0].name + ' id : ' + '  ' + util.getId() + ' : ' + result.recs[0]._id)
+					console.log(rec.name)
+
+					var newRecs = []
+					if (result.recs[0] == rec) {
 
 
-	try {
-		if (
+						newRecs = result.recs
+						if (rec._id === util.getId() && rec._id === result.recs[0]._id) {
 
-			localStorage.getItem('tinder_local_storage') !== null
-		) {
-			var auto_like_state = localStorage.getItem('auto_like_state')
-			if (auto_like_state === 'true') {
+							console.log('before : ' + Object.keys(newRecs).length)
+							newRecs.splice(index, 1)
+							console.log('after : ' + Object.keys(newRecs).length)
 
+							getItem('history', res => {
 
+								var profiles = []
 
-				var util = new Util()
+								if (typeof res.history != 'undefined')
+									profiles = res.history
 
-				getItem('recs', result => {
+								var profile = {}
 
-					if (typeof result.recs[0] != 'undefined' && result.recs[0]._id != null) {
+								profile = rec
 
-						util.setId(result.recs[0]._id)
-						console.log('deleting 0th' + result.recs[0].name + ' id ' + ' ' + util.getId() + ' ' + result.recs[0]._id)
-						console.log('deleting 1st' + result.recs[1].name + ' id ' + ' ' + result.recs[1]._id  )
+								profile.state = 'like'
 
-						var tinderToken = JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken']
-						var i = 0
+								profile.action_performed_on = Date.now()
 
+								if (typeof profiles != 'undefined')
+									profiles.push(profile)
 
-
-						var rec = result.recs.find(u => u._id == util.getId())
-						var index = result.recs.indexOf(rec);
-
-						var tinderService = new TinderService();
-						console.log("auto like continues")
-						tinderService.like({ match_id: util.getId(), token: tinderToken }, res => {
-
-							if (i == 0) {
-								if (res.status == 401) {
-									console.log('401 error')
-								} else {
-
-									console.log('deleting 0th' + result.recs[0].name + ' id : ' + '  ' + util.getId() + ' : ' + result.recs[0]._id)
-									console.log(rec.name)
-
-									// result.recs.shift()
-									var newRecs = []
-									// result.recs.splice(rec, 1)
-									if (result.recs[0] == rec) {
+								setItem({ 'history': profiles })
 
 
-										newRecs = result.recs
+								setRecs({ 'recs': newRecs }, 'recs')
 
-										// for (var i = 1; i < Object.keys(result.recs).length; i++) {
-										// 	newRecs.push(result.recs[i])
-										// }
+								// notifyApplication("background_retrived_data", '')
 
-										// result.recs.shift()
-										if (rec._id === util.getId() && rec._id === result.recs[0]._id) {
+								return;
 
-											console.log('before : '+Object.keys(newRecs).length)
-											newRecs.splice(index, 1) 
-											console.log('after : '+Object.keys(newRecs).length)
-
-											getItem('history', res => {
-
-												var profiles = []
-
-												if (typeof res.history != 'undefined')
-													profiles = res.history
-
-												var profile = {}
-
-												profile = rec
-
-												profile.state = 'like'
-
-												profile.action_performed_on = Date.now()
-
-												// console.log(JSON.stringify(profile, null, 2))
-
-												if (typeof profiles != 'undefined')
-													profiles.push(profile)
-
-												setItem({ 'history': profiles })
+							})
 
 
-												setItem({ 'recs': newRecs })
-
-												notifyApplication("background_retrived_data", '')
-											})
-
-
-										}
-
-										// console.log(  JSON.stringify( result.rec[index],null,2 )  )
-										// delete newRecs[index]
-
-
-									}
-
-
-
-								}
-							}
-							i++
-
-						})
-
-
-
-
+						}
 					}
 
 
-				})
+
+				}
 
 
-			}
+
+			})
+
+
 
 
 		}
 
-	} catch (error) {
 
-	}
+	})
 
-
-	setTimeout(run, 12000);
-}, 4000);
-
+}
 
 
 

@@ -49,10 +49,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 	}
 
 	listOfProfiles = []
+
 	static context
+
 	static toggleStateAutoLiking = false;
+
 	recCount: number;
+
 	static notificationService: SibilingsCommunicationService;
+
 	chrome: any;
 
 
@@ -73,9 +78,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 			} else {
 				this.toggleStateAutoLiking = false
 			}
-
-		// setTimeout(HomeComponent.autoLikeBackground, 5000, HomeComponent.i += 1, this.toggleStateAutoLiking);
-
 
 
 		let thisContext = this
@@ -105,9 +107,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
 		this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
-			if (msg.topic == 'refreshCount') {
-				// 
-			}
+
 			if (msg.topic == 'pass') {
 
 				var rec = this.listOfProfiles.find(u => u._id == msg.message)
@@ -128,7 +128,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 				this.recCount = Object.keys(this.listOfProfiles).length
 
-				// this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
 
 			} else if (msg.topic == 'like') {
 
@@ -183,17 +182,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 			}
 
-			else if (msg.topic == 'background_recs_set') {
 
-				// this.listOfProfiles = []
-
-				// this.refresh()
-				// HomeComponent.context.chromeStorageService.getItem('recs', res => {
-
-
-				// })
-
-			}
 		})
 
 
@@ -220,6 +209,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		this.chrome = getChrome()
 
 		HomeComponent.context = this
+
 		HomeComponent.notificationService = sibilingsCommService
 
 		getChrome().tabs.getSelected(null, function (tab) {
@@ -252,16 +242,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 	}
 
 
-	checkForNewRecs() {
 
-		setTimeout(function run() {
-
-
-			setTimeout(run, 8000);
-		}, 0);
-
-
-	}
 
 
 	getRecs(sleep) {
@@ -273,114 +254,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 		this.chromeStorageService.getItem('recs', (result) => {
 
 			this.poll(result.recs)
+
 			this.sibilingsCommService.pushNotification('selectOnClick', result.recs[0])
 
 		})
 
-		// this.chromeStorageService.getItem('recs', (result) => {
 
-		// 	this.poll(result.recs)
-		// 	this.sibilingsCommService.pushNotification('selectOnClick', result.recs[0])
-		// })
-		// this.chromeStorageService.getItem('recs', (result) => {
-
-		// 	this.poll(result.recs)
-		// 	this.sibilingsCommService.pushNotification('selectOnClick', result.recs[0])
-		// })
-
-		/*	this.tinderAPI.services.get_all_recomendations().subscribe(res => {
-	
-				try {
-					if (res.message) {
-						setTimeout(() => {
-	
-							const Toast = Swal.mixin({
-	
-								toast: true,
-	
-								position: 'top-end',
-	
-								showConfirmButton: false,
-	
-								timer: 3000
-	
-							})
-	
-							Toast.fire({
-								type: 'warning',
-	
-								title: 'No new recomendations for now'
-	
-							})
-	
-						}, sleep)
-	
-						return
-					}
-				} catch (error) {
-	
-				}
-	
-	
-	
-				// console.log(res.results)
-	
-				let recs = []
-				let filteredRecs = []
-	
-				this.chromeStorageService.getItem('recs', (result) => {
-	
-					if (typeof result.recs == 'undefined') {
-	
-						this.chromeStorageService.setItem({ 'recs': res.results })
-	
-						console.log('recs initialised')
-	
-						recs = res.results
-	
-						this.poll(recs)
-	
-						this.sibilingsCommService.pushNotification('initialProfile', recs[0])
-						this.recCount = Object.keys(recs).length
-	
-					} else {
-	
-						console.log('retriving results from local storage')
-	
-						recs = result.recs
-	
-						console.log('Lneght of res.results : ' + Object.keys(res.results).length)
-	
-						console.log('Lneght of  recs : ' + Object.keys(recs).length)
-	
-						recs = recs.concat(res.results)
-	
-						console.log('Lneght of res.results + recs  : ' + Object.keys(recs).length)
-	
-						filteredRecs = recs.filter((arr, index, self) =>
-							index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)))
-	
-						console.log('Lneght of filtered list : ' + Object.keys(filteredRecs).length)
-	
-						this.chromeStorageService.setItem({ 'recs': filteredRecs })
-						console.log(JSON.stringify(filteredRecs))
-	
-						this.poll(filteredRecs)
-	
-						this.sibilingsCommService.pushNotification('initialProfile', filteredRecs[0])
-						this.recCount = Object.keys(filteredRecs).length
-					}
-	
-					// console.log(' ' + JSON.stringify(result.recs, null, 2))
-	
-				})
-	
-	
-			}, err => {
-	
-			})
-	
-			*/
 
 	}
 
@@ -441,6 +320,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 			})
 
 			this.listOfProfiles.push(result)
+
 			this.recCount = Object.keys(this.listOfProfiles).length
 
 			this.sibilingsCommService.pushMessage('scrollTop')
@@ -504,30 +384,27 @@ export class HomeComponent implements OnInit, OnDestroy {
 	refresh() {
 
 		this.listOfProfiles = []
-
-		// this.getRecs(0)
+ 
 
 		this.chromeStorageService.getItem('recs', res => {
 
 			let filteredRecs = []
-			console.log(Object.keys(res.recs).length)
+
+
+			//  filter for duplicates
 			filteredRecs = res.recs.filter((arr, index, self) =>
 				index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)))
 
-			// filteredRecs = recs.filter((arr, index, self) =>
-			// index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)))
 			try {
 				if (res == null) {
 					return
 				}
-				// filteredRecs = res.recs
 
-				// this.poll(res.recs)
 				this.poll(filteredRecs)
 
 				if (Object.keys(filteredRecs).length != 0)
 					this.sibilingsCommService.pushNotification('selectOnClick', filteredRecs[0])
-				// console.log(JSON.stringify(res.recs, null, 4))
+
 			} catch (error) {
 
 			}
@@ -545,7 +422,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 	autoLiking(toggleState) {
 
 		this.toggleStateAutoLiking = toggleState
+
 		localStorage.setItem('auto_like_state', String(this.toggleStateAutoLiking))
+
 		HomeComponent.toggleStateAutoLiking = toggleState
 
 		if (toggleState) {
@@ -564,7 +443,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 		else {
 
 
-			clearTimeout(this.timer)
+			 
 		}
 	}
 
@@ -573,96 +452,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 	}
 
-	static i = 0
+ 
 
-	static autoLikeBackground(index, state) {
-
-		console.log('running in background ')
-
-		if (localStorage.getItem('auto_like_state') !== null) {
-
-			var autoLiking = localStorage.getItem('auto_like_state')
-
-			if (autoLiking.match('true')) {
-				console.log('like in background ')
-				console.log('testing ' + index + ' ' + autoLiking)
-
-				var notificationService = new SibilingsCommunicationService()
-				var chromeService = new ChromeStorageService()
-				var lsitOfProfiles = []
-				chromeService.getItem('recs', (result) => {
-
-					lsitOfProfiles = result.recs
-
-					if (Object.keys(lsitOfProfiles).length > 0) {
-
-						// HomeComponent.notificationService.pushNotification('backgroundLike', lsitOfProfiles[0])
-
-
-
-
-
-					}
-
-
-
-				})
-
-
-			}
-		}
-
-
-		setTimeout(HomeComponent.autoLikeBackground, 5000, HomeComponent.i += 1, autoLiking);
-
-	}
-
-
-
-
-
-	static like(options = { match_id: '', token: '' }, subscribe) {
-
-		var xhr = new XMLHttpRequest();
-		xhr.withCredentials = true;
-
-		xhr.open("GET", "https://api.gotinder.com/like/" + options.match_id);
-
-		xhr.setRequestHeader("x-auth-token", options.token);
-
-		xhr.addEventListener("readystatechange", function () {
-
-			if (this.readyState === 4) {
-
-				subscribe(this.responseText);
-
-			}
-		})
-
-		xhr.send();
-	}
-
-
-	static getRecs(options = { token: '' }, subscribe) {
-		var xhr = new XMLHttpRequest();
-		xhr.withCredentials = true;
-		xhr.open("GET", "https://api.gotinder.com/user/recs");
-
-		xhr.setRequestHeader("x-auth-token", options.token);
-
-		xhr.addEventListener("readystatechange", function () {
-
-			if (this.readyState === 4) {
-
-
-
-				subscribe(this.responseText);
-
-			}
-		})
-
-		xhr.send();
-	}
-
+ 
 
 }

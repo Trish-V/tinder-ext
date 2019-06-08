@@ -21,11 +21,7 @@ export class TimeLineComponent implements OnInit {
 
   constructor(private sibilingsCommService: SibilingsCommunicationService) {
 
-    sibilingsCommService.messageAnnounced$.subscribe(msg => {
-
-      // this.componentRef.directiveRef.scrollToBottom()
-
-    })
+   
 
     sibilingsCommService.notificationAnnounced$.subscribe(msg => {
       if (msg.topic == 'pass') {

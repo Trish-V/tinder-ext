@@ -31,7 +31,7 @@ export class ProfileCardComponent implements OnInit {
 			age: '',
 			schools: [
 				{
-					// id: '',
+					 
 					name: ''
 				}
 			],
@@ -110,17 +110,13 @@ export class ProfileCardComponent implements OnInit {
 
 	ngOnInit() {
 		this.school = '000'
-		this.job = '000'
-		this.profileDataSet.distance_mi = 0
 
+		this.job = '000'
+
+		this.profileDataSet.distance_mi = 0
 
 		this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
 			if (msg.topic == 'pass' || msg.topic == 'like') {
-
-				// this.carouselTileItems$ = this.placeHolderImages
-
-				// this.profileDataSet = this.backUpProfileDataSet
-
 
 				this.myCarousel.reset(false)
 
@@ -136,11 +132,7 @@ export class ProfileCardComponent implements OnInit {
 				console.log('auto liked')
 
 			}
-			if (msg.topic == 'backgroundLike') {
-
-				this.carouselProfileSetup('selectOnAutoLike', null, msg.message)
-				this.serviceLikeImpl(msg.message._id);
-			}
+		 
 
 		})
 	}
@@ -180,11 +172,12 @@ export class ProfileCardComponent implements OnInit {
 
 
 		this.school = '000'
+
 		this.job = '000'
+
 		this.profileDataSet.distance_mi = 0
 
-
-		// this.sibilingsCommService.pushNotification('refreshCount', [])
+ 
 
 	}
 	pass() {
@@ -196,17 +189,17 @@ export class ProfileCardComponent implements OnInit {
 
 
 		this.school = '000'
+
 		this.job = '000'
+
 		this.profileDataSet.distance_mi = 0
 
  
 
 	}
-	superLike() {
-
+	superLike() { 
 
 		this.serviceSuperLikeImpl(this.profileDataSet._id);
-
  
 	}
 
@@ -361,9 +354,7 @@ export class ProfileCardComponent implements OnInit {
 		} else if (type == 'selectOnClick' || type == 'initialProfile' || type == 'selectOnAutoLike') {
 
 			data = JSON.stringify(dataPayLoadOfProfile)
-
-
-
+ 
 		}
 
 		try {
@@ -387,8 +378,7 @@ export class ProfileCardComponent implements OnInit {
 
 			this.myCarousel.reset(true)
 
-			if (type == 'selectOnAutoLike') {
-				// this.profileDataSet =  dataPayLoadOfProfile
+			if (type == 'selectOnAutoLike') { 
 
 				setTimeout(() => {
 

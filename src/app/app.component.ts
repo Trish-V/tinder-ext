@@ -51,8 +51,7 @@ export class AppComponent implements OnInit {
 
 	ngOnInit(): void {
 
-		AppComponent.context = this
-		this.testFunctionBackground()
+		AppComponent.context = this 
 	}
 
 
@@ -60,9 +59,7 @@ export class AppComponent implements OnInit {
 	constructor(
 		public sibilingsCommService: SibilingsCommunicationService,
 		private tinderAPI: TinderAPIService,
-		private cupidoAPI: CupidoAPIService,
-		private router: Router,
-		private sanitizer: DomSanitizer
+		private cupidoAPI: CupidoAPIService, 
 	) {
 		var firstOpenning = JSON.stringify(localStorage.getItem('opened_state')).toString().length > 0
 
@@ -96,13 +93,12 @@ export class AppComponent implements OnInit {
 		let thisContext = this
 		getChrome().runtime.onMessage.addListener(function (request, sender) {
 			if (request.action == "savedLocalStorage") {
+
 				// callback for local storage 
-				thisContext.saveLocalStorage('tinder_local_storage', request.source)
-				// console.log('savedLocalSTorage ' + request.source)
+				thisContext.saveLocalStorage('tinder_local_storage', request.source) 
 			}
 			if (request.action == "getLocalStorage") {
-
-				// console.log('getLocalStorage ' + request.source)
+ 
 				localStorage.setItem('tinder_local_storage', request.source)
 
 
@@ -124,9 +120,7 @@ export class AppComponent implements OnInit {
 
 			this.openAlertToReLogUser()
 		}
-
-
-		// getRecsForOneTimeWhenAppOpens()
+ 
 
 
 	}
@@ -170,6 +164,8 @@ export class AppComponent implements OnInit {
 
 			// toggling false will stop saving profile and throw subscribe undefined
 			this.cupidoAPI.services.initCupidoAPI(true)
+
+			//  below code is responsible for creating a user in cupido server uncomment when neccesery 
 
 			/*	this.cupidoAPI.services.createProfile(JSON.parse(localStorage.getItem('user_profile'))).subscribe(res => {
 	
@@ -366,16 +362,7 @@ export class AppComponent implements OnInit {
 	}
 
 
-	testFunctionBackground() {
-
-		// setTimeout(function run() {
-
-		//   alert('testing')
-		//   setTimeout(run, 6000);
-		// }, 6000);
-
-
-	}
+ 
 
 
 }

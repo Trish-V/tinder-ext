@@ -14,8 +14,9 @@ export class HistoryComponent implements OnInit {
 
   ngOnInit() {
     this.chromeStorageService.getItem('history', res => {
-      this.history = res.history
-      // console.log(JSON.stringify(res.history,null,4))
+      
+      this.history = res.history 
+
     })
 
   }
