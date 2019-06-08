@@ -1,19 +1,18 @@
-
 class CupidoService {
 
     xhr = new XMLHttpRequest();
     // match_list = []
-    host = ''
+    host = '';
 
 
     constructor(host) {
-        this.host = host
+        this.host = host;
         this.xhr = new XMLHttpRequest();
         this.xhr.withCredentials = true;
     }
 
 
-    saveMatch(match, subscribe = { res: '' }) {
+    saveMatch(match, subscribe = {res: ''}) {
 
         this.xhr = new XMLHttpRequest();
         // this.xhr.withCredentials = true;
@@ -21,7 +20,7 @@ class CupidoService {
         var data = JSON.stringify(match);
         this.xhr.addEventListener('readystatechange', function () {
             if (this.readyState === 4) {
-                 
+
                 subscribe(this.responseText)
             }
         });
@@ -32,19 +31,19 @@ class CupidoService {
         this.xhr.send(data);
     }
 
-    messageIdListForTheMatch(match_id, subscribe = { res: '' }) {
+    messageIdListForTheMatch(match_id, subscribe = {res: ''}) {
         var data = JSON.stringify(false);
 
-        var url_match_id = String(match_id)
+        var url_match_id = String(match_id);
 
         this.xhr.addEventListener('readystatechange', function () {
             if (this.readyState === 4) {
-                 
+
                 subscribe(this.responseText)
             }
-        }); 
+        });
 
-        var url = this.host + '/ext/matches/' + url_match_id + '/messages'
+        var url = this.host + '/ext/matches/' + url_match_id + '/messages';
         this.xhr.open('GET', url);
         this.xhr.setRequestHeader('Content-Type', 'application/json');
 
@@ -52,29 +51,27 @@ class CupidoService {
     }
 
 
-    saveMessage(match_id, msg, subscribe = { res: '' }) {
-        var data = []
-        data.push(msg); 
+    saveMessage(match_id, msg, subscribe = {res: ''}) {
+        var data = [];
+        data.push(msg);
         this.xhr = new XMLHttpRequest();
         this.xhr.withCredentials = true;
 
         this.xhr.addEventListener('readystatechange', function () {
-            if (this.readyState === 4) { 
+            if (this.readyState === 4) {
                 subscribe(this.responseText)
             }
         });
-        var url = this.host + '/ext/matches/' + String(match_id) + '/messages'
- 
+        var url = this.host + '/ext/matches/' + String(match_id) + '/messages';
+
 
         this.xhr.open('POST', url);
         this.xhr.setRequestHeader('Content-Type', 'application/json');
-  
+
 
         this.xhr.send(JSON.stringify(data));
 
     }
-
-
 
 
 }

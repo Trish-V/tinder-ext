@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 function getChrome() {
 
@@ -10,7 +10,7 @@ function getChrome() {
 async function testFunctionBackground() {
 
     setTimeout(function run() {
-        alert('Testing')
+        alert('Testing');
 
         setTimeout(testFunctionBackground(), 15000);
     }, 10000);

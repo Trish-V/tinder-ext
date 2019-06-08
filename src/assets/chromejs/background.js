@@ -1,318 +1,313 @@
-
 // setItem({ 'history': [] })
-localStorage.setItem('logged_in', 'true')
-class Util {
-	static _id
-	setId(id) {
-		Util._id = id
-	}
+localStorage.setItem('logged_in', 'true');
 
-	getId() {
-		return Util._id
-	}
+class Util {
+    static _id;
+
+    setId(id) {
+        Util._id = id
+    }
+
+    getId() {
+        return Util._id
+    }
 }
 
-var autoLikeList = []
+var autoLikeList = [];
 
-var state = false
+var state = false;
 
-var recomendationsCheckMultipiler = 3
+var recomendationsCheckMultipiler = 3;
 
-var recomendationsTimeInterval = 900000	// in millis
+var recomendationsTimeInterval = 900000;// in millis
 
-var constRecomendationsTimeInterval = 900000	// in millis
+var constRecomendationsTimeInterval = 900000;	// in millis
 
-var thresholdTimeInterval = 60 * 1000 * 60 * 12 // 12 hrs
+var thresholdTimeInterval = 60 * 1000 * 60 * 12; // 12 hrs
 
-var minRecsLimit = 5
+var minRecsLimit = 5;
 
-var autoLikingTimeGap = 8 * 1000
+var autoLikingTimeGap = 8 * 1000;
 
 chrome.runtime.onMessage.addListener(function (request, sender) {
 
-	if (request.action == "open_tinder") { // callback for liked recomendations 
+    if (request.action === "open_tinder") { // callback for liked recomendations
 
-		window.open("https://tinder.com", "_blank");
-
-
-	}
-
-	if (request.action == "getLocalStorage") {
-		try {
-
-			if (
-				typeof JSON.parse(localStorage.getItem('tinder_local_storage')) != 'undefined'
-				&& JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken'] != null
-			) {
-				if (
-					!String(JSON.parse(request.source)['TinderWeb/APIToken']).match(JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken'])
-				) {
-					getRecsForOneTimeWhenAppOpens()
-					console.log('new recs')
-				}
-			}
-		} catch (error) {
-
-		}
-		localStorage.setItem('tinder_local_storage', request.source);
+        window.open("https://tinder.com", "_blank");
 
 
-	}
-	if (request.action == "is_registered_to_cupido") {
-		// callback for local storage  
-		localStorage.setItem('is_registered_to_cupido', request.source)
-	}
+    }
 
-	if (request.action == "platform_user_id") {
-		// callback for local storage  
-		localStorage.setItem('platform_user_id', String(request.source))
+    if (request.action === "getLocalStorage") {
+        try {
 
-	}
-	if (request.action == "auto_like_start") {
-		// callback for local storage  
-		localStorage.setItem('recs', String(request.source))
+            if (
+                typeof JSON.parse(localStorage.getItem('tinder_local_storage')) != 'undefined'
+                && JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken'] != null
+            ) {
+                if (
+                    !String(JSON.parse(request.source)['TinderWeb/APIToken']).match(JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken'])
+                ) {
+                    getRecsForOneTimeWhenAppOpens();
+                    console.log('new recs')
+                }
+            }
+        } catch (error) {
 
-	}
-	if (request.action == "auto_like_state") {
-		// callback for local storage  
-		localStorage.setItem('auto_like_state', String(request.source))
-		var auto_like_state = localStorage.getItem('auto_like_state')
-		autoLike()
-		// if (auto_like_state === 'true') {
-		// 
-		// }
+        }
+        localStorage.setItem('tinder_local_storage', request.source);
 
-	}
 
-	if (request.action == "auto_like_rec") {
+    }
+    if (request.action === "is_registered_to_cupido") {
+        // callback for local storage
+        localStorage.setItem('is_registered_to_cupido', request.source)
+    }
 
-		likeOnFirstElement()
+    if (request.action === "platform_user_id") {
+        // callback for local storage
+        localStorage.setItem('platform_user_id', String(request.source))
 
-	}
+    }
+    if (request.action === "auto_like_start") {
+        // callback for local storage
+        localStorage.setItem('recs', String(request.source))
+
+    }
+    if (request.action === "auto_like_state") {
+        // callback for local storage
+        localStorage.setItem('auto_like_state', String(request.source));
+        var auto_like_state = localStorage.getItem('auto_like_state');
+        autoLike()
+        // if (auto_like_state === 'true') {
+        //
+        // }
+
+    }
+
+    if (request.action === "auto_like_rec") {
+
+        likeOnFirstElement()
+
+    }
 
 
 });
 
 
-
 setTimeout(function run() {
 
-	chrome.tabs.getSelected(null, function (tab) {
+    chrome.tabs.getSelected(null, function (tab) {
 
-		var tablink = tab.url;
+        var tablink = tab.url;
 
-		if (tablink.includes('tinder.com')) {
+        if (tablink.includes('tinder.com')) {
 
-			chrome.tabs.executeScript(null, { // injecting retriving dom
+            chrome.tabs.executeScript(null, { // injecting retriving dom
 
-				file: "assets/chromejs/localstorage.js"
+                file: "assets/chromejs/localstorage.js"
 
-			}, function () {
+            }, function () {
 
-				if (chrome.runtime.lastError) {
+                if (chrome.runtime.lastError) {
 
-				}
+                }
 
-			});
+            });
 
-		} else {
-			chrome.runtime.sendMessage({
+        } else {
+            chrome.runtime.sendMessage({
 
-				action: "savedLocalStorage",
+                action: "savedLocalStorage",
 
-				source: localStorage.getItem('tinder_local_storage')
+                source: localStorage.getItem('tinder_local_storage')
 
-			});
-		}
+            });
+        }
 
-	});
-
-
+    });
 
 
-	setTimeout(run, 2000);
+    setTimeout(run, 2000);
 }, 2000);
-
 
 
 // var messages= new TinderMessages();
 
 
 setTimeout(function run() {
-	try {
+    try {
 
-		if (
-			localStorage.getItem('is_registered_to_cupido').toString().match('true')
-			//  && typeof localStorage.getItem('tinder_local_storage')['TinderWeb/APIToken'] !== 'undefined'
-		) {
+        if (
+            localStorage.getItem('is_registered_to_cupido').toString().match('true')
+        //  && typeof localStorage.getItem('tinder_local_storage')['TinderWeb/APIToken'] !== 'undefined'
+        ) {
 
-			// var main = new Main(JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken']);
+            // var main = new Main(JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken']);
 
-		} else {
-		}
+        } else {
+        }
 
-	} catch (error) {
+    } catch (error) {
 
-	}
+    }
 
-	setTimeout(run, 15000);
+    setTimeout(run, 15000);
 }, 10000);
 
 
-
 function getRecs(subscribe) {
-	getItem('recs', result => {
-		subscribe(result.recs)
-	})
+    getItem('recs', result => {
+        subscribe(result.recs)
+    })
 }
 
 function setItem(keyValue) {
-	chrome.storage.local.set(keyValue, function () {
+    chrome.storage.local.set(keyValue, function () {
 
-	});
+    });
 }
 
 function setRecs(keyValue, flag) {
-	chrome.storage.local.set(keyValue, function () {
-		if (flag === 'recs') {
-			notifyApplication("background_retrived_data", '')
-			autoLike()
-		}
+    chrome.storage.local.set(keyValue, function () {
+        if (flag === 'recs') {
+            notifyApplication("background_retrived_data", '');
+            autoLike()
+        }
 
-	});
+    });
 }
 
 function getItem(key, subscribe) {
-	chrome.storage.local.get(key, function (result) {
-		subscribe(result)
-	});
+    chrome.storage.local.get(key, function (result) {
+        subscribe(result)
+    });
 
 }
 
 function notifyApplication(title, message) {
-	chrome.runtime.sendMessage({
+    chrome.runtime.sendMessage({
 
-		action: title,
+        action: title,
 
-		source: 'JSON.stringify(message)'
+        source: 'JSON.stringify(message)'
 
-	});
+    });
 
 }
 
 
 function getRecsForOneTimeWhenAppOpens() {
 
-	try {
-		if (
+    try {
+        if (
 
-			localStorage.getItem('tinder_local_storage') !== null
-		) {
-			var tinderToken = JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken']
+            localStorage.getItem('tinder_local_storage') !== null
+        ) {
+            var tinderToken = JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken'];
 
-			let recs = []
+            let recs = [];
 
-			let filteredRecs = []
+            let filteredRecs = [];
 
-			var tinderService = new TinderService();
-
-
-			console.log('timer  ...')
-
-			tinderService.getRecs({ token: tinderToken }, res => {
-
-				if (res.status == 401) {
-					notifyApplication('re_log_user', '')
-					console.log('401 error')
-					return
-				}
-				localStorage.setItem('logged_in', 'true')
-				if (res.status == 429) {
-					recomendationsTimeInterval = recomendationsTimeInterval * recomendationsCheckMultipiler
-					if (recomendationsTimeInterval >= thresholdTimeInterval) {
-
-						recomendationsTimeInterval = constRecomendationsTimeInterval
-					}
-					return
-				}
-				try {
-					if (res.results == null) {
-						return
-					}
-				} catch (error) {
-
-				}
-				if (Object.keys(res.results).length == 0) {
-
-					recomendationsTimeInterval = recomendationsTimeInterval * recomendationsCheckMultipiler
-					if (recomendationsTimeInterval >= thresholdTimeInterval) {
-
-						recomendationsTimeInterval = constRecomendationsTimeInterval
-					}
-					return
-				}
-
-				recomendationsTimeInterval = constRecomendationsTimeInterval * 10
-				console.log(JSON.stringify(res))
-
-				getItem('recs', result => {
-
-					if (typeof result.recs === 'undefined') {
-
-						setItem({ recs: res.results })
-
-						console.log('initial recs')
-
-						notifyApplication("background_retrived_data", JSON.stringify(res.results))
+            var tinderService = new TinderService();
 
 
-					} else {
+            console.log('timer  ...');
 
-						recs = result.recs
+            tinderService.getRecs({token: tinderToken}, res => {
 
-						recs = recs.concat(res.results)
+                if (res.status === 401) {
+                    notifyApplication('re_log_user', '');
+                    console.log('401 error');
+                    return
+                }
+                localStorage.setItem('logged_in', 'true');
+                if (res.status === 429) {
+                    recomendationsTimeInterval = recomendationsTimeInterval * recomendationsCheckMultipiler;
+                    if (recomendationsTimeInterval >= thresholdTimeInterval) {
 
-						filteredRecs = recs.filter((arr, index, self) =>
-							index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)))
+                        recomendationsTimeInterval = constRecomendationsTimeInterval
+                    }
+                    return
+                }
+                try {
+                    if (res.results == null) {
+                        return
+                    }
+                } catch (error) {
 
-						filteredRecs = recs.filter((arr, index, self) =>
-							index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)))
+                }
+                if (Object.keys(res.results).length === 0) {
+
+                    recomendationsTimeInterval = recomendationsTimeInterval * recomendationsCheckMultipiler;
+                    if (recomendationsTimeInterval >= thresholdTimeInterval) {
+
+                        recomendationsTimeInterval = constRecomendationsTimeInterval
+                    }
+                    return
+                }
+
+                recomendationsTimeInterval = constRecomendationsTimeInterval * 10;
+                console.log(JSON.stringify(res));
+
+                getItem('recs', result => {
+
+                    if (typeof result.recs === 'undefined') {
+
+                        setItem({recs: res.results});
+
+                        console.log('initial recs');
+
+                        notifyApplication("background_retrived_data", JSON.stringify(res.results))
 
 
-						setItem({ 'recs': filteredRecs })
+                    } else {
 
-						// setTimeout(function run() {
+                        recs = result.recs;
 
-						// 	notifyApplication("background_retrived_data", JSON.stringify(filteredRecs))
+                        recs = recs.concat(res.results);
 
+                        filteredRecs = recs.filter((arr, index, self) =>
+                            index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)));
 
-						// }, 2000)
-						notifyApplication("background_retrived_data", JSON.stringify(filteredRecs))
-
-						// console.log(JSON.stringify(filteredRecs)  )
-
-						console.log(Object.keys(filteredRecs).length)
+                        filteredRecs = recs.filter((arr, index, self) =>
+                            index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)));
 
 
-					}
-				})
-			})
+                        setItem({'recs': filteredRecs});
 
-		}
+                        // setTimeout(function run() {
 
-	} catch (error) {
+                        // 	notifyApplication("background_retrived_data", JSON.stringify(filteredRecs))
 
-	}
 
+                        // }, 2000)
+                        notifyApplication("background_retrived_data", JSON.stringify(filteredRecs));
+
+                        // console.log(JSON.stringify(filteredRecs)  )
+
+                        console.log(Object.keys(filteredRecs).length)
+
+
+                    }
+                })
+            })
+
+        }
+
+    } catch (error) {
+
+    }
 
 
 }
 
 
 setTimeout(function run() {
-	getRecsForOneTimeWhenAppOpens()
+    getRecsForOneTimeWhenAppOpens();
 
-	setTimeout(run, recomendationsTimeInterval)
+    setTimeout(run, recomendationsTimeInterval)
 
 
 }, 2000);
@@ -320,128 +315,123 @@ setTimeout(function run() {
 
 function autoLike() {
 
-	setTimeout(function callLike() {
-		try {
-			if (
+    setTimeout(function callLike() {
+        try {
+            if (
 
-				localStorage.getItem('tinder_local_storage') !== null
-			) {
-				var auto_like_state = localStorage.getItem('auto_like_state')
-				if (auto_like_state === 'true') {
+                localStorage.getItem('tinder_local_storage') !== null
+            ) {
+                var auto_like_state = localStorage.getItem('auto_like_state');
+                if (auto_like_state === 'true') {
 
-					chrome.runtime.sendMessage({
+                    chrome.runtime.sendMessage({
 
-						action: "auto_like_rec",
+                        action: "auto_like_rec",
 
-						source: ''
+                        source: ''
 
-					});
+                    });
 
-				}
-			}
-		} catch (error) {
+                }
+            }
+        } catch (error) {
 
-		}
-	}, 8000)
+        }
+    }, 8000)
 }
 
 function likeOnFirstElement() {
 
-	var util = new Util()
+    var util = new Util();
 
-	getItem('recs', result => {
+    getItem('recs', result => {
 
-		if (typeof result.recs[0] != 'undefined' && result.recs[0]._id != null) {
+        if (typeof result.recs[0] != 'undefined' && result.recs[0]._id != null) {
 
-			util.setId(result.recs[0]._id)
-			console.log('deleting 0th' + result.recs[0].name + ' id ' + ' ' + util.getId() + ' ' + result.recs[0]._id)
+            util.setId(result.recs[0]._id);
+            console.log('deleting 0th' + result.recs[0].name + ' id ' + ' ' + util.getId() + ' ' + result.recs[0]._id);
 
-			var tinderToken = JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken']
+            var tinderToken = JSON.parse(localStorage.getItem('tinder_local_storage'))['TinderWeb/APIToken'];
 
-			var rec = result.recs.find(u => u._id == util.getId())
+            var rec = result.recs.find(u => u._id === util.getId());
 
-			var index = result.recs.indexOf(rec);
+            var index = result.recs.indexOf(rec);
 
-			console.log("auto like continues")
-			TinderService.like({ match_id: util.getId(), token: tinderToken }, res => {
-				console.log(JSON.stringify		(res))
+            console.log("auto like continues");
+            TinderService.like({match_id: util.getId(), token: tinderToken}, res => {
+                console.log(JSON.stringify(res));
 
-				if (res.status == 401) {
-					console.log('401 error')
-				} else {
+                if (res.status === 401) {
+                    console.log('401 error')
+                } else {
 
-					console.log('deleting 0th' + result.recs[0].name + ' id : ' + '  ' + util.getId() + ' : ' + result.recs[0]._id)
-					console.log(rec.name)
+                    console.log('deleting 0th' + result.recs[0].name + ' id : ' + '  ' + util.getId() + ' : ' + result.recs[0]._id);
+                    console.log(rec.name);
 
-					var newRecs = []
-					if (result.recs[0] == rec) {
-
-
-						newRecs = result.recs
-						if (rec._id === util.getId() && rec._id === result.recs[0]._id) {
-
-							console.log('before : ' + Object.keys(newRecs).length)
-							newRecs.splice(index, 1)
-							console.log('after : ' + Object.keys(newRecs).length)
-
-							getItem('history', res => {
-
-								var profiles = []
-
-								if (typeof res.history != 'undefined')
-									profiles = res.history
-
-								var profile = {}
-
-								profile = rec
-
-								profile.state = 'like'
-
-								profile.action_performed_on = Date.now()
-
-								if (typeof profiles != 'undefined')
-									profiles.push(profile)
-
-								setItem({ 'history': profiles })
+                    var newRecs = [];
+                    if (result.recs[0] === rec) {
 
 
-								setRecs({ 'recs': newRecs }, 'recs')
+                        newRecs = result.recs;
+                        if (rec._id === util.getId() && rec._id === result.recs[0]._id) {
 
-								// notifyApplication("background_retrived_data", '')
+                            console.log('before : ' + Object.keys(newRecs).length);
+                            newRecs.splice(index, 1);
+                            console.log('after : ' + Object.keys(newRecs).length);
 
-								return;
+                            getItem('history', res => {
 
-							})
+                                var profiles = [];
+
+                                if (typeof res.history != 'undefined')
+                                    profiles = res.history;
+
+                                var profile = {};
+
+                                profile = rec;
+
+                                profile.state = 'like';
+
+                                profile.action_performed_on = Date.now();
+
+                                if (typeof profiles != 'undefined')
+                                    profiles.push(profile);
+
+                                setItem({'history': profiles});
 
 
-						}
-					}
+                                setRecs({'recs': newRecs}, 'recs');
+
+                                // notifyApplication("background_retrived_data", '')
+
+                                return;
+
+                            })
 
 
-
-				}
-
-
-
-			})
+                        }
+                    }
 
 
+                }
 
 
-		}
+            })
 
 
-	})
+        }
+
+
+    })
 
 }
 
 
-
 setTimeout(function run() {
-	if (localStorage.getItem('logged_in').match('false')) {
+        if (localStorage.getItem('logged_in').match('false')) {
 
-		notifyApplication('re_log_user', '')
-	}
-	setTimeout(run, 5000)
-}, 5000
+            notifyApplication('re_log_user', '')
+        }
+        setTimeout(run, 5000)
+    }, 5000
 )

@@ -1,4 +1,3 @@
-
 function getDOM() {
     // alert('getDom')
 
@@ -28,14 +27,14 @@ function getDOM() {
 
         imgUrl: String
 
-    }
+    };
 
     // dataSet.name = name[1].innerHTML;
 
     dataSet.age = age[4].innerHTML;
 
-    dataSet.imgUrl = imgUrl
-    alert(dataSet)
+    dataSet.imgUrl = imgUrl;
+    alert(dataSet);
 
     try {
 

@@ -1,20 +1,12 @@
-
-
- 
-
-
-
-
 class Main {
 
 
+    token;
 
-    token
+    match_list = [];
 
-    match_list = []
-
-    host = 'https://e752a67a.ngrok.io'
-    hostLocal = 'http://localhost:3000'
+    host = 'https://e752a67a.ngrok.io';
+    hostLocal = 'http://localhost:3000';
 
     tinderService = new TinderService();
 
@@ -22,7 +14,7 @@ class Main {
 
     constructor(token) {
 
-        
+
         try {
             this.tinderService = new TinderService();
 
@@ -32,16 +24,21 @@ class Main {
             this.getMatchList();
 
         } catch (error) {
-          
+
         }
 
     }
 
     getMatchList(pagination_token = "start") {
- 
 
-        this.tinderService.getMatchesOfTheUserFirstPage({ count: 60, locale: 'en', message: 1, token: this.token }, res => {
-            
+
+        this.tinderService.getMatchesOfTheUserFirstPage({
+            count: 60,
+            locale: 'en',
+            message: 1,
+            token: this.token
+        }, res => {
+
             this.saveMatches(res)
 
 
@@ -51,22 +48,20 @@ class Main {
 
 
     saveMatches(matches) {
-        var matchesArray = []
-        matchesArray = JSON.parse(matches).data.matches
- 
+        var matchesArray = [];
+        matchesArray = JSON.parse(matches).data.matches;
+
         if (typeof matchesArray !== 'undefined')
             matchesArray.forEach(match => {
-                match['platform_user_id'] = localStorage.getItem('platform_user_id').toString()
-                 
+                match['platform_user_id'] = localStorage.getItem('platform_user_id').toString();
+
                 this.saveMatch(match)
             })
 
 
-
-
     }
 
-    saveMatch(match) { 
+    saveMatch(match) {
         this.cupidoService.saveMatch(match, res => {
 
             this.getMessageListForTheMatch(res)
@@ -74,7 +69,7 @@ class Main {
 
     }
 
-    getMessageListForTheMatch(match) { 
+    getMessageListForTheMatch(match) {
         if (typeof JSON.parse(match).data._id !== 'undefined')
             this.cupidoService.messageIdListForTheMatch(JSON.parse(match).data._id, res => {
 
@@ -85,13 +80,18 @@ class Main {
 
     saveMessageForMatch(list, match_id) {
 
-        var msgArray = []
-        var next_page_token = ''
+        var msgArray = [];
+        var next_page_token = '';
 
-        this.tinderService.getMessagesOfTheFirstPage({ count: 60, locale: 'en', match_id: match_id, token: this.token }, res => {
+        this.tinderService.getMessagesOfTheFirstPage({
+            count: 60,
+            locale: 'en',
+            match_id: match_id,
+            token: this.token
+        }, res => {
 
-            msgArray = JSON.parse(res).data.messages
-            next_page_token = JSON.parse(res).data.next_page_token
+            msgArray = JSON.parse(res).data.messages;
+            next_page_token = JSON.parse(res).data.next_page_token;
 
             if (typeof JSON.parse(res).data.messages !== 'undefined') {
 
@@ -102,7 +102,7 @@ class Main {
                         if (String(msgid).match(String(message._id))) {
 
                             msgArray.splice(
-                                msgArray.indexOf({ _id: message._id }),
+                                msgArray.indexOf({_id: message._id}),
                                 1
                             )
 
@@ -110,15 +110,15 @@ class Main {
 
                     })
 
-                })
- 
+                });
+
                 msgArray.forEach(msg => {
                     this.cupidoService.saveMessage(match_id, msg, res => {
- 
+
 
                     })
-                })
-                if (Object.keys(msgArray).length === 0) { 
+                });
+                if (Object.keys(msgArray).length === 0) {
 
                     if (typeof next_page_token !== 'undefined') {
                         this.saveMessageSecondPageForMatch(list, match_id, next_page_token)
@@ -131,15 +131,20 @@ class Main {
     }
 
 
-
     saveMessageSecondPageForMatch(list, match_id, next_page_token, page = 2) {
-        var msgArray = []
-        var next_page_token2 = ''
+        var msgArray = [];
+        var next_page_token2 = '';
 
-        this.tinderService.getMessagesOfTheUserSecondPage({ count: 60, locale: 'en', match_id: match_id, token: this.token, page_token: next_page_token }, res => {
+        this.tinderService.getMessagesOfTheUserSecondPage({
+            count: 60,
+            locale: 'en',
+            match_id: match_id,
+            token: this.token,
+            page_token: next_page_token
+        }, res => {
 
-            msgArray = JSON.parse(res).data.messages
-            next_page_token2 = JSON.parse(res).data.next_page_token
+            msgArray = JSON.parse(res).data.messages;
+            next_page_token2 = JSON.parse(res).data.next_page_token;
 
             if (typeof JSON.parse(res).data.messages !== 'undefined') {
 
@@ -150,7 +155,7 @@ class Main {
                         if (String(msgid).match(String(message._id))) {
 
                             msgArray.splice(
-                                msgArray.indexOf({ _id: message._id }),
+                                msgArray.indexOf({_id: message._id}),
                                 1
                             )
 
@@ -158,16 +163,16 @@ class Main {
 
                     })
 
-                })
- 
+                });
+
                 msgArray.forEach(msg => {
                     this.cupidoService.saveMessage(match_id, msg, res => {
- 
+
 
                     })
-                })
+                });
                 if (Object.keys(msgArray).length === 0) {
- 
+
 
                     if (typeof next_page_token2 !== 'undefined') {
                         this.saveMessageSecondPageForMatch(list, match_id, next_page_token2, ++page)
