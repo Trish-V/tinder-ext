@@ -1,459 +1,407 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core'
-import { environment } from '../../environments/environment'
-import { SibilingsCommunicationService } from '../services/sibilings.communication.service'
-import { Router } from '@angular/router'
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser'
-import { async } from '@angular/core/testing'
-import { TimeLineComponent } from './time-line/time-line.component'
-import { TinderAPIService } from '../services/tinder-api.service';
-import { ChromeStorageService } from '../services/chrome-storage.service';
-import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
+import {Component, OnInit, Input, ViewChild, OnDestroy} from '@angular/core';
+import {environment} from '../../environments/environment';
+import {SibilingsCommunicationService} from '../services/sibilings.communication.service';
+import {Router} from '@angular/router';
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
+import {async} from '@angular/core/testing';
+import {TimeLineComponent} from './time-line/time-line.component';
+import {TinderAPIService} from '../services/tinder-api.service';
+import {ChromeStorageService} from '../services/chrome-storage.service';
+import {listLazyRoutes} from '@angular/compiler/src/aot/lazy_routes';
 
-declare var getChrome: any
+declare var getChrome: any;
 
-declare var openTinder: any
+declare var openTinder: any;
 
-declare var Swal: any
+declare var Swal: any;
 
-declare var Toast: any
+declare var Toast: any;
 
-declare var getRecs: any
+declare var getRecs: any;
 
-
-declare var getRecsForOneTimeWhenAppOpens: any
+declare var getRecsForOneTimeWhenAppOpens: any;
 
 @Component({
-	selector: 'app-home',
-	templateUrl: './home.component.html',
-	styleUrls: ['./home.component.scss']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
+    constructor(
+        public sibilingsCommService: SibilingsCommunicationService,
+        private tinderAPI: TinderAPIService,
+        private router: Router,
+        private sanitizer: DomSanitizer,
+        private chromeStorageService: ChromeStorageService
+    ) {
 
-	toggleStateAutoLiking = false
+        this.chrome = getChrome();
 
+        HomeComponent.context = this;
 
-	@Input()
-	profileDataSet = {
+        HomeComponent.notificationService = sibilingsCommService;
 
-		name: '',
+        getChrome().tabs.getSelected(null, function(tab) {
 
-		age: '',
+            var tablink = tab.url;
 
-		distance: '',
+            if (tablink.includes('tinder.com')) {
 
-		imgUrl: '',
+                getChrome().tabs.executeScript(null, { // injecting retriving dom
 
-		studies: ''
+                    file: 'assets/chromejs/localstorage.js'
 
-	}
+                }, function() {
 
-	listOfProfiles = []
+                    if (getChrome().runtime.lastError) {
 
-	static context
+                    }
 
-	static toggleStateAutoLiking = false;
+                });
 
-	recCount: number;
+            }
 
-	static notificationService: SibilingsCommunicationService;
+        });
 
-	chrome: any;
+    }
 
+    static context;
 
+    static toggleStateAutoLiking = false;
 
-	ngOnInit(): void {
+    static notificationService: SibilingsCommunicationService;
 
-		HomeComponent.context = this
+    toggleStateAutoLiking = false;
 
-		HomeComponent.notificationService = this.sibilingsCommService
+    @Input()
+    profileDataSet = {
 
-		if (typeof localStorage.getItem('auto_like_state') == 'undefined') {
-			localStorage.setItem('auto_like_state', 'false')
-		}
-		else if (localStorage.getItem('auto_like_state') !== null)
-			if (localStorage.getItem('auto_like_state').match('true')) {
-				this.toggleStateAutoLiking = true
-				this.refresh()
-			} else {
-				this.toggleStateAutoLiking = false
-			}
+        name: '',
 
+        age: '',
 
-		let thisContext = this
-		this.chrome.runtime.onMessage.addListener(function (request, sender) {
-			if (request.action == "savedLocalStorage") {
+        distance: '',
 
-				thisContext.saveLocalStorage('tinder_local_storage', request.source)
+        imgUrl: '',
 
-			}
-			if (request.action == "getLocalStorage") {
+        studies: ''
 
-				localStorage.setItem('tinder_local_storage', request.source)
+    };
 
-			}
-			if (request.action == "background_retrived_data") {
-				thisContext.sibilingsCommService.pushNotification('background_recs_set', '')
-				thisContext.refresh()
-				setTimeout(function run() {
-					thisContext.refresh()
-				}, 500)
+    listOfProfiles = [];
 
-			}
+    recCount: number;
 
-		})
+    chrome: any;
 
+    updateEveryMS = 0;
 
+    timer;
+    id = 0;
 
+    ngOnInit(): void {
 
-		this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
+        HomeComponent.context = this;
 
-			if (msg.topic == 'pass') {
+        HomeComponent.notificationService = this.sibilingsCommService;
 
-				var rec = this.listOfProfiles.find(u => u._id == msg.message)
+        if (typeof localStorage.getItem('auto_like_state') == 'undefined') {
+            localStorage.setItem('auto_like_state', 'false');
+        } else if (localStorage.getItem('auto_like_state') !== null) {
+            if (localStorage.getItem('auto_like_state').match('true')) {
+                this.toggleStateAutoLiking = true;
+                this.refresh();
+            } else {
+                this.toggleStateAutoLiking = false;
+            }
+        }
 
-				this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
+        let thisContext = this;
+        this.chrome.runtime.onMessage.addListener(function(request, sender) {
+            if (request.action == 'savedLocalStorage') {
 
-				this.chromeStorageService.getItem('history', res => {
-					if (typeof rec != 'undefined') {
-						rec.state = 'pass'
-						rec.action_performed_on = Date.now()
-						res.history.push(rec)
-						this.chromeStorageService.setItem({ 'history': res.history })
-					}
-				})
+                thisContext.saveLocalStorage('tinder_local_storage', request.source);
 
+            }
+            if (request.action == 'getLocalStorage') {
 
-				this.chromeStorageService.setItem({ 'recs': this.listOfProfiles })
+                localStorage.setItem('tinder_local_storage', request.source);
 
-				this.recCount = Object.keys(this.listOfProfiles).length
+            }
+            if (request.action == 'background_retrived_data') {
+                thisContext.sibilingsCommService.pushNotification('background_recs_set', '');
+                thisContext.refresh();
+                setTimeout(function run() {
+                    thisContext.refresh();
+                }, 500);
 
+            }
 
-			} else if (msg.topic == 'like') {
+        });
 
-				var rec = this.listOfProfiles.find(u => u._id == msg.message)
+        this.sibilingsCommService.notificationAnnounced$.subscribe(msg => {
 
-				console.log(JSON.stringify(rec, null, 4))
+            if (msg.topic == 'pass') {
 
-				this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
+                var rec = this.listOfProfiles.find(u => u._id == msg.message);
 
+                this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1);
 
-				this.chromeStorageService.getItem('history', res => {
-					if (typeof rec != 'undefined') {
-						rec.state = 'like'
-						rec.action_performed_on = Date.now()
-						res.history.push(rec)
-						this.chromeStorageService.setItem({ 'history': res.history })
-					}
+                this.chromeStorageService.getItem('history', res => {
+                    if (typeof rec != 'undefined') {
+                        rec.state = 'pass';
+                        rec.action_performed_on = Date.now();
+                        res.history.push(rec);
+                        this.chromeStorageService.setItem({history: res.history});
+                    }
+                });
 
-				})
+                this.chromeStorageService.setItem({recs: this.listOfProfiles});
 
+                this.recCount = Object.keys(this.listOfProfiles).length;
 
-				this.chromeStorageService.setItem({ 'recs': this.listOfProfiles })
+            } else if (msg.topic == 'like') {
 
-				this.recCount = Object.keys(this.listOfProfiles).length + 1
+                var rec = this.listOfProfiles.find(u => u._id == msg.message);
 
+                console.log(JSON.stringify(rec, null, 4));
 
-				// this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
+                this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1);
 
-			} else if (msg.topic == 'superlike') {
+                this.chromeStorageService.getItem('history', res => {
+                    if (typeof rec != 'undefined') {
+                        rec.state = 'like';
+                        rec.action_performed_on = Date.now();
+                        res.history.push(rec);
+                        this.chromeStorageService.setItem({history: res.history});
+                    }
 
-				var rec = this.listOfProfiles.find(u => u._id == msg.message)
+                });
 
-				this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1)
+                this.chromeStorageService.setItem({recs: this.listOfProfiles});
 
+                this.recCount = Object.keys(this.listOfProfiles).length + 1;
 
-				this.chromeStorageService.getItem('history', res => {
-					if (typeof rec != 'undefined') {
-						rec.state = 'superlike'
-						rec.action_performed_on = Date.now()
-						res.history.push(rec)
-						this.chromeStorageService.setItem({ history: res.history })
-					}
-				})
+                // this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
 
+            } else if (msg.topic == 'superlike') {
 
-				this.chromeStorageService.setItem({ 'recs': this.listOfProfiles })
+                var rec = this.listOfProfiles.find(u => u._id == msg.message);
 
-				this.recCount = Object.keys(this.listOfProfiles).length
+                this.listOfProfiles.splice(this.listOfProfiles.indexOf(rec), 1);
 
+                this.chromeStorageService.getItem('history', res => {
+                    if (typeof rec != 'undefined') {
+                        rec.state = 'superlike';
+                        rec.action_performed_on = Date.now();
+                        res.history.push(rec);
+                        this.chromeStorageService.setItem({history: res.history});
+                    }
+                });
 
-				// this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
+                this.chromeStorageService.setItem({recs: this.listOfProfiles});
 
-			}
+                this.recCount = Object.keys(this.listOfProfiles).length;
 
+                // this.sibilingsCommService.pushNotification('selectOnClick', this.listOfProfiles[0])
 
-		})
+            }
 
+        });
 
-		// this.refresh()
+        // this.refresh()
 
-		setTimeout(function run() {
+        setTimeout(function run() {
 
-			thisContext.refresh()
-			console.log(' 2sec interval for calling list retrival')
+            thisContext.refresh();
+            console.log(' 2sec interval for calling list retrival');
 
-		}, 1000)
-	}
+        }, 1000);
+    }
 
+    getRecs(sleep) {
 
+        var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'));
 
-	constructor(
-		public sibilingsCommService: SibilingsCommunicationService,
-		private tinderAPI: TinderAPIService,
-		private router: Router,
-		private sanitizer: DomSanitizer,
-		private chromeStorageService: ChromeStorageService
-	) {
+        this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken']);
 
-		this.chrome = getChrome()
+        this.chromeStorageService.getItem('recs', (result) => {
 
-		HomeComponent.context = this
+            this.poll(result.recs);
 
-		HomeComponent.notificationService = sibilingsCommService
+            this.sibilingsCommService.pushNotification('selectOnClick', result.recs[0]);
 
-		getChrome().tabs.getSelected(null, function (tab) {
+        });
 
-			var tablink = tab.url
+    }
 
-			if (tablink.includes('tinder.com')) {
+    testLocalStorage() {// injecting localstorage script
 
-				getChrome().tabs.executeScript(null, { // injecting retriving dom
+        getChrome().tabs.executeScript(null, {
 
-					file: "assets/chromejs/localstorage.js"
+            file: 'assets/chromejs/localstorage.js'
 
-				}, function () {
+        }, function() {
 
-					if (getChrome().runtime.lastError) {
+            if (getChrome().runtime.lastError) {
 
-					}
+            }
 
-				})
+        });
 
+    }
 
-			}
+    poll(results: any) {
+        // this.listOfProfiles = []
+        if (typeof results == 'undefined') {
+            return;
+        }
 
-		})
+        if (results == null) {
+            return;
+        }
 
+        if (Object.keys(results).length == 0) {
+            return;
+        }
 
+        for (let result of results) {
+            // code to poll server and update models and view ...
+            var bdate = new Date(result.birth_date);
 
+            var nowDate = new Date();
 
+            var age = nowDate.getTime() - bdate.getTime();
 
-	}
+            result.age = Number(((age / (1000 * 60 * 60 * 24)) / 366).toFixed(0)) - 1;
 
+            result.schools.push({
+                id: '000',
+                name: '000'
+            });
 
+            result.jobs.push({
+                title: {
+                    name: '000'
+                }
+            });
 
+            this.listOfProfiles.push(result);
 
+            this.recCount = Object.keys(this.listOfProfiles).length;
 
-	getRecs(sleep) {
+            this.sibilingsCommService.pushMessage('scrollTop');
 
-		var localStorageData = JSON.parse(localStorage.getItem('tinder_local_storage'))
+            // await this.sleep(this.updateEveryMS)
+        }
+        this.recCount = Object.keys(results).length;
 
-		this.tinderAPI.services.initTinderToken(localStorageData['TinderWeb/APIToken'])
+    }
 
-		this.chromeStorageService.getItem('recs', (result) => {
+    sleep(ms) {
 
-			this.poll(result.recs)
+        return new Promise(resolve => setTimeout(resolve, ms));
 
-			this.sibilingsCommService.pushNotification('selectOnClick', result.recs[0])
+    }
 
-		})
+    openAlertToReLogUser() {
+        Swal.fire({
 
+            title: 'You are not logged in?',
 
+            text: 'Please log in to tinder.com ',
 
-	}
+            type: 'warning',
 
+            showCancelButton: true,
 
+            confirmButtonText: 'Take me there!',
 
-	testLocalStorage() {// injecting localstorage script
+            cancelButtonText: 'Cancel',
 
+            customClass: {
+                popup: 'animated tada'
+            }
 
-		getChrome().tabs.executeScript(null, {
+        }).then(result => {
 
-			file: "assets/chromejs/localstorage.js"
+            if (result.value) {
 
-		}, function () {
+                getChrome().runtime.sendMessage({
 
-			if (getChrome().runtime.lastError) {
+                    action: 'open_tinder',
 
-			}
+                    source: 'open_tinder'
 
-		})
+                });
+            }
 
-	}
+        });
+    }
 
-	updateEveryMS = 0
+    saveLocalStorage(key, value) {
 
-	poll(results: any) {
-		// this.listOfProfiles = []
-		if (typeof results == 'undefined') {
-			return
-		}
+        localStorage.setItem(key, value);
 
-		if (results == null) {
-			return
-		}
+    }
 
-		if (Object.keys(results).length == 0) {
-			return
-		}
+    refresh() {
 
-		for (let result of results) {
-			// code to poll server and update models and view ...
-			var bdate = new Date(result.birth_date)
+        this.listOfProfiles = [];
 
-			var nowDate = new Date()
+        this.chromeStorageService.getItem('recs', res => {
 
-			var age = nowDate.getTime() - bdate.getTime()
+            let filteredRecs = [];
 
-			result.age = Number(((age / (1000 * 60 * 60 * 24)) / 366).toFixed(0)) - 1
+            //  filter for duplicates
+            filteredRecs = res.recs.filter((arr, index, self) =>
+                index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)));
 
-			result.schools.push({
-				id: "000",
-				name: "000"
-			})
+            try {
+                if (res == null) {
+                    return;
+                }
 
-			result.jobs.push({
-				"title": {
-					"name": "000"
-				}
-			})
+                this.poll(filteredRecs);
 
-			this.listOfProfiles.push(result)
+                if (Object.keys(filteredRecs).length != 0) {
+                    this.sibilingsCommService.pushNotification('selectOnClick', filteredRecs[0]);
+                }
 
-			this.recCount = Object.keys(this.listOfProfiles).length
+            } catch (error) {
 
-			this.sibilingsCommService.pushMessage('scrollTop')
+            }
 
-			// await this.sleep(this.updateEveryMS)
-		}
-		this.recCount = Object.keys(results).length
+        });
 
+    }
 
-	}
+    autoLiking(toggleState) {
 
-	sleep(ms) {
+        this.toggleStateAutoLiking = toggleState;
 
-		return new Promise(resolve => setTimeout(resolve, ms))
+        localStorage.setItem('auto_like_state', String(this.toggleStateAutoLiking));
 
-	}
+        HomeComponent.toggleStateAutoLiking = toggleState;
 
-	openAlertToReLogUser() {
-		Swal.fire({
+        if (toggleState) {
 
-			title: 'You are not logged in?',
+            getChrome().runtime.sendMessage({
 
-			text: 'Please log in to tinder.com ',
+                action: 'auto_like_state',
 
-			type: 'warning',
+                source: String(toggleState)
 
-			showCancelButton: true,
+            });
 
-			confirmButtonText: 'Take me there!',
+        } else {
 
-			cancelButtonText: 'Cancel',
+        }
+    }
 
-			customClass: {
-				popup: 'animated tada'
-			}
+    ngOnDestroy(): void {
 
-
-		}).then(result => {
-
-			if (result.value) {
-
-				getChrome().runtime.sendMessage({
-
-					action: "open_tinder",
-
-					source: 'open_tinder'
-
-				})
-			}
-
-		})
-	}
-
-
-	saveLocalStorage(key, value) {
-
-		localStorage.setItem(key, value)
-
-	}
-
-	refresh() {
-
-		this.listOfProfiles = []
- 
-
-		this.chromeStorageService.getItem('recs', res => {
-
-			let filteredRecs = []
-
-
-			//  filter for duplicates
-			filteredRecs = res.recs.filter((arr, index, self) =>
-				index === self.findIndex((t) => (t.save === arr.save && t._id === arr._id)))
-
-			try {
-				if (res == null) {
-					return
-				}
-
-				this.poll(filteredRecs)
-
-				if (Object.keys(filteredRecs).length != 0)
-					this.sibilingsCommService.pushNotification('selectOnClick', filteredRecs[0])
-
-			} catch (error) {
-
-			}
-
-
-
-		})
-
-
-	}
-
-	timer
-	id = 0
-
-	autoLiking(toggleState) {
-
-		this.toggleStateAutoLiking = toggleState
-
-		localStorage.setItem('auto_like_state', String(this.toggleStateAutoLiking))
-
-		HomeComponent.toggleStateAutoLiking = toggleState
-
-		if (toggleState) {
-
-
-			getChrome().runtime.sendMessage({
-
-				action: "auto_like_state",
-
-				source: String(toggleState)
-
-			})
-
-
-		}
-		else {
-
-
-			 
-		}
-	}
-
-
-	ngOnDestroy(): void {
-
-	}
-
- 
-
- 
+    }
 
 }
